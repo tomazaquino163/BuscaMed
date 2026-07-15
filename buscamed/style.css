@@ -1,0 +1,913 @@
+/* ================================
+   VARIÁVEIS DO BUSCAMED
+================================ */
+
+:root {
+
+    --verde-principal: #23613A;
+    --verde-escuro: #19472A;
+    --verde-claro: #E8F1EB;
+
+    --vermelho: #C62828;
+    --vermelho-claro: #FCECEC;
+
+    --azul-claro: #DCEFF5;
+
+    --fundo: #F6F8F6;
+    --creme: #FBF9F3;
+
+    --texto: #26332B;
+    --texto-suave: #66736B;
+
+    --branco: #FFFFFF;
+
+    --sombra: 0 12px 35px rgba(35, 97, 58, 0.10);
+
+}
+
+
+/* ================================
+   RESET
+================================ */
+
+* {
+
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+
+html {
+
+    scroll-behavior: smooth;
+
+}
+
+
+body {
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    color: var(--texto);
+
+    background: var(--fundo);
+
+    line-height: 1.6;
+
+}
+
+
+img {
+
+    max-width: 100%;
+
+    display: block;
+
+}
+
+
+a {
+
+    color: inherit;
+
+    text-decoration: none;
+
+}
+
+
+button,
+input {
+
+    font: inherit;
+
+}
+
+
+/* ================================
+   CONTAINER
+================================ */
+
+.container {
+
+    width: min(1180px, calc(100% - 40px));
+
+    margin: 0 auto;
+
+}
+
+
+/* ================================
+   CABEÇALHO
+================================ */
+
+.header {
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border-bottom: 1px solid #E7ECE8;
+
+    position: sticky;
+
+    top: 0;
+
+    z-index: 1000;
+
+}
+
+
+.header-content {
+
+    min-height: 90px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+}
+
+
+.logo {
+
+    width: 190px;
+
+}
+
+
+.nav {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    font-size: 15px;
+
+    color: var(--texto-suave);
+
+}
+
+
+.nav a {
+
+    transition: color 0.2s ease;
+
+}
+
+
+.nav a:hover {
+
+    color: var(--verde-principal);
+
+}
+
+
+.btn-farmacia {
+
+    background: var(--verde-principal);
+
+    color: white !important;
+
+    padding: 12px 20px;
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.btn-farmacia:hover {
+
+    background: var(--verde-escuro);
+
+}
+
+
+.menu-button {
+
+    display: none;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 30px;
+
+    color: var(--verde-principal);
+
+    cursor: pointer;
+
+}
+
+
+/* ================================
+   HERO
+================================ */
+
+.hero {
+
+    padding: 80px 0;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            var(--fundo) 0%,
+            var(--creme) 100%
+        );
+
+}
+
+
+.hero-content {
+
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    align-items: center;
+
+    gap: 70px;
+
+}
+
+
+.hero-text {
+
+    max-width: 570px;
+
+}
+
+
+.tagline,
+.section-label {
+
+    display: inline-block;
+
+    color: var(--verde-principal);
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+    letter-spacing: 0.5px;
+
+    margin-bottom: 14px;
+
+}
+
+
+.hero h1 {
+
+    font-size: clamp(2.3rem, 5vw, 4.2rem);
+
+    line-height: 1.1;
+
+    color: var(--verde-escuro);
+
+    margin-bottom: 24px;
+
+}
+
+
+.hero-text > p {
+
+    font-size: 19px;
+
+    color: var(--texto-suave);
+
+    margin-bottom: 35px;
+
+}
+
+
+.search-box {
+
+    background: white;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    box-shadow: var(--sombra);
+
+}
+
+
+.search-box label {
+
+    display: block;
+
+    font-weight: bold;
+
+    margin-bottom: 10px;
+
+}
+
+
+.search-input-area {
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.search-input-area input {
+
+    min-width: 0;
+
+    flex: 1;
+
+    border: 2px solid #DDE5DF;
+
+    border-radius: 10px;
+
+    padding: 15px;
+
+    outline: none;
+
+}
+
+
+.search-input-area input:focus {
+
+    border-color: var(--verde-principal);
+
+}
+
+
+.btn-search {
+
+    border: none;
+
+    background: var(--verde-principal);
+
+    color: white;
+
+    padding: 0 22px;
+
+    border-radius: 10px;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+}
+
+
+.btn-search:hover {
+
+    background: var(--verde-escuro);
+
+}
+
+
+.hero-image {
+
+    position: relative;
+
+}
+
+
+.hero-image > img {
+
+    width: 100%;
+
+    height: 570px;
+
+    object-fit: cover;
+
+    object-position: center;
+
+    border-radius: 28px;
+
+    box-shadow: var(--sombra);
+
+}
+
+
+.image-message {
+
+    position: absolute;
+
+    bottom: 25px;
+
+    left: 25px;
+
+    right: 25px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    border-radius: 14px;
+
+    padding: 15px 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+}
+
+
+.image-message span {
+
+    font-size: 25px;
+
+}
+
+
+.image-message p {
+
+    font-size: 14px;
+
+    color: var(--texto-suave);
+
+}
+
+
+/* ================================
+   COMO FUNCIONA
+================================ */
+
+.how-it-works {
+
+    padding: 100px 0;
+
+    background: white;
+
+}
+
+
+.section-title {
+
+    text-align: center;
+
+    max-width: 650px;
+
+    margin: 0 auto 55px;
+
+}
+
+
+.section-title h2,
+.accessibility h2,
+.pharmacy-section h2 {
+
+    font-size: clamp(2rem, 4vw, 3rem);
+
+    line-height: 1.15;
+
+    color: var(--verde-escuro);
+
+    margin-bottom: 15px;
+
+}
+
+
+.section-title p {
+
+    color: var(--texto-suave);
+
+}
+
+
+.steps {
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 25px;
+
+}
+
+
+.step-card {
+
+    position: relative;
+
+    background: var(--fundo);
+
+    padding: 35px 28px;
+
+    border-radius: 18px;
+
+    text-align: center;
+
+    border: 1px solid #E7ECE8;
+
+}
+
+
+.step-number {
+
+    position: absolute;
+
+    top: 15px;
+
+    right: 18px;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    color: var(--verde-principal);
+
+}
+
+
+.step-icon {
+
+    font-size: 42px;
+
+    margin-bottom: 15px;
+
+}
+
+
+.step-card h3 {
+
+    font-size: 21px;
+
+    margin-bottom: 10px;
+
+    color: var(--verde-escuro);
+
+}
+
+
+.step-card p {
+
+    color: var(--texto-suave);
+
+}
+
+
+/* ================================
+   ACESSIBILIDADE
+================================ */
+
+.accessibility {
+
+    padding: 80px 0;
+
+    background: var(--azul-claro);
+
+}
+
+
+.accessibility-content {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    max-width: 850px;
+
+}
+
+
+.accessibility-icon {
+
+    flex-shrink: 0;
+
+    width: 90px;
+
+    height: 90px;
+
+    display: grid;
+
+    place-items: center;
+
+    background: white;
+
+    border-radius: 50%;
+
+    font-size: 42px;
+
+}
+
+
+.accessibility p {
+
+    max-width: 700px;
+
+    color: var(--texto-suave);
+
+}
+
+
+/* ================================
+   FARMÁCIAS
+================================ */
+
+.pharmacy-section {
+
+    padding: 90px 0;
+
+    background: var(--creme);
+
+}
+
+
+.pharmacy-content {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 40px;
+
+}
+
+
+.pharmacy-content > div {
+
+    max-width: 700px;
+
+}
+
+
+.pharmacy-content p {
+
+    color: var(--texto-suave);
+
+}
+
+
+.btn-secondary {
+
+    flex-shrink: 0;
+
+    padding: 15px 22px;
+
+    border: 2px solid var(--verde-principal);
+
+    color: var(--verde-principal);
+
+    border-radius: 10px;
+
+    font-weight: bold;
+
+}
+
+
+.btn-secondary:hover {
+
+    background: var(--verde-principal);
+
+    color: white;
+
+}
+
+
+/* ================================
+   RODAPÉ
+================================ */
+
+.footer {
+
+    padding: 40px 0;
+
+    background: var(--verde-escuro);
+
+    color: white;
+
+}
+
+
+.footer-content {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 30px;
+
+}
+
+
+.footer-logo {
+
+    width: 150px;
+
+    filter: brightness(0) invert(1);
+
+    margin-bottom: 8px;
+
+}
+
+
+.footer p {
+
+    color: #D9E5DC;
+
+    font-size: 14px;
+
+}
+
+
+.copyright {
+
+    text-align: right;
+
+}
+
+
+/* ================================
+   RESPONSIVIDADE
+================================ */
+
+@media (max-width: 900px) {
+
+    .nav {
+
+        display: none;
+
+    }
+
+
+    .menu-button {
+
+        display: block;
+
+    }
+
+
+    .hero-content {
+
+        grid-template-columns: 1fr;
+
+        gap: 45px;
+
+    }
+
+
+    .hero-text {
+
+        max-width: none;
+
+    }
+
+
+    .hero-image > img {
+
+        height: 500px;
+
+    }
+
+
+    .steps {
+
+        grid-template-columns: 1fr;
+
+    }
+
+
+    .pharmacy-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+
+        width: min(100% - 28px, 1180px);
+
+    }
+
+
+    .header-content {
+
+        min-height: 75px;
+
+    }
+
+
+    .logo {
+
+        width: 150px;
+
+    }
+
+
+    .hero {
+
+        padding: 50px 0;
+
+    }
+
+
+    .hero h1 {
+
+        font-size: 2.45rem;
+
+    }
+
+
+    .hero-text > p {
+
+        font-size: 17px;
+
+    }
+
+
+    .search-input-area {
+
+        flex-direction: column;
+
+    }
+
+
+    .btn-search {
+
+        min-height: 52px;
+
+    }
+
+
+    .hero-image > img {
+
+        height: 390px;
+
+        border-radius: 20px;
+
+    }
+
+
+    .image-message {
+
+        left: 12px;
+
+        right: 12px;
+
+        bottom: 12px;
+
+    }
+
+
+    .how-it-works {
+
+        padding: 70px 0;
+
+    }
+
+
+    .accessibility-content {
+
+        align-items: flex-start;
+
+    }
+
+
+    .accessibility-icon {
+
+        width: 65px;
+
+        height: 65px;
+
+        font-size: 30px;
+
+    }
+
+
+    .footer-content {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .copyright {
+
+        text-align: left;
+
+    }
+
+}
