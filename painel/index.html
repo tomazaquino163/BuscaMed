@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Painel administrativo das farmácias parceiras do BuscaMed."
+    >
+
+    <title>Painel da Farmácia | BuscaMed</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- MENU LATERAL -->
+
+        <aside class="sidebar" id="sidebar">
+
+            <div class="sidebar-header">
+
+                <a href="../index.html" class="logo-link">
+                    <img
+                        src="../assets/logo.png"
+                        alt="BuscaMed"
+                        class="sidebar-logo"
+                    >
+                </a>
+
+                <button
+                    type="button"
+                    class="sidebar-close"
+                    id="sidebarClose"
+                    aria-label="Fechar menu"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <nav class="sidebar-nav" aria-label="Menu do painel">
+
+                <button
+                    type="button"
+                    class="nav-item active"
+                    data-section="dashboard"
+                >
+                    <span class="nav-icon">▦</span>
+                    <span>Visão geral</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="medicamentos"
+                >
+                    <span class="nav-icon">💊</span>
+                    <span>Medicamentos</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="nav-item"
+                    data-section="configuracoes"
+                >
+                    <span class="nav-icon">⚙</span>
+                    <span>Configurações</span>
+                </button>
+
+            </nav>
+
+            <div class="sidebar-footer">
+
+                <a href="../index.html" class="sidebar-link">
+                    <span>🌐</span>
+                    <span>Ver site público</span>
+                </a>
+
+                <a href="../login.html" class="sidebar-link logout-link">
+                    <span>↪</span>
+                    <span>Sair</span>
+                </a>
+
+            </div>
+
+        </aside>
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- CONTEÚDO -->
+
+        <main class="main-content">
+
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <button
+                        type="button"
+                        class="menu-button"
+                        id="menuButton"
+                        aria-label="Abrir menu"
+                        aria-expanded="false"
+                    >
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+
+                    <div>
+                        <p class="topbar-label">Painel administrativo</p>
+                        <h1 id="pageTitle">Visão geral</h1>
+                    </div>
+
+                </div>
+
+                <div class="pharmacy-profile">
+
+                    <div class="profile-avatar" aria-hidden="true">
+                        N
+                    </div>
+
+                    <div class="profile-text">
+                        <strong>Farmácia Nissei</strong>
+                        <span>Conta de demonstração</span>
+                    </div>
+
+                </div>
+
+            </header>
+
+            <div class="content-wrapper">
+
+                <!-- DASHBOARD -->
+
+                <section
+                    class="page-section active"
+                    id="dashboardSection"
+                >
+
+                    <div class="welcome-card">
+
+                        <div>
+                            <span class="section-tag">
+                                💚 Parceiro BuscaMed
+                            </span>
+
+                            <h2>Olá, Farmácia Nissei! 👋</h2>
+
+                            <p>
+                                Acompanhe seus medicamentos e mantenha os preços
+                                atualizados para ajudar os consumidores.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="primary-button"
+                            id="dashboardAddButton"
+                        >
+                            <span>＋</span>
+                            Cadastrar medicamento
+                        </button>
+
+                    </div>
+
+                    <div class="stats-grid">
+
+                        <article class="stat-card">
+
+                            <div class="stat-icon green">
+                                💊
+                            </div>
+
+                            <div>
+                                <span>Medicamentos</span>
+                                <strong id="totalMedicamentos">0</strong>
+                                <small>produtos cadastrados</small>
+                            </div>
+
+                        </article>
+
+                        <article class="stat-card">
+
+                            <div class="stat-icon blue">
+                                ✓
+                            </div>
+
+                            <div>
+                                <span>Disponíveis</span>
+                                <strong id="totalDisponiveis">0</strong>
+                                <small>itens em estoque</small>
+                            </div>
+
+                        </article>
+
+                        <article class="stat-card">
+
+                            <div class="stat-icon yellow">
+                                R$
+                            </div>
+
+                            <div>
+                                <span>Preço médio</span>
+                                <strong id="precoMedio">R$ 0,00</strong>
+                                <small>entre os produtos</small>
+                            </div>
+
+                        </article>
+
+                        <article class="stat-card">
+
+                            <div class="stat-icon red">
+                                ↻
+                            </div>
+
+                            <div>
+                                <span>Atualizados hoje</span>
+                                <strong id="atualizadosHoje">0</strong>
+                                <small>alterações realizadas</small>
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                    <div class="dashboard-grid">
+
+                        <section class="panel-card">
+
+                            <div class="panel-heading">
+                                <div>
+                                    <span class="eyebrow">
+                                        Atividade recente
+                                    </span>
+
+                                    <h3>Últimos medicamentos</h3>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    class="text-button"
+                                    id="viewAllButton"
+                                >
+                                    Ver todos
+                                </button>
+                            </div>
+
+                            <div
+                                class="recent-list"
+                                id="recentMedicines"
+                            ></div>
+
+                        </section>
+
+                        <aside class="panel-card update-card">
+
+                            <div class="update-icon">
+                                🕒
+                            </div>
+
+                            <span class="eyebrow">
+                                Qualidade da informação
+                            </span>
+
+                            <h3>Mantenha os preços atualizados</h3>
+
+                            <p>
+                                Informações recentes aumentam a confiança do
+                                consumidor e tornam a comparação mais útil.
+                            </p>
+
+                            <div class="update-progress">
+
+                                <div class="progress-info">
+                                    <span>Produtos atualizados</span>
+                                    <strong id="progressText">0%</strong>
+                                </div>
+
+                                <div class="progress-track">
+                                    <div
+                                        class="progress-bar"
+                                        id="progressBar"
+                                    ></div>
+                                </div>
+
+                            </div>
+
+                        </aside>
+
+                    </div>
+
+                </section>
+
+                <!-- MEDICAMENTOS -->
+
+                <section
+                    class="page-section"
+                    id="medicamentosSection"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+                            <span class="section-tag">
+                                Gerenciamento
+                            </span>
+
+                            <h2>Meus medicamentos</h2>
+
+                            <p>
+                                Cadastre, altere ou remova os produtos oferecidos
+                                pela farmácia.
+                            </p>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="primary-button"
+                            id="addMedicineButton"
+                        >
+                            <span>＋</span>
+                            Novo medicamento
+                        </button>
+
+                    </div>
+
+                    <div class="toolbar">
+
+                        <div class="search-field">
+
+                            <span aria-hidden="true">⌕</span>
+
+                            <input
+                                type="search"
+                                id="medicineSearch"
+                                placeholder="Pesquisar medicamento..."
+                                autocomplete="off"
+                                aria-label="Pesquisar medicamento"
+                            >
+
+                        </div>
+
+                        <select
+                            id="stockFilter"
+                            class="filter-select"
+                            aria-label="Filtrar por estoque"
+                        >
+                            <option value="todos">
+                                Todos os estoques
+                            </option>
+
+                            <option value="disponivel">
+                                Disponível
+                            </option>
+
+                            <option value="baixo">
+                                Estoque baixo
+                            </option>
+
+                            <option value="indisponivel">
+                                Indisponível
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="table-card">
+
+                        <div class="desktop-table">
+
+                            <table>
+
+                                <thead>
+                                    <tr>
+                                        <th>Medicamento</th>
+                                        <th>Dosagem</th>
+                                        <th>Preço</th>
+                                        <th>Estoque</th>
+                                        <th>Atualização</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="medicineTableBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                        <div
+                            class="mobile-medicine-list"
+                            id="mobileMedicineList"
+                        ></div>
+
+                        <div
+                            class="empty-state"
+                            id="emptyState"
+                            hidden
+                        >
+                            <div class="empty-icon">💊</div>
+
+                            <h3>Nenhum medicamento encontrado</h3>
+
+                            <p>
+                                Altere os filtros ou cadastre um novo produto.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </section>
+
+                <!-- CONFIGURAÇÕES -->
+
+                <section
+                    class="page-section"
+                    id="configuracoesSection"
+                >
+
+                    <div class="section-header">
+
+                        <div>
+                            <span class="section-tag">
+                                Conta da farmácia
+                            </span>
+
+                            <h2>Configurações</h2>
+
+                            <p>
+                                Informações demonstrativas do estabelecimento.
+                            </p>
+                        </div>
+
+                    </div>
+
+                    <div class="settings-grid">
+
+                        <article class="settings-card">
+
+                            <div class="settings-heading">
+                                <span class="settings-icon">🏪</span>
+
+                                <div>
+                                    <h3>Dados da farmácia</h3>
+                                    <p>
+                                        Informações exibidas no BuscaMed.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="settings-form">
+
+                                <div class="form-group">
+                                    <label for="pharmacyName">
+                                        Nome da farmácia
+                                    </label>
+
+                                    <input
+                                        id="pharmacyName"
+                                        type="text"
+                                        value="Farmácia Nissei"
+                                        disabled
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pharmacyEmail">
+                                        E-mail
+                                    </label>
+
+                                    <input
+                                        id="pharmacyEmail"
+                                        type="email"
+                                        value="nissei@buscamed.com.br"
+                                        disabled
+                                    >
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="pharmacyCity">
+                                        Município
+                                    </label>
+
+                                    <input
+                                        id="pharmacyCity"
+                                        type="text"
+                                        value="Santo Antônio da Platina - PR"
+                                        disabled
+                                    >
+                                </div>
+
+                            </div>
+
+                            <p class="settings-note">
+                                Nesta versão demonstrativa, os dados da farmácia
+                                ainda não podem ser alterados.
+                            </p>
+
+                        </article>
+
+                        <article class="settings-card">
+
+                            <div class="settings-heading">
+                                <span class="settings-icon">🔐</span>
+
+                                <div>
+                                    <h3>Segurança</h3>
+                                    <p>
+                                        O login real será conectado ao Supabase.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="security-status">
+                                <span class="status-dot"></span>
+
+                                <div>
+                                    <strong>Modo demonstração</strong>
+                                    <p>
+                                        Os dados estão armazenados neste navegador.
+                                    </p>
+                                </div>
+                            </div>
+
+                        </article>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- MODAL DE CADASTRO E EDIÇÃO -->
+
+    <div
+        class="modal"
+        id="medicineModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay" data-close-modal></div>
+
+        <div
+            class="modal-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modalTitle"
+        >
+
+            <div class="modal-header">
+
+                <div>
+                    <span class="section-tag" id="modalTag">
+                        Novo cadastro
+                    </span>
+
+                    <h2 id="modalTitle">
+                        Cadastrar medicamento
+                    </h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="modal-close"
+                    data-close-modal
+                    aria-label="Fechar janela"
+                >
+                    ×
+                </button>
+
+            </div>
+
+            <form id="medicineForm">
+
+                <input
+                    type="hidden"
+                    id="medicineId"
+                >
+
+                <div class="form-grid">
+
+                    <div class="form-group full-width">
+
+                        <label for="medicineName">
+                            Nome do medicamento
+                        </label>
+
+                        <input
+                            type="text"
+                            id="medicineName"
+                            placeholder="Ex.: Captopril"
+                            maxlength="60"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="medicineDosage">
+                            Dosagem
+                        </label>
+
+                        <input
+                            type="text"
+                            id="medicineDosage"
+                            placeholder="Ex.: 25 mg"
+                            maxlength="30"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="medicinePrice">
+                            Preço
+                        </label>
+
+                        <div class="price-input">
+                            <span>R$</span>
+
+                            <input
+                                type="text"
+                                id="medicinePrice"
+                                inputmode="decimal"
+                                placeholder="0,00"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="medicineStock">
+                            Situação do estoque
+                        </label>
+
+                        <select
+                            id="medicineStock"
+                            required
+                        >
+                            <option value="disponivel">
+                                Disponível
+                            </option>
+
+                            <option value="baixo">
+                                Estoque baixo
+                            </option>
+
+                            <option value="indisponivel">
+                                Indisponível
+                            </option>
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="medicineQuantity">
+                            Quantidade de unidades
+                        </label>
+
+                        <input
+                            type="number"
+                            id="medicineQuantity"
+                            min="0"
+                            max="99999"
+                            value="1"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+                <div
+                    class="form-message"
+                    id="formMessage"
+                    role="status"
+                ></div>
+
+                <div class="modal-actions">
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        data-close-modal
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="saveMedicineButton"
+                    >
+                        Salvar medicamento
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- MODAL DE EXCLUSÃO -->
+
+    <div
+        class="modal"
+        id="deleteModal"
+        aria-hidden="true"
+    >
+
+        <div class="modal-overlay" data-close-delete></div>
+
+        <div
+            class="modal-dialog delete-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="deleteTitle"
+        >
+
+            <div class="delete-icon">
+                🗑️
+            </div>
+
+            <h2 id="deleteTitle">
+                Excluir medicamento?
+            </h2>
+
+            <p>
+                O produto
+                <strong id="deleteMedicineName"></strong>
+                será removido do painel.
+            </p>
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    class="secondary-button"
+                    data-close-delete
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    class="danger-button"
+                    id="confirmDeleteButton"
+                >
+                    Excluir
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- TOAST -->
+
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        aria-live="polite"
+    >
+
+        <span class="toast-icon" id="toastIcon">
+            ✓
+        </span>
+
+        <div>
+            <strong id="toastTitle">
+                Sucesso
+            </strong>
+
+            <p id="toastMessage"></p>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
