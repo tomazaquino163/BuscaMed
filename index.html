@@ -2,299 +2,582 @@
 <html lang="pt-BR">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>BuscaMed | Encontre o melhor preço para seu medicamento</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    <meta name="description"
-        content="Compare preços de medicamentos em farmácias da sua região de forma simples e acessível.">
+    <meta
+        name="description"
+        content="BuscaMed - Compare preços de medicamentos e encontre opções mais econômicas."
+    >
 
-    <link rel="stylesheet" href="style.css">
+    <title>
+        BuscaMed - Compare preços de medicamentos
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
 </head>
+
 
 <body>
 
-    <!-- CABEÇALHO -->
+
+    <!-- =====================================
+         CABEÇALHO
+    ====================================== -->
+
     <header class="header">
+
 
         <div class="container header-content">
 
-            <a href="#" class="logo-link">
-                <img src="assets/logo.png" alt="BuscaMed - medicamento mais barato na sua região" class="logo">
+
+            <!-- LOGO -->
+
+            <a
+                href="#inicio"
+                class="logo-link"
+            >
+
+                <img
+                    src="assets/logo.png"
+                    alt="Logo BuscaMed"
+                    class="logo"
+                >
+
             </a>
 
-            <nav class="nav">
-                <a href="#inicio">Início</a>
-                <a href="#como-funciona">Como funciona</a>
-                <a href="#acessibilidade">Acessibilidade</a>
 
-                <a href="#" class="btn-farmacia">
-                    Sou uma farmácia
+            <!-- MENU DESKTOP -->
+
+            <nav class="nav">
+
+                <a href="#inicio">
+
+                    Início
+
                 </a>
+
+
+                <a href="#como-funciona">
+
+                    Como funciona
+
+                </a>
+
+
+                <a href="#sobre">
+
+                    Sobre o projeto
+
+                </a>
+
             </nav>
 
-            <button class="menu-button" aria-label="Abrir menu">
-                ☰
+
+            <!-- BOTÃO DO MENU MOBILE -->
+
+            <button
+                type="button"
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Abrir menu"
+                aria-expanded="false"
+            >
+
+                <span></span>
+
+                <span></span>
+
+                <span></span>
+
             </button>
 
+
         </div>
+
+
+        <!-- MENU MOBILE -->
+
+        <nav
+            class="mobile-nav"
+            id="mobileNav"
+        >
+
+            <a href="#inicio">
+
+                Início
+
+            </a>
+
+
+            <a href="#como-funciona">
+
+                Como funciona
+
+            </a>
+
+
+            <a href="#sobre">
+
+                Sobre o projeto
+
+            </a>
+
+        </nav>
+
 
     </header>
 
 
+    <!-- =====================================
+         CONTEÚDO PRINCIPAL
+    ====================================== -->
+
     <main>
 
-        <!-- SEÇÃO PRINCIPAL -->
-        <section class="hero" id="inicio">
+
+        <!-- =====================================
+             HERO / BUSCA PRINCIPAL
+        ====================================== -->
+
+        <section
+            class="hero"
+            id="inicio"
+        >
+
 
             <div class="container hero-content">
 
+
                 <div class="hero-text">
 
-                    <span class="tagline">
-                        Cuidar também é economizar
+
+                    <span class="tag">
+
+                        💚 Economia e saúde
+
                     </span>
 
+
                     <h1>
-                        Encontre o melhor preço para o seu medicamento.
+
+                        Encontre o melhor preço
+                        para o seu medicamento
+
                     </h1>
 
+
                     <p>
-                        Compare preços em farmácias da sua região de forma simples,
-                        rápida e acessível.
+
+                        Compare preços em diferentes
+                        farmácias e descubra onde
+                        economizar.
+
                     </p>
+
+
+                    <!-- ÁREA DE BUSCA -->
 
                     <div class="search-box">
 
-                        <label for="medicamento">
-                            Qual medicamento você procura?
+
+                        <label
+                            for="medicamento"
+                        >
+
+                            Qual medicamento
+                            você procura?
+
                         </label>
 
-                        <div class="search-input-area">
 
-                            <div class="campo-com-sugestoes">
+                        <div
+                            class="search-input-area"
+                        >
 
-                                <input type="text" id="medicamento" placeholder="Ex: Captopril, Propranolol..."
-                                    autocomplete="off">
 
-                                <div id="sugestoesMedicamentos" class="sugestoes-medicamentos"></div>
+                            <div
+                                class="campo-com-sugestoes"
+                            >
+
+
+                                <div
+                                    class="input-com-limpar"
+                                >
+
+
+                                    <input
+                                        type="text"
+                                        id="medicamento"
+                                        placeholder="Ex: Captopril, Propranolol..."
+                                        autocomplete="off"
+                                    >
+
+
+                                    <button
+                                        type="button"
+                                        id="btnLimpar"
+                                        class="btn-limpar"
+                                        aria-label="Limpar busca"
+                                    >
+
+                                        ×
+
+                                    </button>
+
+
+                                </div>
+
+
+                                <!-- SUGESTÕES AUTOMÁTICAS -->
+
+                                <div
+                                    id="sugestoesMedicamentos"
+                                    class="sugestoes-medicamentos"
+                                >
+
+                                </div>
+
 
                             </div>
 
-                            <button class="btn-search" id="btnPesquisar">
+
+                            <button
+                                type="button"
+                                class="btn-search"
+                                id="btnPesquisar"
+                            >
+
                                 🔍 Pesquisar
+
                             </button>
+
 
                         </div>
 
+
                     </div>
-                    <div id="resultadoBusca" class="resultado-busca"></div>
+
+
+                    <!-- RESULTADO DA BUSCA -->
+
+                    <div
+                        id="resultadoBusca"
+                        class="resultado-busca"
+                    >
+
+                    </div>
+
 
                 </div>
 
+
+                <!-- IMAGEM PRINCIPAL -->
 
                 <div class="hero-image">
 
-                    <img src="assets/banner-casal-idoso.png" alt="Casal de idosos utilizando um celular juntos">
 
-                    <div class="image-message">
-                        <span>💚</span>
-                        <p>
-                            Informação simples para ajudar você a economizar.
-                        </p>
-                    </div>
+                    <img
+                        src="assets/banner-casal-idoso.png"
+                        alt="Casal de idosos utilizando tecnologia"
+                    >
+
 
                 </div>
 
+
             </div>
+
 
         </section>
 
 
-        <!-- COMO FUNCIONA -->
-        <section class="how-it-works" id="como-funciona">
+        <!-- =====================================
+             COMO FUNCIONA
+        ====================================== -->
+
+        <section
+            class="section"
+            id="como-funciona"
+        >
+
 
             <div class="container">
 
-                <div class="section-title">
 
-                    <span class="section-label">
-                        Simples assim
+                <div
+                    class="section-title"
+                >
+
+
+                    <span class="tag">
+
+                        Simples e fácil
+
                     </span>
 
+
                     <h2>
-                        Como o BuscaMed funciona?
+
+                        Como funciona?
+
                     </h2>
 
+
                     <p>
-                        Encontrar o melhor preço para o seu medicamento pode ser simples.
+
+                        Encontrar o melhor preço
+                        pode ser simples.
+
                     </p>
+
 
                 </div>
 
 
                 <div class="steps">
 
+
                     <div class="step-card">
 
-                        <div class="step-number">
+
+                        <div
+                            class="step-number"
+                        >
+
                             1
+
                         </div>
 
-                        <div class="step-icon">
-                            🔍
-                        </div>
 
                         <h3>
+
                             Pesquise
+
                         </h3>
 
+
                         <p>
-                            Digite o nome do medicamento que você procura.
+
+                            Digite o nome do
+                            medicamento que você
+                            procura.
+
                         </p>
+
 
                     </div>
 
 
                     <div class="step-card">
 
-                        <div class="step-number">
+
+                        <div
+                            class="step-number"
+                        >
+
                             2
+
                         </div>
 
-                        <div class="step-icon">
-                            📊
-                        </div>
 
                         <h3>
+
                             Compare
+
                         </h3>
 
+
                         <p>
-                            Veja os preços disponíveis nas farmácias da sua região.
+
+                            Veja os preços encontrados
+                            nas farmácias participantes.
+
                         </p>
+
 
                     </div>
 
 
                     <div class="step-card">
 
-                        <div class="step-number">
+
+                        <div
+                            class="step-number"
+                        >
+
                             3
+
                         </div>
 
-                        <div class="step-icon">
-                            💰
-                        </div>
 
                         <h3>
+
                             Economize
+
                         </h3>
 
+
                         <p>
-                            Escolha a opção que melhor combina com você.
+
+                            Escolha a opção que melhor
+                            atende às suas necessidades.
+
                         </p>
+
 
                     </div>
 
+
                 </div>
 
+
             </div>
+
 
         </section>
 
 
-        <!-- ACESSIBILIDADE -->
-        <section class="accessibility" id="acessibilidade">
+        <!-- =====================================
+             SOBRE O PROJETO
+        ====================================== -->
 
-            <div class="container accessibility-content">
+        <section
+            class="section section-light"
+            id="sobre"
+        >
 
-                <div class="accessibility-icon">
-                    ♿
-                </div>
+
+            <div class="container sobre-content">
+
 
                 <div>
 
-                    <span class="section-label">
-                        Pensado para todos
+
+                    <span class="tag">
+
+                        Sobre o BuscaMed
+
                     </span>
 
+
                     <h2>
-                        Tecnologia simples e acessível.
+
+                        Informação para
+                        cuidar melhor
+
                     </h2>
 
+
                     <p>
-                        O BuscaMed foi pensado para que pessoas de diferentes idades
-                        e níveis de familiaridade com a tecnologia possam encontrar
-                        informações de forma fácil e segura.
+
+                        O BuscaMed é uma solução
+                        tecnológica criada para facilitar
+                        a comparação de preços de
+                        medicamentos.
+
                     </p>
+
+
+                    <p>
+
+                        Nosso objetivo é ajudar as pessoas
+                        a encontrar opções mais econômicas
+                        de forma simples, rápida e acessível.
+
+                    </p>
+
 
                 </div>
 
-            </div>
 
-        </section>
+                <div
+                    class="sobre-destaque"
+                >
 
 
-        <!-- ÁREA DA FARMÁCIA -->
-        <section class="pharmacy-section">
+                    <span>
 
-            <div class="container pharmacy-content">
+                        💰
 
-                <div>
-
-                    <span class="section-label">
-                        Para farmácias
                     </span>
 
-                    <h2>
-                        Sua farmácia também pode fazer parte do BuscaMed.
-                    </h2>
 
-                    <p>
-                        Cadastre seus medicamentos, atualize seus preços e ajude
-                        seus clientes a encontrar as melhores opções.
-                    </p>
+                    <strong>
+
+                        Compare preços.
+                        Economize.
+
+                    </strong>
+
 
                 </div>
 
-                <a href="#" class="btn-secondary">
-                    Conheça a área da farmácia
-                </a>
 
             </div>
 
+
         </section>
+
 
     </main>
 
 
-    <!-- RODAPÉ -->
+    <!-- =====================================
+         RODAPÉ
+    ====================================== -->
+
     <footer class="footer">
 
-        <div class="container footer-content">
 
-            <div>
+        <div
+            class="container footer-content"
+        >
 
-                <img src="assets/logo.png" alt="BuscaMed" class="footer-logo">
 
-                <p>
-                    Informação para economizar.
-                </p>
+            <img
+                src="assets/logo.png"
+                alt="Logo BuscaMed"
+                class="footer-logo"
+            >
 
-            </div>
 
-            <p class="copyright">
-                © 2026 BuscaMed. Projeto desenvolvido para fins educacionais.
+            <p>
+
+                Informação para economizar
+                e cuidar melhor.
+
             </p>
 
+
+            <span>
+
+                Projeto escolar BuscaMed
+
+            </span>
+
+
         </div>
+
 
     </footer>
 
 
-    <script src="script.js"></script>
+    <!-- JAVASCRIPT -->
+
+    <script
+        src="script.js"
+    ></script>
+
 
 </body>
 
