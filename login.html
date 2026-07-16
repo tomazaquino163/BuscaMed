@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Área exclusiva para farmácias parceiras do BuscaMed."
+    >
+
+    <title>
+        Área da Farmácia | BuscaMed
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="login.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <main class="login-page">
+
+
+        <!-- LADO DA APRESENTAÇÃO -->
+
+        <section class="login-info">
+
+
+            <a
+                href="index.html"
+                class="logo-link"
+            >
+
+                <img
+                    src="assets/logo.png"
+                    alt="Logo BuscaMed"
+                    class="logo"
+                >
+
+            </a>
+
+
+            <div class="info-content">
+
+
+                <span class="tag">
+
+                    💚 Parceiro BuscaMed
+
+                </span>
+
+
+                <h1>
+
+                    Sua farmácia,
+                    mais perto de quem precisa.
+
+                </h1>
+
+
+                <p>
+
+                    Gerencie seus medicamentos,
+                    atualize seus preços e ajude
+                    seus clientes a encontrar
+                    melhores opções.
+
+                </p>
+
+
+                <div class="beneficios">
+
+
+                    <div class="beneficio">
+
+
+                        <span class="beneficio-icon">
+
+                            ✓
+
+                        </span>
+
+
+                        <span>
+
+                            Gerencie seus medicamentos
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="beneficio">
+
+
+                        <span class="beneficio-icon">
+
+                            ✓
+
+                        </span>
+
+
+                        <span>
+
+                            Atualize seus preços
+
+                        </span>
+
+
+                    </div>
+
+
+                    <div class="beneficio">
+
+
+                        <span class="beneficio-icon">
+
+                            ✓
+
+                        </span>
+
+
+                        <span>
+
+                            Alcance mais pessoas
+
+                        </span>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+        </section>
+
+
+        <!-- FORMULÁRIO DE LOGIN -->
+
+        <section class="login-area">
+
+
+            <div class="login-card">
+
+
+                <div class="login-header">
+
+
+                    <span class="login-icon">
+
+                        🔐
+
+                    </span>
+
+
+                    <h2>
+
+                        Área da Farmácia
+
+                    </h2>
+
+
+                    <p>
+
+                        Entre para gerenciar seus medicamentos
+
+                    </p>
+
+
+                </div>
+
+
+                <form
+                    id="loginForm"
+                >
+
+
+                    <!-- E-MAIL -->
+
+                    <div class="form-group">
+
+
+                        <label
+                            for="email"
+                        >
+
+                            E-mail
+
+                        </label>
+
+
+                        <input
+                            type="email"
+                            id="email"
+                            placeholder="farmacia@exemplo.com"
+                            required
+                        >
+
+
+                    </div>
+
+
+                    <!-- SENHA -->
+
+                    <div class="form-group">
+
+
+                        <label
+                            for="senha"
+                        >
+
+                            Senha
+
+                        </label>
+
+
+                        <div class="password-wrapper">
+
+
+                            <input
+                                type="password"
+                                id="senha"
+                                placeholder="Digite sua senha"
+                                required
+                            >
+
+
+                            <button
+                                type="button"
+                                id="toggleSenha"
+                                class="toggle-password"
+                                aria-label="Mostrar senha"
+                            >
+
+                                👁️
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="form-options">
+
+
+                        <label
+                            class="remember"
+                        >
+
+                            <input
+                                type="checkbox"
+                            >
+
+
+                            <span>
+
+                                Lembrar de mim
+
+                            </span>
+
+
+                        </label>
+
+
+                        <a
+                            href="#"
+                            id="esqueciSenha"
+                        >
+
+                            Esqueci minha senha
+
+                        </a>
+
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn-login"
+                    >
+
+                        Entrar
+
+                    </button>
+
+
+                </form>
+
+
+                <div
+                    id="mensagemLogin"
+                    class="mensagem-login"
+                >
+
+                </div>
+
+
+                <div class="cadastro-link">
+
+
+                    <span>
+
+                        Ainda não possui acesso?
+
+                    </span>
+
+
+                    <a
+                        href="#"
+                        id="solicitarCadastro"
+                    >
+
+                        Solicitar cadastro
+
+                    </a>
+
+
+                </div>
+
+
+                <a
+                    href="index.html"
+                    class="voltar-site"
+                >
+
+                    ← Voltar para o BuscaMed
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <script
+        src="login.js"
+    ></script>
+
+
+</body>
+
+</html>

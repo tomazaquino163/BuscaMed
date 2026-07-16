@@ -1,0 +1,914 @@
+/* =====================================
+   RESET
+===================================== */
+
+* {
+
+    margin: 0;
+
+    padding: 0;
+
+    box-sizing: border-box;
+
+}
+
+
+:root {
+
+    --verde-principal:
+        #3E8E5B;
+
+    --verde-escuro:
+        #27613B;
+
+    --verde-claro:
+        #E8F4EB;
+
+    --texto:
+        #26332A;
+
+    --texto-suave:
+        #68756C;
+
+    --branco:
+        #FFFFFF;
+
+    --borda:
+        #E0E8E2;
+
+}
+
+
+/* =====================================
+   BODY
+===================================== */
+
+body {
+
+    font-family:
+
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color:
+        var(--texto);
+
+    background:
+        #F8FAF8;
+
+}
+
+
+/* =====================================
+   PÁGINA DE LOGIN
+===================================== */
+
+.login-page {
+
+    min-height:
+        100vh;
+
+    display:
+        grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+}
+
+
+/* =====================================
+   LADO INFORMATIVO
+===================================== */
+
+.login-info {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    padding:
+        45px 8%;
+
+    background:
+
+        linear-gradient(
+
+            145deg,
+
+            #E8F4EB,
+
+            #F8FBF8
+
+        );
+
+}
+
+
+/* =====================================
+   LOGO
+===================================== */
+
+.logo {
+
+    width:
+        300px;
+
+    padding:
+        12px 18px;
+
+    background:
+        white;
+
+    border-radius:
+        22px;
+
+    box-shadow:
+
+        0 8px 20px
+        rgba(
+            39,
+            97,
+            59,
+            0.08
+        );
+
+}
+
+
+.info-content {
+
+    max-width:
+        550px;
+
+    margin:
+        auto 0;
+
+}
+
+
+.tag {
+
+    display:
+        inline-block;
+
+    padding:
+        8px 15px;
+
+    border-radius:
+        30px;
+
+    background:
+        var(--branco);
+
+    color:
+        var(--verde-principal);
+
+    font-size:
+        13px;
+
+    font-weight:
+        bold;
+
+}
+
+
+.info-content h1 {
+
+    margin:
+        22px 0;
+
+    font-size:
+        clamp(
+            36px,
+            4vw,
+            58px
+        );
+
+    line-height:
+        1.1;
+
+    color:
+        var(--verde-escuro);
+
+}
+
+
+.info-content p {
+
+    max-width:
+        500px;
+
+    font-size:
+        18px;
+
+    line-height:
+        1.7;
+
+    color:
+        var(--texto-suave);
+
+}
+
+
+/* =====================================
+   BENEFÍCIOS
+===================================== */
+
+.beneficios {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        15px;
+
+    margin-top:
+        35px;
+
+}
+
+
+.beneficio {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    color:
+        var(--verde-escuro);
+
+    font-weight:
+        600;
+
+}
+
+
+.beneficio-icon {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        25px;
+
+    height:
+        25px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--verde-principal);
+
+    color:
+        white;
+
+    font-size:
+        14px;
+
+}
+
+
+/* =====================================
+   ÁREA DO FORMULÁRIO
+===================================== */
+
+.login-area {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    padding:
+        40px;
+
+    background:
+        #FFFFFF;
+
+}
+
+
+.login-card {
+
+    width:
+        100%;
+
+    max-width:
+        450px;
+
+}
+
+
+.login-header {
+
+    text-align:
+        center;
+
+    margin-bottom:
+        35px;
+
+}
+
+
+.login-icon {
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    width:
+        60px;
+
+    height:
+        60px;
+
+    margin-bottom:
+        15px;
+
+    border-radius:
+        50%;
+
+    background:
+        var(--verde-claro);
+
+    font-size:
+        27px;
+
+}
+
+
+.login-header h2 {
+
+    margin-bottom:
+        8px;
+
+    color:
+        var(--verde-escuro);
+
+    font-size:
+        30px;
+
+}
+
+
+.login-header p {
+
+    color:
+        var(--texto-suave);
+
+}
+
+
+/* =====================================
+   FORMULÁRIO
+===================================== */
+
+.form-group {
+
+    margin-bottom:
+        20px;
+
+}
+
+
+.form-group label {
+
+    display:
+        block;
+
+    margin-bottom:
+        8px;
+
+    font-weight:
+        600;
+
+    color:
+        var(--texto);
+
+}
+
+
+.form-group input {
+
+    width:
+        100%;
+
+    height:
+        52px;
+
+    padding:
+        0 16px;
+
+    border:
+        1px solid
+        var(--borda);
+
+    border-radius:
+        10px;
+
+    outline:
+        none;
+
+    font-size:
+        15px;
+
+    color:
+        var(--texto);
+
+    transition:
+        0.2s;
+
+}
+
+
+.form-group input:focus {
+
+    border-color:
+        var(--verde-principal);
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(
+            62,
+            142,
+            91,
+            0.12
+        );
+
+}
+
+
+/* =====================================
+   SENHA
+===================================== */
+
+.password-wrapper {
+
+    position:
+        relative;
+
+}
+
+
+.password-wrapper input {
+
+    padding-right:
+        55px;
+
+}
+
+
+.toggle-password {
+
+    position:
+        absolute;
+
+    top:
+        50%;
+
+    right:
+        12px;
+
+    transform:
+        translateY(-50%);
+
+    border:
+        none;
+
+    background:
+        transparent;
+
+    cursor:
+        pointer;
+
+    font-size:
+        18px;
+
+}
+
+
+/* =====================================
+   OPÇÕES
+===================================== */
+
+.form-options {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    margin:
+        5px 0 25px;
+
+    font-size:
+        13px;
+
+}
+
+
+.remember {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        7px;
+
+    color:
+        var(--texto-suave);
+
+}
+
+
+.remember input {
+
+    accent-color:
+        var(--verde-principal);
+
+}
+
+
+.form-options a {
+
+    color:
+        var(--verde-principal);
+
+    font-weight:
+        600;
+
+}
+
+
+/* =====================================
+   BOTÃO LOGIN
+===================================== */
+
+.btn-login {
+
+    width:
+        100%;
+
+    height:
+        54px;
+
+    border:
+        none;
+
+    border-radius:
+        10px;
+
+    background:
+        var(--verde-principal);
+
+    color:
+        white;
+
+    font-size:
+        16px;
+
+    font-weight:
+        bold;
+
+    cursor:
+        pointer;
+
+    transition:
+        0.2s;
+
+}
+
+
+.btn-login:hover {
+
+    background:
+        var(--verde-escuro);
+
+}
+
+
+.btn-login:disabled {
+
+    opacity:
+        0.7;
+
+    cursor:
+        wait;
+
+}
+
+
+/* =====================================
+   MENSAGENS
+===================================== */
+
+.mensagem-login {
+
+    min-height:
+        25px;
+
+    margin-top:
+        15px;
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+
+}
+
+
+.mensagem-login.erro {
+
+    color:
+        #C74747;
+
+}
+
+
+.mensagem-login.sucesso {
+
+    color:
+        var(--verde-principal);
+
+}
+
+
+/* =====================================
+   CADASTRO
+===================================== */
+
+.cadastro-link {
+
+    margin-top:
+        30px;
+
+    padding-top:
+        25px;
+
+    border-top:
+        1px solid
+        var(--borda);
+
+    text-align:
+        center;
+
+    font-size:
+        14px;
+
+    color:
+        var(--texto-suave);
+
+}
+
+
+.cadastro-link a {
+
+    color:
+        var(--verde-principal);
+
+    font-weight:
+        bold;
+
+}
+
+
+/* =====================================
+   VOLTAR
+===================================== */
+
+.voltar-site {
+
+    display:
+        block;
+
+    margin-top:
+        25px;
+
+    text-align:
+        center;
+
+    color:
+        var(--texto-suave);
+
+    font-size:
+        14px;
+
+    transition:
+        0.2s;
+
+}
+
+
+.voltar-site:hover {
+
+    color:
+        var(--verde-principal);
+
+}
+
+
+/* =====================================
+   TABLETS E CELULARES
+===================================== */
+
+@media (
+    max-width:
+    800px
+) {
+
+
+    .login-page {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+
+    .login-info {
+
+        min-height:
+            330px;
+
+        padding:
+            30px 8%;
+
+        align-items:
+            center;
+
+        text-align:
+            center;
+
+    }
+
+
+    .logo {
+
+        width:
+            180px;
+
+        padding:
+            10px 15px;
+
+        border-radius:
+            18px;
+
+    }
+
+
+    .info-content {
+
+        margin:
+            auto 0;
+
+        display:
+            flex;
+
+        flex-direction:
+            column;
+
+        align-items:
+            center;
+
+    }
+
+
+    .info-content h1 {
+
+        font-size:
+            34px;
+
+        margin:
+            15px 0;
+
+    }
+
+
+    .info-content p {
+
+        font-size:
+            15px;
+
+    }
+
+
+    .beneficios {
+
+        display:
+            none;
+
+    }
+
+
+    .login-area {
+
+        padding:
+            45px 7%;
+
+    }
+
+
+}
+
+
+/* =====================================
+   SMARTPHONES PEQUENOS
+===================================== */
+
+@media (
+    max-width:
+    450px
+) {
+
+
+    .login-info {
+
+        min-height:
+            300px;
+
+    }
+
+
+    .logo {
+
+        width:
+            180px;
+
+        padding:
+            10px 15px;
+
+        border-radius:
+            18px;
+
+    }
+
+
+    .info-content h1 {
+
+        font-size:
+            30px;
+
+    }
+
+
+    .login-header h2 {
+
+        font-size:
+            26px;
+
+    }
+
+
+    .form-options {
+
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap:
+            12px;
+
+    }
+
+}
