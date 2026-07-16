@@ -73,7 +73,14 @@
 
                         <div class="search-input-area">
 
-                            <input type="text" id="medicamento" placeholder="Ex: Losartana 50 mg">
+                            <div class="campo-com-sugestoes">
+
+                                <input type="text" id="medicamento" placeholder="Ex: Captopril, Propranolol..."
+                                    autocomplete="off">
+
+                                <div id="sugestoesMedicamentos" class="sugestoes-medicamentos"></div>
+
+                            </div>
 
                             <button class="btn-search" id="btnPesquisar">
                                 🔍 Pesquisar

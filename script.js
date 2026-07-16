@@ -5,105 +5,45 @@
 const medicamentos = {
 
     "propranolol 40 mg": [
-        {
-            farmacia: "Nissei",
-            preco: 8.90
-        },
-        {
-            farmacia: "Multi Farma",
-            preco: 7.50
-        },
-        {
-            farmacia: "Droga Mais",
-            preco: 6.99
-        },
-        {
-            farmacia: "Hiper Farma",
-            preco: 8.20
-        }
+        { farmacia: "Nissei", preco: 8.90 },
+        { farmacia: "Multi Farma", preco: 7.50 },
+        { farmacia: "Droga Mais", preco: 6.99 },
+        { farmacia: "Hiper Farma", preco: 8.20 }
     ],
 
     "hidroclorotiazida 25 mg": [
-        {
-            farmacia: "Nissei",
-            preco: 5.90
-        },
-        {
-            farmacia: "Multi Farma",
-            preco: 4.80
-        },
-        {
-            farmacia: "Droga Mais",
-            preco: 3.99
-        },
-        {
-            farmacia: "Hiper Farma",
-            preco: 5.20
-        }
+        { farmacia: "Nissei", preco: 5.90 },
+        { farmacia: "Multi Farma", preco: 4.80 },
+        { farmacia: "Droga Mais", preco: 3.99 },
+        { farmacia: "Hiper Farma", preco: 5.20 }
     ],
 
     "furosemida 40 mg": [
-        {
-            farmacia: "Nissei",
-            preco: 7.90
-        },
-        {
-            farmacia: "Multi Farma",
-            preco: 6.50
-        },
-        {
-            farmacia: "Droga Mais",
-            preco: 5.99
-        },
-        {
-            farmacia: "Hiper Farma",
-            preco: 6.80
-        }
+        { farmacia: "Nissei", preco: 7.90 },
+        { farmacia: "Multi Farma", preco: 6.50 },
+        { farmacia: "Droga Mais", preco: 5.99 },
+        { farmacia: "Hiper Farma", preco: 6.80 }
     ],
 
     "captopril 25 mg": [
-        {
-            farmacia: "Nissei",
-            preco: 10.40
-        },
-        {
-            farmacia: "Multi Farma",
-            preco: 5.38
-        },
-        {
-            farmacia: "Droga Mais",
-            preco: 4.99
-        },
-        {
-            farmacia: "Hiper Farma",
-            preco: 6.85
-        }
+        { farmacia: "Nissei", preco: 10.40 },
+        { farmacia: "Multi Farma", preco: 5.38 },
+        { farmacia: "Droga Mais", preco: 4.99 },
+        { farmacia: "Hiper Farma", preco: 6.85 }
     ],
 
     "anlodipino 5 mg": [
-        {
-            farmacia: "Nissei",
-            preco: 9.90
-        },
-        {
-            farmacia: "Multi Farma",
-            preco: 8.50
-        },
-        {
-            farmacia: "Droga Mais",
-            preco: 7.99
-        },
-        {
-            farmacia: "Hiper Farma",
-            preco: 8.90
-        }
+        { farmacia: "Nissei", preco: 9.90 },
+        { farmacia: "Multi Farma", preco: 8.50 },
+        { farmacia: "Droga Mais", preco: 7.99 },
+        { farmacia: "Hiper Farma", preco: 8.90 }
     ]
 
 };
 
 
 // ================================
-// NORMALIZAÇÃO DO TEXTO
+// NORMALIZAR TEXTO
 // ================================
 
 function normalizarTexto(texto) {
@@ -131,107 +71,10 @@ const botaoPesquisar =
 const resultadoBusca =
     document.getElementById("resultadoBusca");
 
-
-// ================================
-// ENCONTRAR MEDICAMENTO
-// ================================
-
-function encontrarMedicamento(busca) {
-
-    const medicamentosDisponiveis =
-        Object.keys(medicamentos);
-
-
-    // 1. Procura exata
-
-    if (medicamentos[busca]) {
-
-        return busca;
-
-    }
-
-
-    // 2. Procura pelo nome principal
-
-    const medicamentoPorNome =
-        medicamentosDisponiveis.find(
-
-            medicamento => {
-
-                const nomePrincipal =
-                    medicamento.split(" ")[0];
-
-                return busca === nomePrincipal;
-
-            }
-
-        );
-
-
-    if (medicamentoPorNome) {
-
-        return medicamentoPorNome;
-
-    }
-
-
-    // 3. Procura ignorando o espaço entre número e unidade
-
-    const buscaSemEspacos =
-        busca.replace(/\s+/g, "");
-
-
-    const medicamentoSemEspacos =
-        medicamentosDisponiveis.find(
-
-            medicamento => {
-
-                const nomeSemEspacos =
-                    medicamento.replace(/\s+/g, "");
-
-                return buscaSemEspacos === nomeSemEspacos;
-
-            }
-
-        );
-
-
-    if (medicamentoSemEspacos) {
-
-        return medicamentoSemEspacos;
-
-    }
-
-
-    // 4. Procura quando o usuário digita apenas parte do nome
-
-    const medicamentoParcial =
-        medicamentosDisponiveis.find(
-
-            medicamento => {
-
-                const nomePrincipal =
-                    medicamento.split(" ")[0];
-
-                return busca.includes(nomePrincipal);
-
-            }
-
-        );
-
-
-    if (medicamentoParcial) {
-
-        return medicamentoParcial;
-
-    }
-
-
-    // Caso nada seja encontrado
-
-    return null;
-
-}
+const sugestoesMedicamentos =
+    document.getElementById(
+        "sugestoesMedicamentos"
+    );
 
 
 // ================================
@@ -248,7 +91,153 @@ function formatarPreco(preco) {
 
 
 // ================================
-// REALIZAR PESQUISA
+// MOSTRAR SUGESTÕES
+// ================================
+
+function mostrarSugestoes() {
+
+
+    const textoDigitado =
+        normalizarTexto(
+            campoMedicamento.value
+        );
+
+
+    // Se não digitou nada, esconde as sugestões
+
+    if (textoDigitado === "") {
+
+        sugestoesMedicamentos.innerHTML = "";
+
+        sugestoesMedicamentos.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    const listaMedicamentos =
+        Object.keys(medicamentos);
+
+
+    const resultados =
+        listaMedicamentos.filter(
+
+            medicamento => {
+
+                const nomePrincipal =
+                    medicamento.split(" ")[0];
+
+
+                return medicamento.includes(
+                    textoDigitado
+                )
+
+                ||
+
+                nomePrincipal.startsWith(
+                    textoDigitado
+                );
+
+            }
+
+        );
+
+
+    // Se não encontrou nada
+
+    if (resultados.length === 0) {
+
+        sugestoesMedicamentos.innerHTML = "";
+
+        sugestoesMedicamentos.style.display =
+            "none";
+
+        return;
+
+    }
+
+
+    // Criar as sugestões
+
+    sugestoesMedicamentos.innerHTML =
+
+        resultados.map(
+
+            medicamento => `
+
+                <button
+                    type="button"
+                    class="sugestao-medicamento"
+                    data-medicamento="${medicamento}"
+                >
+
+                    💊
+
+                    <span>
+
+                        ${medicamento}
+
+                    </span>
+
+                </button>
+
+            `
+
+        ).join("");
+
+
+    sugestoesMedicamentos.style.display =
+        "block";
+
+
+    // Adicionar clique em cada sugestão
+
+    document
+        .querySelectorAll(
+            ".sugestao-medicamento"
+        )
+        .forEach(
+
+            sugestao => {
+
+
+                sugestao.addEventListener(
+
+                    "click",
+
+                    function() {
+
+
+                        campoMedicamento.value =
+                            this.dataset.medicamento;
+
+
+                        sugestoesMedicamentos.innerHTML =
+                            "";
+
+
+                        sugestoesMedicamentos.style.display =
+                            "none";
+
+
+                        pesquisarMedicamento();
+
+
+                    }
+
+                );
+
+            }
+
+        );
+
+}
+
+
+// ================================
+// PESQUISAR MEDICAMENTO
 // ================================
 
 function pesquisarMedicamento() {
@@ -259,10 +248,10 @@ function pesquisarMedicamento() {
 
 
     const busca =
-        normalizarTexto(buscaOriginal);
+        normalizarTexto(
+            buscaOriginal
+        );
 
-
-    // Se o campo estiver vazio
 
     if (busca === "") {
 
@@ -282,13 +271,9 @@ function pesquisarMedicamento() {
     }
 
 
-    // Procurar medicamento
-
     const medicamentoEncontrado =
         encontrarMedicamento(busca);
 
-
-    // Se não encontrar
 
     if (!medicamentoEncontrado) {
 
@@ -304,11 +289,13 @@ function pesquisarMedicamento() {
                 Tente pesquisar por:
 
                 <strong>
+
                     Propranolol,
                     Hidroclorotiazida,
                     Furosemida,
                     Captopril
                     ou Anlodipino.
+
                 </strong>
 
             </div>
@@ -320,29 +307,24 @@ function pesquisarMedicamento() {
     }
 
 
-    // Obter os preços
-
     const resultados =
-        medicamentos[medicamentoEncontrado];
+        medicamentos[
+            medicamentoEncontrado
+        ];
 
-
-    // Ordenar do menor para o maior
 
     const resultadosOrdenados =
         [...resultados].sort(
 
-            (a, b) => a.preco - b.preco
+            (a, b) =>
+                a.preco - b.preco
 
         );
 
 
-    // Menor preço
-
     const menorPreco =
         resultadosOrdenados[0];
 
-
-    // Maior preço
 
     const maiorPreco =
         resultadosOrdenados[
@@ -350,13 +332,10 @@ function pesquisarMedicamento() {
         ];
 
 
-    // Calcular economia
-
     const economia =
-        maiorPreco.preco - menorPreco.preco;
+        maiorPreco.preco -
+        menorPreco.preco;
 
-
-    // Exibir resultado
 
     resultadoBusca.innerHTML = `
 
@@ -389,7 +368,9 @@ function pesquisarMedicamento() {
                 <div>
 
 
-                    <span class="label-menor-preco">
+                    <span
+                        class="label-menor-preco"
+                    >
 
                         Melhor oferta
 
@@ -460,8 +441,9 @@ function pesquisarMedicamento() {
 
                         oferta => `
 
-                            <div class="oferta">
-
+                            <div
+                                class="oferta"
+                            >
 
                                 <span>
 
@@ -480,7 +462,6 @@ function pesquisarMedicamento() {
 
                                 </strong>
 
-
                             </div>
 
                         `
@@ -497,8 +478,6 @@ function pesquisarMedicamento() {
     `;
 
 
-    // Rolar suavemente até o resultado
-
     resultadoBusca.scrollIntoView({
 
         behavior: "smooth",
@@ -507,13 +486,132 @@ function pesquisarMedicamento() {
 
     });
 
+}
+
+
+// ================================
+// ENCONTRAR MEDICAMENTO
+// ================================
+
+function encontrarMedicamento(busca) {
+
+
+    const medicamentosDisponiveis =
+        Object.keys(medicamentos);
+
+
+    if (medicamentos[busca]) {
+
+        return busca;
+
+    }
+
+
+    const medicamentoPorNome =
+        medicamentosDisponiveis.find(
+
+            medicamento => {
+
+                const nomePrincipal =
+                    medicamento.split(" ")[0];
+
+
+                return busca ===
+                    nomePrincipal;
+
+            }
+
+        );
+
+
+    if (medicamentoPorNome) {
+
+        return medicamentoPorNome;
+
+    }
+
+
+    const buscaSemEspacos =
+        busca.replace(
+            /\s+/g,
+            ""
+        );
+
+
+    const medicamentoSemEspacos =
+        medicamentosDisponiveis.find(
+
+            medicamento => {
+
+                const nomeSemEspacos =
+                    medicamento.replace(
+                        /\s+/g,
+                        ""
+                    );
+
+
+                return buscaSemEspacos ===
+                    nomeSemEspacos;
+
+            }
+
+        );
+
+
+    if (medicamentoSemEspacos) {
+
+        return medicamentoSemEspacos;
+
+    }
+
+
+    const medicamentoParcial =
+        medicamentosDisponiveis.find(
+
+            medicamento => {
+
+                const nomePrincipal =
+                    medicamento.split(" ")[0];
+
+
+                return busca.includes(
+                    nomePrincipal
+                );
+
+            }
+
+        );
+
+
+    if (medicamentoParcial) {
+
+        return medicamentoParcial;
+
+    }
+
+
+    return null;
 
 }
 
 
 // ================================
-// EVENTO DO BOTÃO PESQUISAR
+// EVENTOS
 // ================================
+
+
+// Mostrar sugestões enquanto digita
+
+campoMedicamento.addEventListener(
+
+    "input",
+
+    mostrarSugestoes
+
+);
+
+
+// Pesquisar ao clicar
 
 botaoPesquisar.addEventListener(
 
@@ -524,9 +622,7 @@ botaoPesquisar.addEventListener(
 );
 
 
-// ================================
-// PESQUISAR PRESSIONANDO ENTER
-// ================================
+// Pesquisar com Enter
 
 campoMedicamento.addEventListener(
 
@@ -538,11 +634,18 @@ campoMedicamento.addEventListener(
         if (event.key === "Enter") {
 
 
+            sugestoesMedicamentos.innerHTML =
+                "";
+
+
+            sugestoesMedicamentos.style.display =
+                "none";
+
+
             pesquisarMedicamento();
 
 
         }
-
 
     }
 
