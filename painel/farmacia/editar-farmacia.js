@@ -214,25 +214,12 @@ const EditarFarmacia = {
 
     carregarDadosAtuais() {
 
-        /*
-         * O painel provavelmente já possui os dados da farmácia
-         * carregados em uma variável global.
-         *
-         * Vamos tentar localizar essa variável sem quebrar
-         * o restante do sistema.
-         */
-
-        this.dadosFarmacia =
-            window.farmaciaAtual ||
-            window.dadosFarmacia ||
-            window.farmaciaLogada ||
-            null;
-
+        this.dadosFarmacia = estado?.farmacia || null;
 
         if (!this.dadosFarmacia) {
 
             console.warn(
-                "Os dados atuais da farmácia ainda não estão disponíveis."
+                "Os dados atuais da farmácia ainda não foram carregados."
             );
 
         }
@@ -350,12 +337,5 @@ const EditarFarmacia = {
 };
 
 
-/* ======================================================
-   INICIAR MÓDULO
-====================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
 
-    EditarFarmacia.inicializar();
-
-});

@@ -156,6 +156,8 @@ async function iniciarPainel() {
         await verificarSessao();
         await carregarFarmacia();
 
+        EditarFarmacia.inicializar();
+
         preencherInformacoesFarmacia();
         configurarAcessoPorStatus();
 
