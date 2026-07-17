@@ -1,26 +1,45 @@
 const VIEW_OFERTAS = "public_medicine_offers";
 
-const campoMedicamento = document.getElementById("medicamento");
-const botaoPesquisar = document.getElementById("btnPesquisar");
-const botaoLimpar = document.getElementById("btnLimpar");
-const resultadoBusca = document.getElementById("resultadoBusca");
-const sugestoesMedicamentos = document.getElementById(
-    "sugestoesMedicamentos"
-);
+const IMAGEM_FARMACIA_PADRAO =
+    "assets/logo-farmacia.png";
 
-const menuToggle = document.getElementById("menuToggle");
-const mobileNav = document.getElementById("mobileNav");
+const campoMedicamento =
+    document.getElementById("medicamento");
 
-const partnerButton = document.getElementById("partnerButton");
-const partnerDropdown = document.getElementById("partnerDropdown");
+const botaoPesquisar =
+    document.getElementById("btnPesquisar");
+
+const botaoLimpar =
+    document.getElementById("btnLimpar");
+
+const resultadoBusca =
+    document.getElementById("resultadoBusca");
+
+const sugestoesMedicamentos =
+    document.getElementById("sugestoesMedicamentos");
+
+const menuToggle =
+    document.getElementById("menuToggle");
+
+const mobileNav =
+    document.getElementById("mobileNav");
+
+const partnerButton =
+    document.getElementById("partnerButton");
+
+const partnerDropdown =
+    document.getElementById("partnerDropdown");
+
+const anoAtual =
+    document.getElementById("anoAtual");
 
 let timerAutocomplete;
 let pesquisando = false;
 
 
-// =====================================
-// FUNÇÕES UTILITÁRIAS
-// =====================================
+/* ========================================
+   FUNÇÕES UTILITÁRIAS
+======================================== */
 
 function normalizarTexto(texto = "") {
     return String(texto)
@@ -45,12 +64,28 @@ function escaparHtml(valor = "") {
 function formatarPreco(valor) {
     const numero = Number(valor);
 
-    return Number.isFinite(numero)
-        ? numero.toLocaleString("pt-BR", {
-              style: "currency",
-              currency: "BRL"
-          })
-        : "R$ --";
+    if (!Number.isFinite(numero)) {
+        return "R$ --";
+    }
+
+    return numero.toLocaleString(
+        "pt-BR",
+        {
+            style: "currency",
+            currency: "BRL"
+        }
+    );
+}
+
+
+function capitalizarLocalidade(texto = "") {
+    return String(texto)
+        .toLocaleLowerCase("pt-BR")
+        .replace(
+            /(^|\s|[-/])\p{L}/gu,
+            (letra) =>
+                letra.toLocaleUpperCase("pt-BR")
+        );
 }
 
 
@@ -68,10 +103,11 @@ function nomeMedicamento(oferta) {
 
 
 function precoEfetivo(oferta) {
-    const precoNormal = Number(oferta.price);
-    const precoPromocional = Number(
-        oferta.promotional_price
-    );
+    const precoNormal =
+        Number(oferta.price);
+
+    const precoPromocional =
+        Number(oferta.promotional_price);
 
     const promocaoValida =
         Number.isFinite(precoPromocional) &&
@@ -85,10 +121,11 @@ function precoEfetivo(oferta) {
 
 
 function emPromocao(oferta) {
-    const precoNormal = Number(oferta.price);
-    const precoPromocional = Number(
-        oferta.promotional_price
-    );
+    const precoNormal =
+        Number(oferta.price);
+
+    const precoPromocional =
+        Number(oferta.promotional_price);
 
     return (
         Number.isFinite(precoPromocional) &&
@@ -108,9 +145,31 @@ function nomeFarmacia(oferta) {
 
 
 function localizacao(oferta) {
+    const cidade =
+        capitalizarLocalidade(
+            oferta.city || ""
+        );
+
+    const bairro =
+        capitalizarLocalidade(
+            oferta.neighborhood || ""
+        );
+
+    const estado =
+        String(oferta.state || "")
+            .toUpperCase()
+            .trim();
+
+    const cidadeEstado = [
+        cidade,
+        estado
+    ]
+        .filter(Boolean)
+        .join(" - ");
+
     return [
-        oferta.neighborhood,
-        oferta.city
+        bairro,
+        cidadeEstado
     ]
         .filter(Boolean)
         .join(" • ");
@@ -118,53 +177,72 @@ function localizacao(oferta) {
 
 
 function digitos(valor = "") {
-    return String(valor).replace(/\D/g, "");
+    return String(valor)
+        .replace(/\D/g, "");
 }
 
 
 function linkWhatsApp(oferta) {
-    const numeroOriginal = digitos(
-        oferta.whatsapp || oferta.phone
-    );
+    const numeroOriginal =
+        digitos(
+            oferta.whatsapp ||
+            oferta.phone
+        );
 
     if (!numeroOriginal) {
         return null;
     }
 
-    const numero = numeroOriginal.startsWith("55")
-        ? numeroOriginal
-        : `55${numeroOriginal}`;
+    const numero =
+        numeroOriginal.startsWith("55")
+            ? numeroOriginal
+            : `55${numeroOriginal}`;
 
-    const mensagem = encodeURIComponent(
-        `Olá! Encontrei ${nomeMedicamento(
-            oferta
-        )} no BuscaMed e gostaria de confirmar preço e disponibilidade.`
+    const mensagem =
+        encodeURIComponent(
+            `Olá! Encontrei ${nomeMedicamento(
+                oferta
+            )} no BuscaMed por ${formatarPreco(
+                precoEfetivo(oferta)
+            )} e gostaria de confirmar o preço e a disponibilidade.`
+        );
+
+    return (
+        `https://wa.me/${numero}` +
+        `?text=${mensagem}`
     );
-
-    return `https://wa.me/${numero}?text=${mensagem}`;
 }
 
 
 function validarSupabase() {
-    if (typeof supabaseClient === "undefined") {
+    if (
+        typeof supabaseClient ===
+        "undefined"
+    ) {
         throw new Error(
-            "Supabase não inicializado. Verifique config.js e supabase.js."
+            "Supabase não inicializado. " +
+            "Verifique config.js e supabase.js."
         );
     }
 }
 
 
 function atualizarLimpar() {
+    if (!botaoLimpar) {
+        return;
+    }
+
     botaoLimpar.style.display =
         campoMedicamento.value.trim()
-            ? "block"
+            ? "grid"
             : "none";
 }
 
 
 function fecharSugestoes() {
     sugestoesMedicamentos.innerHTML = "";
-    sugestoesMedicamentos.style.display = "none";
+    sugestoesMedicamentos.style.display =
+        "none";
 }
 
 
@@ -184,17 +262,18 @@ function estadoBusca(ativo) {
     botaoPesquisar.innerHTML = ativo
         ? `
             <span class="spinner"></span>
-            Buscando...
+            Buscando ofertas...
         `
         : `
-            🔍 Encontrar menor preço
+            <span aria-hidden="true">🔍</span>
+            Encontrar menor preço
         `;
 }
 
 
-// =====================================
-// DROPDOWN DA FARMÁCIA
-// =====================================
+/* ========================================
+   MENU DA FARMÁCIA
+======================================== */
 
 partnerButton?.addEventListener(
     "click",
@@ -251,27 +330,29 @@ document.addEventListener(
 document.addEventListener(
     "keydown",
     (evento) => {
-        if (evento.key === "Escape") {
-            partnerButton?.setAttribute(
-                "aria-expanded",
-                "false"
-            );
-
-            partnerDropdown?.classList.remove(
-                "active"
-            );
-
-            fecharSugestoes();
+        if (evento.key !== "Escape") {
+            return;
         }
+
+        partnerButton?.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+
+        partnerDropdown?.classList.remove(
+            "active"
+        );
+
+        fecharSugestoes();
     }
 );
 
 
-// =====================================
-// MENU MOBILE
-// =====================================
+/* ========================================
+   MENU MOBILE
+======================================== */
 
-menuToggle.addEventListener(
+menuToggle?.addEventListener(
     "click",
     () => {
         const aberto =
@@ -298,15 +379,15 @@ document
         link.addEventListener(
             "click",
             () => {
-                menuToggle.classList.remove(
+                menuToggle?.classList.remove(
                     "active"
                 );
 
-                mobileNav.classList.remove(
+                mobileNav?.classList.remove(
                     "active"
                 );
 
-                menuToggle.setAttribute(
+                menuToggle?.setAttribute(
                     "aria-expanded",
                     "false"
                 );
@@ -315,14 +396,15 @@ document
     });
 
 
-// =====================================
-// AUTOCOMPLETE
-// =====================================
+/* ========================================
+   AUTOCOMPLETE
+======================================== */
 
 async function buscarSugestoes() {
-    const termo = normalizarTexto(
-        campoMedicamento.value
-    );
+    const termo =
+        normalizarTexto(
+            campoMedicamento.value
+        );
 
     atualizarLimpar();
 
@@ -334,26 +416,25 @@ async function buscarSugestoes() {
     try {
         validarSupabase();
 
-        const termoSeguro = termo.replaceAll(
-            ",",
-            " "
-        );
+        const termoSeguro =
+            termo.replaceAll(",", " ");
 
         const { data, error } =
             await supabaseClient
                 .from(VIEW_OFERTAS)
-                .select(
-                    `
+                .select(`
                     name,
                     dosage,
                     dosage_unit,
-                    active_ingredient
-                    `
-                )
+                    active_ingredient,
+                    manufacturer
+                `)
                 .or(
-                    `name.ilike.%${termoSeguro}%,active_ingredient.ilike.%${termoSeguro}%`
+                    `name.ilike.%${termoSeguro}%,` +
+                    `active_ingredient.ilike.%${termoSeguro}%,` +
+                    `manufacturer.ilike.%${termoSeguro}%`
                 )
-                .limit(30);
+                .limit(40);
 
         if (error) {
             throw error;
@@ -362,27 +443,51 @@ async function buscarSugestoes() {
         const medicamentosUnicos =
             new Map();
 
-        (data || []).forEach((item) => {
-            const nomeCompleto =
-                nomeMedicamento(item);
+        (data || []).forEach(
+            (item) => {
+                const nomeCompleto =
+                    nomeMedicamento(item);
 
-            if (!nomeCompleto) {
-                return;
-            }
-
-            medicamentosUnicos.set(
-                normalizarTexto(nomeCompleto),
-                {
-                    nome: nomeCompleto,
-                    principio:
-                        item.active_ingredient ||
-                        ""
+                if (!nomeCompleto) {
+                    return;
                 }
-            );
-        });
+
+                const chave =
+                    normalizarTexto(
+                        nomeCompleto
+                    );
+
+                if (
+                    medicamentosUnicos.has(
+                        chave
+                    )
+                ) {
+                    return;
+                }
+
+                medicamentosUnicos.set(
+                    chave,
+                    {
+                        nome: nomeCompleto,
+                        termoBusca:
+                            item.name ||
+                            nomeCompleto,
+                        principio:
+                            item.active_ingredient ||
+                            "",
+                        fabricante:
+                            item.manufacturer ||
+                            ""
+                    }
+                );
+            }
+        );
 
         const lista =
-            [...medicamentosUnicos.values()]
+            [
+                ...medicamentosUnicos
+                    .values()
+            ]
                 .slice(0, 8);
 
         if (!lista.length) {
@@ -400,6 +505,10 @@ async function buscarSugestoes() {
                             data-medicamento="${escaparHtml(
                                 item.nome
                             )}"
+                            data-termo-busca="${escaparHtml(
+                                item.termoBusca
+                            )}"
+                            role="option"
                         >
                             <span aria-hidden="true">
                                 💊
@@ -413,11 +522,17 @@ async function buscarSugestoes() {
                                 </strong>
 
                                 ${
-                                    item.principio
+                                    item.principio ||
+                                    item.fabricante
                                         ? `
                                             <small>
                                                 ${escaparHtml(
-                                                    item.principio
+                                                    [
+                                                        item.principio,
+                                                        item.fabricante
+                                                    ]
+                                                        .filter(Boolean)
+                                                        .join(" • ")
                                                 )}
                                             </small>
                                         `
@@ -433,20 +548,25 @@ async function buscarSugestoes() {
             "block";
 
         sugestoesMedicamentos
-            .querySelectorAll("button")
-            .forEach((botao) => {
-                botao.addEventListener(
-                    "click",
-                    () => {
-                        campoMedicamento.value =
-                            botao.dataset.medicamento;
+            .querySelectorAll(
+                ".sugestao-medicamento"
+            )
+            .forEach(
+                (botao) => {
+                    botao.addEventListener(
+                        "click",
+                        () => {
+                            campoMedicamento.value =
+                                botao.dataset
+                                    .termoBusca;
 
-                        fecharSugestoes();
-                        atualizarLimpar();
-                        pesquisarMedicamento();
-                    }
-                );
-            });
+                            fecharSugestoes();
+                            atualizarLimpar();
+                            pesquisarMedicamento();
+                        }
+                    );
+                }
+            );
     } catch (erro) {
         console.error(
             "Erro no autocomplete:",
@@ -456,58 +576,96 @@ async function buscarSugestoes() {
         fecharSugestoes();
     }
 }
-// =====================================
-// RENDERIZAÇÃO DAS OFERTAS
-// =====================================
+
+
+/* ========================================
+   IMAGENS
+======================================== */
 
 function logoFarmacia(oferta) {
-    if (oferta.logo_url) {
+    const logo =
+        oferta.logo_url ||
+        IMAGEM_FARMACIA_PADRAO;
+
+    return `
+        <img
+            src="${escaparHtml(logo)}"
+            alt="Logo de ${escaparHtml(
+                nomeFarmacia(oferta)
+            )}"
+            class="farmacia-logo"
+            onerror="
+                this.onerror=null;
+                this.src='${IMAGEM_FARMACIA_PADRAO}';
+            "
+        >
+    `;
+}
+
+
+function imagemMedicamento(oferta) {
+    if (oferta.image_url) {
         return `
-            <img
-                src="${escaparHtml(
-                    oferta.logo_url
-                )}"
-                alt="Logo de ${escaparHtml(
-                    nomeFarmacia(oferta)
-                )}"
-                class="farmacia-logo"
-            >
+            <div class="medicamento-imagem-box">
+                <img
+                    src="${escaparHtml(
+                        oferta.image_url
+                    )}"
+                    alt="Imagem de ${escaparHtml(
+                        nomeMedicamento(oferta)
+                    )}"
+                    class="medicamento-imagem"
+                    onerror="
+                        this.parentElement.innerHTML =
+                        '<div class=&quot;medicamento-imagem-placeholder&quot;><div><span>💊</span><small>Imagem indisponível</small></div></div>';
+                    "
+                >
+            </div>
         `;
     }
 
     return `
-        <div
-            class="farmacia-logo-placeholder"
-            aria-hidden="true"
-        >
-            🏪
+        <div class="medicamento-imagem-box">
+            <div class="medicamento-imagem-placeholder">
+                <div>
+                    <span aria-hidden="true">
+                        💊
+                    </span>
+
+                    <small>
+                        Imagem do medicamento
+                    </small>
+                </div>
+            </div>
         </div>
     `;
 }
 
 
-function blocoPreco(
-    oferta,
-    principal = true
-) {
+/* ========================================
+   PREÇO
+======================================== */
+
+function blocoPreco(oferta) {
     return `
         ${
             emPromocao(oferta)
                 ? `
                     <span class="preco-anterior">
+                        De
                         ${formatarPreco(
                             oferta.price
                         )}
                     </span>
                 `
-                : ""
+                : `
+                    <span class="preco-anterior">
+                        Melhor preço
+                    </span>
+                `
         }
 
-        <strong class="${
-            principal
-                ? "preco-principal"
-                : ""
-        }">
+        <strong class="preco-principal">
             ${formatarPreco(
                 precoEfetivo(oferta)
             )}
@@ -526,12 +684,20 @@ function blocoPreco(
 }
 
 
-function renderizar(ofertas, termo) {
-    const melhorOferta = ofertas[0];
+/* ========================================
+   RENDERIZAÇÃO
+======================================== */
 
-    const maiorPreco = Math.max(
-        ...ofertas.map(precoEfetivo)
-    );
+function renderizar(ofertas, termo) {
+    const melhorOferta =
+        ofertas[0];
+
+    const maiorPreco =
+        Math.max(
+            ...ofertas.map(
+                precoEfetivo
+            )
+        );
 
     const economia =
         maiorPreco -
@@ -561,8 +727,8 @@ function renderizar(ofertas, termo) {
                         ${ofertas.length}
                         ${
                             ofertas.length === 1
-                                ? "oferta"
-                                : "ofertas"
+                                ? "oferta encontrada"
+                                : "ofertas encontradas"
                         }
                     </span>
 
@@ -581,9 +747,12 @@ function renderizar(ofertas, termo) {
                         ? `
                             <p class="resultado-subtitulo">
                                 Princípio ativo:
-                                ${escaparHtml(
-                                    melhorOferta.active_ingredient
-                                )}
+                                <strong>
+                                    ${escaparHtml(
+                                        melhorOferta
+                                            .active_ingredient
+                                    )}
+                                </strong>
                             </p>
                         `
                         : ""
@@ -591,145 +760,148 @@ function renderizar(ofertas, termo) {
 
             </header>
 
-
             <div class="melhor-oferta">
 
-                <div class="oferta-topo">
+                <div class="melhor-oferta-grid">
 
-                    <div class="farmacia-resumo">
+                    ${imagemMedicamento(
+                        melhorOferta
+                    )}
 
-                        ${logoFarmacia(
-                            melhorOferta
-                        )}
+                    <div class="oferta-conteudo">
 
-                        <div>
+                        <div class="oferta-topo">
 
-                            <small>
-                                Melhor oferta disponível
-                            </small>
+                            <div class="farmacia-resumo">
 
-                            <h3>
-                                ${escaparHtml(
-                                    nomeFarmacia(
-                                        melhorOferta
-                                    )
+                                ${logoFarmacia(
+                                    melhorOferta
                                 )}
-                            </h3>
+
+                                <div>
+
+                                    <small>
+                                        Melhor oferta disponível
+                                    </small>
+
+                                    <h3>
+                                        ${escaparHtml(
+                                            nomeFarmacia(
+                                                melhorOferta
+                                            )
+                                        )}
+                                    </h3>
+
+                                    ${
+                                        localizacao(
+                                            melhorOferta
+                                        )
+                                            ? `
+                                                <p class="localizacao">
+                                                    📍
+                                                    ${escaparHtml(
+                                                        localizacao(
+                                                            melhorOferta
+                                                        )
+                                                    )}
+                                                </p>
+                                            `
+                                            : ""
+                                    }
+
+                                </div>
+
+                            </div>
+
+                            <div class="preco-bloco">
+                                ${blocoPreco(
+                                    melhorOferta
+                                )}
+                            </div>
+
+                        </div>
+
+                        ${
+                            detalhes.length
+                                ? `
+                                    <div class="detalhes-medicamento">
+
+                                        ${detalhes
+                                            .map(
+                                                (detalhe) => `
+                                                    <span>
+                                                        ${escaparHtml(
+                                                            detalhe
+                                                        )}
+                                                    </span>
+                                                `
+                                            )
+                                            .join("")}
+
+                                    </div>
+                                `
+                                : ""
+                        }
+
+                        <div class="oferta-acoes">
 
                             ${
-                                localizacao(
-                                    melhorOferta
-                                )
+                                whatsapp
                                     ? `
-                                        <p class="localizacao">
-                                            📍
-                                            ${escaparHtml(
-                                                localizacao(
-                                                    melhorOferta
-                                                )
-                                            )}
-                                        </p>
+                                        <a
+                                            href="${whatsapp}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn-whatsapp"
+                                        >
+                                            💬 Conversar no WhatsApp
+                                        </a>
+                                    `
+                                    : ""
+                            }
+
+                            ${
+                                melhorOferta.phone
+                                    ? `
+                                        <a
+                                            href="tel:${digitos(
+                                                melhorOferta.phone
+                                            )}"
+                                            class="btn-secundario"
+                                        >
+                                            ☎️ Ligar para a farmácia
+                                        </a>
                                     `
                                     : ""
                             }
 
                         </div>
 
-                    </div>
+                        ${
+                            economia > 0
+                                ? `
+                                    <p class="economia">
 
+                                        💰 Você pode economizar até
 
-                    <div class="preco-bloco">
-                        ${blocoPreco(
-                            melhorOferta
-                        )}
+                                        <strong>
+                                            ${formatarPreco(
+                                                economia
+                                            )}
+                                        </strong>
+
+                                        escolhendo a melhor oferta.
+
+                                    </p>
+                                `
+                                : ""
+                        }
+
                     </div>
 
                 </div>
-
-
-                ${
-                    detalhes.length
-                        ? `
-                            <div class="detalhes-medicamento">
-
-                                ${detalhes
-                                    .map(
-                                        (
-                                            detalhe
-                                        ) => `
-                                            <span>
-                                                ${escaparHtml(
-                                                    detalhe
-                                                )}
-                                            </span>
-                                        `
-                                    )
-                                    .join("")}
-
-                            </div>
-                        `
-                        : ""
-                }
-
-
-                <div class="oferta-acoes">
-
-                    ${
-                        whatsapp
-                            ? `
-                                <a
-                                    href="${whatsapp}"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="btn-whatsapp"
-                                >
-                                    💬 Conversar no WhatsApp
-                                </a>
-                            `
-                            : ""
-                    }
-
-                    ${
-                        melhorOferta.phone
-                            ? `
-                                <a
-                                    href="tel:${digitos(
-                                        melhorOferta.phone
-                                    )}"
-                                    class="btn-secundario"
-                                >
-                                    ☎️ Ligar para a farmácia
-                                </a>
-                            `
-                            : ""
-                    }
-
-                </div>
-
-
-                ${
-                    economia > 0
-                        ? `
-                            <p class="economia">
-
-                                💰 Economia de até
-
-                                <strong>
-                                    ${formatarPreco(
-                                        economia
-                                    )}
-                                </strong>
-
-                                em relação à opção
-                                mais cara.
-
-                            </p>
-                        `
-                        : ""
-                }
 
             </div>
-
 
             ${
                 ofertas.length > 1
@@ -737,15 +909,13 @@ function renderizar(ofertas, termo) {
                         <div class="outras-ofertas">
 
                             <h3>
-                                Outras ofertas
+                                Outras ofertas disponíveis
                             </h3>
 
                             ${ofertas
                                 .slice(1)
                                 .map(
-                                    (
-                                        oferta
-                                    ) => `
+                                    (oferta) => `
                                         <div class="oferta">
 
                                             <div class="oferta-info">
@@ -763,7 +933,8 @@ function renderizar(ofertas, termo) {
                                                         localizacao(
                                                             oferta
                                                         ),
-                                                        oferta.package_description
+                                                        oferta
+                                                            .package_description
                                                     ]
                                                         .filter(
                                                             Boolean
@@ -777,7 +948,6 @@ function renderizar(ofertas, termo) {
                                                 </small>
 
                                             </div>
-
 
                                             <div class="oferta-preco">
 
@@ -815,12 +985,10 @@ function renderizar(ofertas, termo) {
                     : ""
             }
 
-
             <p class="resultado-aviso">
 
-                Preço e disponibilidade devem
-                ser confirmados diretamente
-                com a farmácia.
+                Preço e disponibilidade devem ser
+                confirmados diretamente com a farmácia.
 
             </p>
 
@@ -829,14 +997,14 @@ function renderizar(ofertas, termo) {
 
     resultadoBusca.scrollIntoView({
         behavior: "smooth",
-        block: "center"
+        block: "start"
     });
 }
 
 
-// =====================================
-// PESQUISA PRINCIPAL
-// =====================================
+/* ========================================
+   PESQUISA PRINCIPAL
+======================================== */
 
 async function pesquisarMedicamento() {
     if (pesquisando) {
@@ -847,7 +1015,9 @@ async function pesquisarMedicamento() {
         campoMedicamento.value.trim();
 
     const termo =
-        normalizarTexto(termoOriginal);
+        normalizarTexto(
+            termoOriginal
+        );
 
     fecharSugestoes();
 
@@ -855,8 +1025,14 @@ async function pesquisarMedicamento() {
         mensagem(
             "mensagem-erro",
             `
-                ⚠️ Digite o nome ou o
-                princípio ativo de um medicamento.
+                <strong>
+                    ⚠️ Digite um medicamento.
+                </strong>
+
+                <br>
+
+                Você pode pesquisar pelo nome,
+                princípio ativo ou fabricante.
             `
         );
 
@@ -889,40 +1065,55 @@ async function pesquisarMedicamento() {
                 .from(VIEW_OFERTAS)
                 .select("*")
                 .or(
-                    `
-                    name.ilike.%${termoSeguro}%,
-                    active_ingredient.ilike.%${termoSeguro}%,
-                    manufacturer.ilike.%${termoSeguro}%
-                    `.replace(/\s+/g, "")
+                    (
+                        `name.ilike.%${termoSeguro}%,` +
+                        `active_ingredient.ilike.%${termoSeguro}%,` +
+                        `manufacturer.ilike.%${termoSeguro}%,` +
+                        `package_description.ilike.%${termoSeguro}%`
+                    )
                 )
-                .limit(80);
+                .limit(100);
 
         if (error) {
             throw error;
         }
 
-        const ofertas = (data || [])
-            .filter((oferta) => {
-                const preco =
-                    precoEfetivo(oferta);
+        const ofertas =
+            (data || [])
+                .filter(
+                    (oferta) => {
+                        const preco =
+                            precoEfetivo(
+                                oferta
+                            );
 
-                return (
-                    Number.isFinite(preco) &&
-                    preco > 0
+                        return (
+                            Number.isFinite(
+                                preco
+                            ) &&
+                            preco > 0
+                        );
+                    }
+                )
+                .sort(
+                    (
+                        ofertaA,
+                        ofertaB
+                    ) =>
+                        precoEfetivo(
+                            ofertaA
+                        ) -
+                        precoEfetivo(
+                            ofertaB
+                        )
                 );
-            })
-            .sort(
-                (ofertaA, ofertaB) =>
-                    precoEfetivo(ofertaA) -
-                    precoEfetivo(ofertaB)
-            );
 
         if (!ofertas.length) {
             mensagem(
                 "mensagem-vazia",
                 `
                     <strong>
-                        😕 Nenhuma oferta encontrada.
+                        😕 Nenhuma oferta encontrada
                     </strong>
 
                     <br>
@@ -955,8 +1146,8 @@ async function pesquisarMedicamento() {
 
                 <br>
 
-                Tente novamente em alguns
-                instantes.
+                Verifique a conexão e tente
+                novamente em alguns instantes.
             `
         );
     } finally {
@@ -965,32 +1156,35 @@ async function pesquisarMedicamento() {
 }
 
 
-// =====================================
-// EVENTOS DO CAMPO DE PESQUISA
-// =====================================
+/* ========================================
+   EVENTOS DA PESQUISA
+======================================== */
 
-campoMedicamento.addEventListener(
+campoMedicamento?.addEventListener(
     "input",
     () => {
-        clearTimeout(timerAutocomplete);
+        clearTimeout(
+            timerAutocomplete
+        );
 
         atualizarLimpar();
 
-        timerAutocomplete = setTimeout(
-            buscarSugestoes,
-            320
-        );
+        timerAutocomplete =
+            setTimeout(
+                buscarSugestoes,
+                320
+            );
     }
 );
 
 
-botaoPesquisar.addEventListener(
+botaoPesquisar?.addEventListener(
     "click",
     pesquisarMedicamento
 );
 
 
-botaoLimpar.addEventListener(
+botaoLimpar?.addEventListener(
     "click",
     () => {
         campoMedicamento.value = "";
@@ -1004,12 +1198,31 @@ botaoLimpar.addEventListener(
 );
 
 
-campoMedicamento.addEventListener(
+campoMedicamento?.addEventListener(
     "keydown",
     (evento) => {
         if (evento.key === "Enter") {
             evento.preventDefault();
             pesquisarMedicamento();
+        }
+    }
+);
+
+
+/* ========================================
+   INICIALIZAÇÃO
+======================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+        atualizarLimpar();
+        fecharSugestoes();
+
+        if (anoAtual) {
+            anoAtual.textContent =
+                new Date()
+                    .getFullYear();
         }
     }
 );
