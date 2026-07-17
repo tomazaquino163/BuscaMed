@@ -125,7 +125,7 @@ a {
 }
 
 .header-content {
-    min-height: 78px;
+    min-height: 96px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -138,9 +138,14 @@ a {
 }
 
 .logo {
-    width: 138px;
-    max-height: 52px;
+    width: 220px;
+    max-height: 80px;
     object-fit: contain;
+    transition: transform .25s ease;
+}
+
+.logo:hover {
+    transform: scale(1.03);
 }
 
 .nav {
@@ -1767,11 +1772,11 @@ a {
 @media (max-width: 600px) {
 
     .header-content {
-        min-height: 67px;
+        min-height: 82px;
     }
 
     .logo {
-        width: 120px;
+        width: 170px;
     }
 
     .hero-text {
