@@ -40,6 +40,11 @@ const EditarFarmacia = {
             formulario:
                 document.getElementById("formulario-editar-farmacia"),
 
+            botaoSalvar:
+                document.querySelector(
+                    '#formulario-editar-farmacia button[type="submit"]'
+                ),
+
             botoesFechar:
                 document.querySelectorAll(
                     "[data-fechar-edicao-farmacia]"
@@ -95,6 +100,19 @@ const EditarFarmacia = {
 
     adicionarEventos() {
 
+        const { formulario } = this.elementos;
+
+        if (formulario) {
+
+            formulario.addEventListener("submit", async (evento) => {
+
+                evento.preventDefault();
+
+                await this.salvar();
+
+            });
+
+        }
         const {
             botaoAbrir,
             modal,
@@ -107,6 +125,20 @@ const EditarFarmacia = {
             botaoAbrir.addEventListener("click", () => {
 
                 this.abrir();
+
+            });
+
+        }
+
+        const { formulario } = this.elementos;
+
+        if (formulario) {
+
+            formulario.addEventListener("submit", async (evento) => {
+
+                evento.preventDefault();
+
+                await this.salvar();
 
             });
 
@@ -198,6 +230,8 @@ const EditarFarmacia = {
 
 
         formulario?.reset();
+
+        UploadLogoFarmacia.limpar();
 
 
         if (erroFormulario) {
@@ -305,6 +339,412 @@ const EditarFarmacia = {
             this.elementos.cep,
             farmacia.postal_code
         );
+
+    },
+
+    /* ==================================================
+   OBTER DADOS DO FORMULÁRIO
+================================================== */
+
+    obterDadosFormulario() {
+
+        return {
+
+            trade_name:
+                this.elementos.nomeFantasia?.value.trim() || "",
+
+            responsible_name:
+                this.elementos.responsavel?.value.trim() || "",
+
+            commercial_email:
+                this.elementos.emailComercial?.value.trim() || "",
+
+            phone:
+                this.elementos.telefone?.value.trim() || "",
+
+            whatsapp:
+                this.elementos.whatsapp?.value.trim() || "",
+
+            address:
+                this.elementos.endereco?.value.trim() || "",
+
+            neighborhood:
+                this.elementos.bairro?.value.trim() || "",
+
+            city:
+                this.elementos.cidade?.value.trim() || "",
+
+            state:
+                this.elementos.estado?.value
+                    .trim()
+                    .toUpperCase() || "",
+
+            postal_code:
+                this.elementos.cep?.value.trim() || ""
+
+        };
+
+    },
+
+
+    /* ==================================================
+       VALIDAÇÃO
+    ================================================== */
+
+    validarFormulario(dados) {
+
+        this.limparErrosCampos();
+
+        const { erroFormulario } = this.elementos;
+
+        if (erroFormulario) {
+            erroFormulario.textContent = "";
+        }
+
+
+        const camposObrigatorios = [
+
+            {
+                chave: "trade_name",
+                elemento: this.elementos.nomeFantasia,
+                mensagem: "Informe o nome fantasia."
+            },
+
+            {
+                chave: "responsible_name",
+                elemento: this.elementos.responsavel,
+                mensagem: "Informe o nome do responsável."
+            },
+
+            {
+                chave: "commercial_email",
+                elemento: this.elementos.emailComercial,
+                mensagem: "Informe o e-mail comercial."
+            },
+
+            {
+                chave: "city",
+                elemento: this.elementos.cidade,
+                mensagem: "Informe a cidade."
+            },
+
+            {
+                chave: "state",
+                elemento: this.elementos.estado,
+                mensagem: "Informe o estado."
+            }
+
+        ];
+
+
+        const campoInvalido = camposObrigatorios.find(
+
+            (campo) => !dados[campo.chave]
+
+        );
+
+
+        if (campoInvalido) {
+
+            if (erroFormulario) {
+                erroFormulario.textContent =
+                    campoInvalido.mensagem;
+            }
+
+            campoInvalido.elemento?.focus();
+
+            return false;
+
+        }
+
+
+        const emailValido =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                dados.commercial_email
+            );
+
+
+        if (!emailValido) {
+
+            if (erroFormulario) {
+                erroFormulario.textContent =
+                    "Informe um e-mail comercial válido.";
+            }
+
+            this.elementos.emailComercial?.focus();
+
+            return false;
+
+        }
+
+
+        if (dados.state.length !== 2) {
+
+            if (erroFormulario) {
+                erroFormulario.textContent =
+                    "Informe a sigla do estado com duas letras.";
+            }
+
+            this.elementos.estado?.focus();
+
+            return false;
+
+        }
+
+
+        return true;
+
+    },
+
+
+    /* ==================================================
+       ESTADO DO BOTÃO
+    ================================================== */
+
+    definirSalvando(salvando) {
+
+        const botao = this.elementos.botaoSalvar;
+
+        if (!botao) {
+            return;
+        }
+
+
+        if (!botao.dataset.textoOriginal) {
+
+            botao.dataset.textoOriginal =
+                botao.textContent.trim();
+
+        }
+
+
+        botao.disabled = salvando;
+
+        botao.textContent = salvando
+            ? "Salvando..."
+            : botao.dataset.textoOriginal;
+
+    },
+
+
+    /* ==================================================
+       ATUALIZAR ESTADO LOCAL
+    ================================================== */
+
+    atualizarEstadoLocal(dados, logoUrl, respostaRpc) {
+
+        let farmaciaAtualizada = null;
+
+
+        if (Array.isArray(respostaRpc)) {
+
+            farmaciaAtualizada =
+                respostaRpc[0] || null;
+
+        } else if (
+            respostaRpc &&
+            typeof respostaRpc === "object"
+        ) {
+
+            farmaciaAtualizada = respostaRpc;
+
+        }
+
+
+        estado.farmacia = {
+
+            ...estado.farmacia,
+
+            ...dados,
+
+            logo_url: logoUrl,
+
+            ...(farmaciaAtualizada || {})
+
+        };
+
+
+        this.dadosFarmacia = estado.farmacia;
+
+    },
+
+
+    /* ==================================================
+       SALVAR ALTERAÇÕES
+    ================================================== */
+
+    async salvar() {
+
+        const dados = this.obterDadosFormulario();
+
+        if (!this.validarFormulario(dados)) {
+            return;
+        }
+
+
+        const { erroFormulario } = this.elementos;
+
+        this.definirSalvando(true);
+
+
+        try {
+
+            let logoUrl =
+                this.dadosFarmacia?.logo_url || null;
+
+
+            if (UploadLogoFarmacia.possuiArquivo()) {
+
+                logoUrl =
+                    await UploadLogoFarmacia
+                        .enviarParaStorage();
+
+            }
+
+
+            const { data, error } =
+                await supabaseClient.rpc(
+                    "update_own_pharmacy",
+                    {
+
+                        p_trade_name:
+                            dados.trade_name,
+
+                        p_responsible_name:
+                            dados.responsible_name,
+
+                        p_commercial_email:
+                            dados.commercial_email,
+
+                        p_phone:
+                            dados.phone || null,
+
+                        p_whatsapp:
+                            dados.whatsapp || null,
+
+                        p_address:
+                            dados.address || null,
+
+                        p_neighborhood:
+                            dados.neighborhood || null,
+
+                        p_city:
+                            dados.city,
+
+                        p_state:
+                            dados.state,
+
+                        p_postal_code:
+                            dados.postal_code || null,
+
+                        p_logo_url:
+                            logoUrl
+
+                    }
+                );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            this.atualizarEstadoLocal(
+                dados,
+                logoUrl,
+                data
+            );
+
+
+            if (
+                typeof preencherInformacoesFarmacia ===
+                "function"
+            ) {
+
+                preencherInformacoesFarmacia();
+
+            }
+
+
+            if (
+                typeof preencherLogoFarmacia ===
+                "function"
+            ) {
+
+                preencherLogoFarmacia();
+
+            }
+
+
+            UploadLogoFarmacia.limpar();
+
+            this.fechar();
+
+
+            if (
+                typeof mostrarNotificacao ===
+                "function"
+            ) {
+
+                mostrarNotificacao(
+                    "Dados da farmácia atualizados com sucesso.",
+                    "sucesso"
+                );
+
+            }
+
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao atualizar a farmácia:",
+                erro
+            );
+
+
+            let mensagem =
+                "Não foi possível atualizar os dados da farmácia.";
+
+
+            if (
+                typeof traduzirErroSupabase ===
+                "function"
+            ) {
+
+                mensagem =
+                    traduzirErroSupabase(erro) ||
+                    mensagem;
+
+            } else if (erro?.message) {
+
+                mensagem = erro.message;
+
+            }
+
+
+            if (erroFormulario) {
+                erroFormulario.textContent = mensagem;
+            }
+
+
+            if (
+                typeof mostrarNotificacao ===
+                "function"
+            ) {
+
+                mostrarNotificacao(
+                    mensagem,
+                    "erro"
+                );
+
+            }
+
+
+        } finally {
+
+            this.definirSalvando(false);
+
+        }
 
     },
 

@@ -263,6 +263,51 @@ const UploadLogoFarmacia = {
 
     },
 
+    /* ==================================================
+   ENVIO DA LOGO PARA O SUPABASE STORAGE
+================================================== */
+
+    async enviarParaStorage() {
+
+        if (!this.possuiArquivo()) {
+            return null;
+        }
+
+        const arquivo = this.obterArquivo();
+
+        const extensao = arquivo.name
+            .split(".")
+            .pop()
+            .toLowerCase();
+
+        const nomeArquivo = `${crypto.randomUUID()}.${extensao}`;
+        const caminhoArquivo = `logos/${nomeArquivo}`;
+
+        const { error: erroUpload } = await supabaseClient.storage
+            .from("pharmacy-logos")
+            .upload(caminhoArquivo, arquivo, {
+                cacheControl: "3600",
+                upsert: false
+            });
+
+        if (erroUpload) {
+            throw erroUpload;
+        }
+
+        const { data } = supabaseClient.storage
+            .from("pharmacy-logos")
+            .getPublicUrl(caminhoArquivo);
+
+        if (!data?.publicUrl) {
+            throw new Error(
+                "A imagem foi enviada, mas não foi possível obter sua URL pública."
+            );
+        }
+
+        return data.publicUrl;
+
+    },
+
 
     /* ==================================================
        LIMPEZA
