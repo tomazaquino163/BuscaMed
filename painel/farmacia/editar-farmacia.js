@@ -368,7 +368,9 @@ const EditarFarmacia = {
                     .toUpperCase() || "",
 
             postal_code:
-                this.elementos.cep?.value.trim() || ""
+                this.elementos.cep?.value
+                    .replace(/\D/g, "")
+                    .slice(0, 8) || ""
 
         };
 
