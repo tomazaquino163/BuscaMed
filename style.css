@@ -768,6 +768,7 @@ a {
 }
 
 .floating-card {
+    display: none;
     position: absolute;
     min-width: 190px;
     padding: 12px 14px;
