@@ -1,24 +1,17 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Painel da farmácia no BuscaMed"
-    >
+    <meta name="description" content="Painel da farmácia no BuscaMed">
 
     <title>Painel da Farmácia | BuscaMed</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="farmacia/editar-farmacia.css">
 </head>
 
 <body>
@@ -27,10 +20,7 @@
          TELA DE CARREGAMENTO
     ====================================================== -->
 
-    <div
-        id="tela-carregamento"
-        class="tela-carregamento"
-    >
+    <div id="tela-carregamento" class="tela-carregamento">
         <div class="spinner"></div>
 
         <p>
@@ -45,10 +35,7 @@
 
     <aside class="barra-lateral">
 
-        <a
-            href="../index.html"
-            class="logo"
-        >
+        <a href="../index.html" class="logo">
             <span class="logo-icone">
                 +
             </span>
@@ -62,31 +49,19 @@
 
         <nav class="menu">
 
-            <button
-                type="button"
-                class="item-menu ativo"
-                data-secao="inicio"
-            >
+            <button type="button" class="item-menu ativo" data-secao="inicio">
                 <span>⌂</span>
                 Início
             </button>
 
 
-            <button
-                type="button"
-                class="item-menu"
-                data-secao="medicamentos"
-            >
+            <button type="button" class="item-menu" data-secao="medicamentos">
                 <span>💊</span>
                 Medicamentos
             </button>
 
 
-            <button
-                type="button"
-                class="item-menu"
-                data-secao="farmacia"
-            >
+            <button type="button" class="item-menu" data-secao="farmacia">
                 <span>🏥</span>
                 Minha farmácia
             </button>
@@ -94,11 +69,7 @@
         </nav>
 
 
-        <button
-            type="button"
-            id="botao-sair"
-            class="botao-sair"
-        >
+        <button type="button" id="botao-sair" class="botao-sair">
             <span>↪</span>
             Sair
         </button>
@@ -127,10 +98,7 @@
 
             <div class="usuario-logado">
 
-                <div
-                    id="avatar-farmacia"
-                    class="avatar"
-                >
+                <div id="avatar-farmacia" class="avatar">
                     F
                 </div>
 
@@ -153,15 +121,8 @@
              BLOQUEIO POR STATUS
         ================================================== -->
 
-        <section
-            id="aviso-status"
-            class="aviso-status oculto"
-            aria-live="polite"
-        >
-            <div
-                id="icone-aviso-status"
-                class="icone-aviso-status"
-            >
+        <section id="aviso-status" class="aviso-status oculto" aria-live="polite">
+            <div id="icone-aviso-status" class="icone-aviso-status">
                 ⏳
             </div>
 
@@ -174,10 +135,7 @@
                     Seu cadastro está sendo analisado.
                 </p>
 
-                <div
-                    id="motivo-status"
-                    class="motivo-status oculto"
-                ></div>
+                <div id="motivo-status" class="motivo-status oculto"></div>
             </div>
         </section>
 
@@ -186,10 +144,7 @@
              SEÇÃO INÍCIO
         ================================================== -->
 
-        <section
-            id="secao-inicio"
-            class="secao-painel ativa"
-        >
+        <section id="secao-inicio" class="secao-painel ativa">
 
             <div class="banner">
 
@@ -213,10 +168,7 @@
                     </p>
                 </div>
 
-                <div
-                    class="banner-simbolo"
-                    aria-hidden="true"
-                >
+                <div class="banner-simbolo" aria-hidden="true">
                     💊
                 </div>
 
@@ -320,21 +272,14 @@
                         </div>
 
 
-                        <button
-                            type="button"
-                            id="botao-atualizar-inicio"
-                            class="botao-secundario"
-                        >
+                        <button type="button" id="botao-atualizar-inicio" class="botao-secundario">
                             ↻ Atualizar
                         </button>
 
                     </div>
 
 
-                    <div
-                        id="lista-medicamentos-recentes"
-                        class="lista-medicamentos"
-                    ></div>
+                    <div id="lista-medicamentos-recentes" class="lista-medicamentos"></div>
 
                 </section>
 
@@ -355,11 +300,7 @@
                         farmácia a aparecer melhor nas buscas.
                     </p>
 
-                    <button
-                        type="button"
-                        class="botao-principal"
-                        data-ir-para="medicamentos"
-                    >
+                    <button type="button" class="botao-principal" data-ir-para="medicamentos">
                         Gerenciar medicamentos
                     </button>
 
@@ -374,10 +315,7 @@
              SEÇÃO MEDICAMENTOS
         ================================================== -->
 
-        <section
-            id="secao-medicamentos"
-            class="secao-painel"
-        >
+        <section id="secao-medicamentos" class="secao-painel">
 
             <section class="painel-listagem">
 
@@ -399,11 +337,7 @@
                     </div>
 
 
-                    <button
-                        type="button"
-                        id="botao-novo-medicamento"
-                        class="botao-principal"
-                    >
+                    <button type="button" id="botao-novo-medicamento" class="botao-principal">
                         + Novo medicamento
                     </button>
 
@@ -418,20 +352,13 @@
                             🔎
                         </span>
 
-                        <input
-                            type="search"
-                            id="busca-medicamento"
-                            placeholder="Buscar por nome, princípio ativo ou fabricante"
-                            autocomplete="off"
-                        >
+                        <input type="search" id="busca-medicamento"
+                            placeholder="Buscar por nome, princípio ativo ou fabricante" autocomplete="off">
 
                     </div>
 
 
-                    <select
-                        id="filtro-medicamentos"
-                        aria-label="Filtrar medicamentos"
-                    >
+                    <select id="filtro-medicamentos" aria-label="Filtrar medicamentos">
                         <option value="all">
                             Todos
                         </option>
@@ -458,21 +385,14 @@
                     </select>
 
 
-                    <button
-                        type="button"
-                        id="botao-atualizar-medicamentos"
-                        class="botao-secundario"
-                    >
+                    <button type="button" id="botao-atualizar-medicamentos" class="botao-secundario">
                         ↻ Atualizar
                     </button>
 
                 </div>
 
 
-                <div
-                    id="lista-medicamentos"
-                    class="lista-medicamentos"
-                ></div>
+                <div id="lista-medicamentos" class="lista-medicamentos"></div>
 
             </section>
 
@@ -483,10 +403,7 @@
              SEÇÃO MINHA FARMÁCIA
         ================================================== -->
 
-        <section
-            id="secao-farmacia"
-            class="secao-painel"
-        >
+        <section id="secao-farmacia" class="secao-painel">
 
             <section class="painel-listagem">
 
@@ -514,10 +431,7 @@
 
                     <div class="cabecalho-perfil-farmacia">
 
-                        <div
-                            id="logo-farmacia"
-                            class="logo-farmacia"
-                        >
+                        <div id="logo-farmacia" class="logo-farmacia">
                             🏥
                         </div>
 
@@ -532,10 +446,7 @@
                         </div>
 
 
-                        <span
-                            id="perfil-status"
-                            class="selo-status approved"
-                        >
+                        <span id="perfil-status" class="selo-status approved">
                             Aprovada
                         </span>
 
@@ -638,28 +549,15 @@
          MODAL DE MEDICAMENTO
     ====================================================== -->
 
-    <div
-        id="modal-medicamento"
-        class="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="titulo-modal-medicamento"
-    >
+    <div id="modal-medicamento" class="modal" role="dialog" aria-modal="true"
+        aria-labelledby="titulo-modal-medicamento">
 
-        <div
-            class="fundo-modal"
-            data-fechar-modal-medicamento
-        ></div>
+        <div class="fundo-modal" data-fechar-modal-medicamento></div>
 
 
         <div class="conteudo-modal conteudo-modal-grande">
 
-            <button
-                type="button"
-                class="fechar-modal"
-                data-fechar-modal-medicamento
-                aria-label="Fechar"
-            >
+            <button type="button" class="fechar-modal" data-fechar-modal-medicamento aria-label="Fechar">
                 ×
             </button>
 
@@ -683,15 +581,9 @@
             </div>
 
 
-            <form
-                id="formulario-medicamento"
-                novalidate
-            >
+            <form id="formulario-medicamento" novalidate>
 
-                <input
-                    type="hidden"
-                    id="medicamento-id"
-                >
+                <input type="hidden" id="medicamento-id">
 
 
                 <div class="grade-formulario">
@@ -701,18 +593,9 @@
                             Nome do medicamento *
                         </label>
 
-                        <input
-                            type="text"
-                            id="nome-medicamento"
-                            maxlength="150"
-                            required
-                            placeholder="Ex.: Dipirona"
-                        >
+                        <input type="text" id="nome-medicamento" maxlength="150" required placeholder="Ex.: Dipirona">
 
-                        <small
-                            class="erro-campo"
-                            data-erro="nome-medicamento"
-                        ></small>
+                        <small class="erro-campo" data-erro="nome-medicamento"></small>
                     </div>
 
 
@@ -721,12 +604,7 @@
                             Princípio ativo
                         </label>
 
-                        <input
-                            type="text"
-                            id="principio-ativo"
-                            maxlength="150"
-                            placeholder="Ex.: Dipirona sódica"
-                        >
+                        <input type="text" id="principio-ativo" maxlength="150" placeholder="Ex.: Dipirona sódica">
                     </div>
 
 
@@ -735,12 +613,7 @@
                             Fabricante / laboratório
                         </label>
 
-                        <input
-                            type="text"
-                            id="fabricante"
-                            maxlength="150"
-                            placeholder="Ex.: Medley"
-                        >
+                        <input type="text" id="fabricante" maxlength="150" placeholder="Ex.: Medley">
                     </div>
 
 
@@ -749,13 +622,7 @@
                             Dosagem
                         </label>
 
-                        <input
-                            type="number"
-                            id="dosagem"
-                            min="0"
-                            step="0.01"
-                            placeholder="Ex.: 500"
-                        >
+                        <input type="number" id="dosagem" min="0" step="0.01" placeholder="Ex.: 500">
                     </div>
 
 
@@ -784,12 +651,8 @@
                             Apresentação
                         </label>
 
-                        <input
-                            type="text"
-                            id="apresentacao"
-                            maxlength="200"
-                            placeholder="Ex.: Caixa com 20 comprimidos"
-                        >
+                        <input type="text" id="apresentacao" maxlength="200"
+                            placeholder="Ex.: Caixa com 20 comprimidos">
                     </div>
 
 
@@ -798,13 +661,8 @@
                             Código de barras
                         </label>
 
-                        <input
-                            type="text"
-                            id="codigo-barras"
-                            maxlength="50"
-                            inputmode="numeric"
-                            placeholder="Ex.: 7890000000000"
-                        >
+                        <input type="text" id="codigo-barras" maxlength="50" inputmode="numeric"
+                            placeholder="Ex.: 7890000000000">
                     </div>
 
 
@@ -829,19 +687,10 @@
                         <div class="campo-moeda">
                             <span>R$</span>
 
-                            <input
-                                type="text"
-                                id="preco"
-                                inputmode="decimal"
-                                required
-                                placeholder="0,00"
-                            >
+                            <input type="text" id="preco" inputmode="decimal" required placeholder="0,00">
                         </div>
 
-                        <small
-                            class="erro-campo"
-                            data-erro="preco"
-                        ></small>
+                        <small class="erro-campo" data-erro="preco"></small>
                     </div>
 
 
@@ -853,18 +702,10 @@
                         <div class="campo-moeda">
                             <span>R$</span>
 
-                            <input
-                                type="text"
-                                id="preco-promocional"
-                                inputmode="decimal"
-                                placeholder="0,00"
-                            >
+                            <input type="text" id="preco-promocional" inputmode="decimal" placeholder="0,00">
                         </div>
 
-                        <small
-                            class="erro-campo"
-                            data-erro="preco-promocional"
-                        ></small>
+                        <small class="erro-campo" data-erro="preco-promocional"></small>
                     </div>
 
 
@@ -873,19 +714,9 @@
                             Quantidade em estoque *
                         </label>
 
-                        <input
-                            type="number"
-                            id="quantidade"
-                            min="0"
-                            step="1"
-                            value="0"
-                            required
-                        >
+                        <input type="number" id="quantidade" min="0" step="1" value="0" required>
 
-                        <small
-                            class="erro-campo"
-                            data-erro="quantidade"
-                        ></small>
+                        <small class="erro-campo" data-erro="quantidade"></small>
                     </div>
 
 
@@ -894,12 +725,7 @@
                             URL da imagem
                         </label>
 
-                        <input
-                            type="url"
-                            id="imagem-url"
-                            maxlength="500"
-                            placeholder="https://..."
-                        >
+                        <input type="url" id="imagem-url" maxlength="500" placeholder="https://...">
                     </div>
 
 
@@ -908,12 +734,8 @@
                             Descrição
                         </label>
 
-                        <textarea
-                            id="descricao"
-                            maxlength="1000"
-                            rows="4"
-                            placeholder="Informações adicionais sobre o medicamento"
-                        ></textarea>
+                        <textarea id="descricao" maxlength="1000" rows="4"
+                            placeholder="Informações adicionais sobre o medicamento"></textarea>
                     </div>
 
 
@@ -922,11 +744,7 @@
                         <div class="opcoes-checkbox">
 
                             <label class="opcao-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="medicamento-ativo"
-                                    checked
-                                >
+                                <input type="checkbox" id="medicamento-ativo" checked>
 
                                 <span>
                                     <strong>
@@ -941,10 +759,7 @@
 
 
                             <label class="opcao-checkbox">
-                                <input
-                                    type="checkbox"
-                                    id="exige-receita"
-                                >
+                                <input type="checkbox" id="exige-receita">
 
                                 <span>
                                     <strong>
@@ -964,28 +779,16 @@
                 </div>
 
 
-                <div
-                    id="erro-formulario-medicamento"
-                    class="erro-formulario"
-                    role="alert"
-                ></div>
+                <div id="erro-formulario-medicamento" class="erro-formulario" role="alert"></div>
 
 
                 <div class="acoes-modal">
 
-                    <button
-                        type="button"
-                        class="botao-cancelar"
-                        data-fechar-modal-medicamento
-                    >
+                    <button type="button" class="botao-cancelar" data-fechar-modal-medicamento>
                         Cancelar
                     </button>
 
-                    <button
-                        type="submit"
-                        id="botao-salvar-medicamento"
-                        class="botao-principal"
-                    >
+                    <button type="submit" id="botao-salvar-medicamento" class="botao-principal">
                         Salvar medicamento
                     </button>
 
@@ -1002,28 +805,14 @@
          MODAL DE EXCLUSÃO
     ====================================================== -->
 
-    <div
-        id="modal-exclusao"
-        class="modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="titulo-modal-exclusao"
-    >
+    <div id="modal-exclusao" class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-exclusao">
 
-        <div
-            class="fundo-modal"
-            data-fechar-modal-exclusao
-        ></div>
+        <div class="fundo-modal" data-fechar-modal-exclusao></div>
 
 
         <div class="conteudo-modal">
 
-            <button
-                type="button"
-                class="fechar-modal"
-                data-fechar-modal-exclusao
-                aria-label="Fechar"
-            >
+            <button type="button" class="fechar-modal" data-fechar-modal-exclusao aria-label="Fechar">
                 ×
             </button>
 
@@ -1050,19 +839,11 @@
 
             <div class="acoes-modal">
 
-                <button
-                    type="button"
-                    class="botao-cancelar"
-                    data-fechar-modal-exclusao
-                >
+                <button type="button" class="botao-cancelar" data-fechar-modal-exclusao>
                     Cancelar
                 </button>
 
-                <button
-                    type="button"
-                    id="botao-confirmar-exclusao"
-                    class="botao-excluir"
-                >
+                <button type="button" id="botao-confirmar-exclusao" class="botao-excluir">
                     Excluir medicamento
                 </button>
 
@@ -1077,12 +858,7 @@
          NOTIFICAÇÃO
     ====================================================== -->
 
-    <div
-        id="notificacao"
-        class="notificacao"
-        role="status"
-        aria-live="polite"
-    ></div>
+    <div id="notificacao" class="notificacao" role="status" aria-live="polite"></div>
 
 
     <!-- =====================================================
@@ -1095,7 +871,11 @@
     <script src="../supabase.js"></script>
     <script src="../auth.js"></script>
 
+    <script src="farmacia/upload-logo.js"></script>
+    <script src="farmacia/editar-farmacia.js"></script>
+
     <script src="script.js"></script>
 
 </body>
+
 </html>
