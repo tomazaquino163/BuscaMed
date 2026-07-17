@@ -5,24 +5,15 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="description"
-        content="Área exclusiva para farmácias parceiras do BuscaMed."
-    >
+    <meta name="description" content="Área exclusiva para farmácias parceiras do BuscaMed.">
 
     <title>
         Área da Farmácia | BuscaMed
     </title>
 
-    <link
-        rel="stylesheet"
-        href="login.css"
-    >
+    <link rel="stylesheet" href="login.css">
 
 </head>
 
@@ -38,16 +29,9 @@
         <section class="login-info">
 
 
-            <a
-                href="index.html"
-                class="logo-link"
-            >
+            <a href="index.html" class="logo-link">
 
-                <img
-                    src="assets/logo.png"
-                    alt="Logo BuscaMed"
-                    class="logo"
-                >
+                <img src="assets/logo.png" alt="Logo BuscaMed" class="logo">
 
             </a>
 
@@ -187,9 +171,7 @@
                 </div>
 
 
-                <form
-                    id="loginForm"
-                >
+                <form id="loginForm">
 
 
                     <!-- E-MAIL -->
@@ -197,21 +179,14 @@
                     <div class="form-group">
 
 
-                        <label
-                            for="email"
-                        >
+                        <label for="email">
 
                             E-mail
 
                         </label>
 
 
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="farmacia@exemplo.com"
-                            required
-                        >
+                        <input type="email" id="email" placeholder="farmacia@exemplo.com" required>
 
 
                     </div>
@@ -222,9 +197,7 @@
                     <div class="form-group">
 
 
-                        <label
-                            for="senha"
-                        >
+                        <label for="senha">
 
                             Senha
 
@@ -234,20 +207,10 @@
                         <div class="password-wrapper">
 
 
-                            <input
-                                type="password"
-                                id="senha"
-                                placeholder="Digite sua senha"
-                                required
-                            >
+                            <input type="password" id="senha" placeholder="Digite sua senha" required>
 
 
-                            <button
-                                type="button"
-                                id="toggleSenha"
-                                class="toggle-password"
-                                aria-label="Mostrar senha"
-                            >
+                            <button type="button" id="toggleSenha" class="toggle-password" aria-label="Mostrar senha">
 
                                 👁️
 
@@ -263,13 +226,9 @@
                     <div class="form-options">
 
 
-                        <label
-                            class="remember"
-                        >
+                        <label class="remember">
 
-                            <input
-                                type="checkbox"
-                            >
+                            <input type="checkbox">
 
 
                             <span>
@@ -282,10 +241,7 @@
                         </label>
 
 
-                        <a
-                            href="#"
-                            id="esqueciSenha"
-                        >
+                        <a href="#" id="esqueciSenha">
 
                             Esqueci minha senha
 
@@ -295,10 +251,7 @@
                     </div>
 
 
-                    <button
-                        type="submit"
-                        class="btn-login"
-                    >
+                    <button type="submit" class="btn-login">
 
                         Entrar
 
@@ -308,10 +261,7 @@
                 </form>
 
 
-                <div
-                    id="mensagemLogin"
-                    class="mensagem-login"
-                >
+                <div id="mensagemLogin" class="mensagem-login">
 
                 </div>
 
@@ -326,10 +276,7 @@
                     </span>
 
 
-                    <a
-                        href="#"
-                        id="solicitarCadastro"
-                    >
+                    <a href="#" id="solicitarCadastro">
 
                         Solicitar cadastro
 
@@ -339,10 +286,7 @@
                 </div>
 
 
-                <a
-                    href="index.html"
-                    class="voltar-site"
-                >
+                <a href="index.html" class="voltar-site">
 
                     ← Voltar para o BuscaMed
 
@@ -358,9 +302,12 @@
     </main>
 
 
-    <script
-        src="login.js"
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="config.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="login.js"></script>
 
 
 </body>

@@ -1,284 +1,342 @@
+"use strict";
+
 // =====================================
 // ELEMENTOS DA PÁGINA
 // =====================================
 
-const loginForm =
-    document.getElementById(
-        "loginForm"
-    );
+const loginForm = document.getElementById("loginForm");
+const campoEmail = document.getElementById("email");
+const campoSenha = document.getElementById("senha");
+const toggleSenha = document.getElementById("toggleSenha");
+const mensagemLogin = document.getElementById("mensagemLogin");
+const esqueciSenha = document.getElementById("esqueciSenha");
+const solicitarCadastro = document.getElementById("solicitarCadastro");
+const botaoLogin = loginForm.querySelector(".btn-login");
 
+// =====================================
+// INICIALIZAÇÃO
+// =====================================
 
-const senha =
-    document.getElementById(
-        "senha"
-    );
+document.addEventListener("DOMContentLoaded", verificarSessaoExistente);
 
+async function verificarSessaoExistente() {
+    limparMensagem();
 
-const toggleSenha =
-    document.getElementById(
-        "toggleSenha"
-    );
+    try {
+        const usuario = await obterUsuarioAtual();
 
+        if (!usuario) {
+            return;
+        }
 
-const mensagemLogin =
-    document.getElementById(
-        "mensagemLogin"
-    );
+        mostrarMensagem(
+            "Sessão encontrada. Verificando acesso...",
+            "sucesso"
+        );
 
-
-const esqueciSenha =
-    document.getElementById(
-        "esqueciSenha"
-    );
-
-
-const solicitarCadastro =
-    document.getElementById(
-        "solicitarCadastro"
-    );
-
+        await verificarAcessoFarmacia(usuario);
+    } catch (erro) {
+        console.log("Nenhuma sessão ativa.");
+    }
+}
 
 // =====================================
 // MOSTRAR / OCULTAR SENHA
 // =====================================
 
-toggleSenha.addEventListener(
+toggleSenha.addEventListener("click", function () {
+    const mostrar = campoSenha.type === "password";
 
-    "click",
+    campoSenha.type = mostrar ? "text" : "password";
+    toggleSenha.textContent = mostrar ? "🙈" : "👁️";
 
-    function() {
-
-
-        if (
-
-            senha.type ===
-            "password"
-
-        ) {
-
-
-            senha.type =
-                "text";
-
-
-            toggleSenha.textContent =
-                "🙈";
-
-
-            toggleSenha.setAttribute(
-
-                "aria-label",
-
-                "Ocultar senha"
-
-            );
-
-
-        } else {
-
-
-            senha.type =
-                "password";
-
-
-            toggleSenha.textContent =
-                "👁️";
-
-
-            toggleSenha.setAttribute(
-
-                "aria-label",
-
-                "Mostrar senha"
-
-            );
-
-
-        }
-
-
-    }
-
-);
-
+    toggleSenha.setAttribute(
+        "aria-label",
+        mostrar ? "Ocultar senha" : "Mostrar senha"
+    );
+});
 
 // =====================================
-// LOGIN DE DEMONSTRAÇÃO
+// LOGIN
 // =====================================
 
-loginForm.addEventListener(
+loginForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-    "submit",
+    limparMensagem();
 
-    function(event) {
+    const email = campoEmail.value.trim().toLowerCase();
+    const senha = campoSenha.value;
 
-
-        event.preventDefault();
-
-
-        const email =
-            document
-                .getElementById(
-                    "email"
-                )
-                .value
-                .trim();
-
-
-        const senhaDigitada =
-            senha
-                .value
-                .trim();
-
-
-        mensagemLogin
-            .className =
-            "mensagem-login";
-
-
-        mensagemLogin
-            .textContent =
-            "";
-
-
-        if (
-
-            email ===
-            ""
-
-            ||
-
-            senhaDigitada ===
-            ""
-
-        ) {
-
-
-            mensagemLogin
-                .textContent =
-
-                "Preencha todos os campos.";
-
-
-            mensagemLogin
-                .classList
-                .add(
-                    "erro"
-                );
-
-
-            return;
-
-
-        }
-
-
-        const botao =
-            loginForm
-                .querySelector(
-                    ".btn-login"
-                );
-
-
-        botao.disabled =
-            true;
-
-
-        botao.textContent =
-            "Entrando...";
-
-
-        mensagemLogin
-            .textContent =
-
-            "Verificando acesso...";
-
-
-        mensagemLogin
-            .classList
-            .add(
-                "sucesso"
-            );
-
-
-        setTimeout(
-
-            function() {
-
-
-                mensagemLogin
-                    .textContent =
-
-                    "Área de demonstração em construção.";
-
-
-                botao.disabled =
-                    false;
-
-
-                botao.textContent =
-                    "Entrar";
-
-
-            },
-
-            1200
-
+    if (!email || !senha) {
+        mostrarMensagem(
+            "Preencha o e-mail e a senha.",
+            "erro"
         );
 
-
+        return;
     }
 
-);
+    alterarEstadoBotao(true, "Entrando...");
 
+    try {
+        const usuario = await fazerLogin(email, senha);
+
+        if (!usuario) {
+            throw new Error(
+                "Não foi possível identificar o usuário."
+            );
+        }
+
+        mostrarMensagem(
+            "Login realizado. Verificando acesso...",
+            "sucesso"
+        );
+
+        await verificarAcessoFarmacia(usuario);
+    } catch (erro) {
+        console.error("Erro no login:", erro);
+
+        mostrarMensagem(
+            traduzirErro(erro),
+            "erro"
+        );
+
+        alterarEstadoBotao(false, "Entrar");
+    }
+});
+
+// =====================================
+// VERIFICAR PERFIL E FARMÁCIA
+// =====================================
+
+async function verificarAcessoFarmacia(usuario) {
+    const perfil = await obterPerfilUsuario(usuario.id);
+
+    if (!perfil) {
+        await fazerLogout();
+
+        throw new Error(
+            "Não foi encontrado um perfil para esta conta."
+        );
+    }
+
+    if (perfil.role !== "pharmacy") {
+        await fazerLogout();
+
+        throw new Error(
+            "Esta conta não possui acesso à área da farmácia."
+        );
+    }
+
+    const { data: farmacia, error } = await supabaseClient
+        .from("pharmacies")
+        .select(`
+            id,
+            owner_user_id,
+            legal_name,
+            trade_name,
+            status
+        `)
+        .eq("owner_user_id", usuario.id)
+        .maybeSingle();
+
+    if (error) {
+        await fazerLogout();
+
+        throw new Error(
+            "Não foi possível consultar o cadastro da farmácia."
+        );
+    }
+
+    if (!farmacia) {
+        await fazerLogout();
+
+        throw new Error(
+            "Esta conta não está vinculada a nenhuma farmácia."
+        );
+    }
+
+    if (farmacia.status === "pending") {
+        await fazerLogout();
+
+        throw new Error(
+            "O cadastro da farmácia ainda está aguardando aprovação."
+        );
+    }
+
+    if (farmacia.status === "rejected") {
+        await fazerLogout();
+
+        throw new Error(
+            "O cadastro da farmácia foi rejeitado."
+        );
+    }
+
+    if (farmacia.status === "suspended") {
+        await fazerLogout();
+
+        throw new Error(
+            "O acesso desta farmácia está suspenso."
+        );
+    }
+
+    if (farmacia.status === "archived") {
+        await fazerLogout();
+
+        throw new Error(
+            "O cadastro desta farmácia está arquivado."
+        );
+    }
+
+    if (farmacia.status !== "approved") {
+        await fazerLogout();
+
+        throw new Error(
+            "A farmácia não está liberada para acessar o painel."
+        );
+    }
+
+    const nomeFarmacia =
+        farmacia.trade_name ||
+        farmacia.legal_name ||
+        "farmácia";
+
+    mostrarMensagem(
+        `Bem-vindo, ${nomeFarmacia}!`,
+        "sucesso"
+    );
+
+    setTimeout(function () {
+        window.location.href = "painel/index.html";
+    }, 600);
+}
 
 // =====================================
 // ESQUECI MINHA SENHA
 // =====================================
 
-esqueciSenha.addEventListener(
+esqueciSenha.addEventListener("click", async function (event) {
+    event.preventDefault();
 
-    "click",
+    limparMensagem();
 
-    function(event) {
+    const email = campoEmail.value.trim().toLowerCase();
 
-
-        event.preventDefault();
-
-
-        alert(
-
-            "A recuperação de senha será disponibilizada quando o sistema de login estiver conectado ao banco de dados."
-
+    if (!email) {
+        mostrarMensagem(
+            "Digite seu e-mail para recuperar a senha.",
+            "erro"
         );
 
-
+        campoEmail.focus();
+        return;
     }
 
-);
+    mostrarMensagem(
+        "Enviando e-mail de recuperação...",
+        "sucesso"
+    );
 
+    try {
+        const redirectTo =
+            `${window.location.origin}${window.location.pathname}`;
+
+        const { error } =
+            await supabaseClient.auth.resetPasswordForEmail(
+                email,
+                { redirectTo }
+            );
+
+        if (error) {
+            throw error;
+        }
+
+        mostrarMensagem(
+            "As instruções de recuperação foram enviadas para seu e-mail.",
+            "sucesso"
+        );
+    } catch (erro) {
+        console.error(
+            "Erro na recuperação de senha:",
+            erro
+        );
+
+        mostrarMensagem(
+            "Não foi possível enviar o e-mail de recuperação.",
+            "erro"
+        );
+    }
+});
 
 // =====================================
 // SOLICITAR CADASTRO
 // =====================================
 
-solicitarCadastro.addEventListener(
+solicitarCadastro.addEventListener("click", function (event) {
+    event.preventDefault();
 
-    "click",
+    window.location.href = "farmacia/cadastro.html";
+});
 
-    function(event) {
+// =====================================
+// INTERFACE
+// =====================================
 
+function mostrarMensagem(texto, tipo) {
+    mensagemLogin.textContent = texto;
+    mensagemLogin.className =
+        `mensagem-login ${tipo}`;
+}
 
-        event.preventDefault();
+function limparMensagem() {
+    mensagemLogin.textContent = "";
+    mensagemLogin.className = "mensagem-login";
+}
 
+function alterarEstadoBotao(carregando, texto) {
+    botaoLogin.disabled = carregando;
+    botaoLogin.textContent = texto;
 
-        alert(
+    campoEmail.disabled = carregando;
+    campoSenha.disabled = carregando;
+    toggleSenha.disabled = carregando;
+}
 
-            "O cadastro de novas farmácias será disponibilizado em uma próxima etapa."
+// =====================================
+// TRADUZIR ERROS
+// =====================================
 
-        );
+function traduzirErro(erro) {
+    const mensagem = String(
+        erro?.message || erro || ""
+    ).toLowerCase();
 
-
+    if (
+        mensagem.includes("invalid login credentials") ||
+        mensagem.includes("invalid credentials")
+    ) {
+        return "E-mail ou senha incorretos.";
     }
 
-);
+    if (mensagem.includes("email not confirmed")) {
+        return "Confirme seu e-mail antes de entrar.";
+    }
+
+    if (
+        mensagem.includes("too many requests") ||
+        mensagem.includes("rate limit")
+    ) {
+        return "Muitas tentativas. Aguarde alguns minutos.";
+    }
+
+    if (
+        mensagem.includes("failed to fetch") ||
+        mensagem.includes("network")
+    ) {
+        return "Não foi possível conectar ao servidor.";
+    }
+
+    return erro?.message ||
+        "Não foi possível realizar o login.";
+}
