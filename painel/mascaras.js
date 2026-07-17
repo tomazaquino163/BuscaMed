@@ -1,3 +1,5 @@
+"use strict";
+
 const Mascaras = {
 
     somenteNumeros(valor) {
@@ -20,7 +22,7 @@ const Mascaras = {
         }
 
         return numeros.replace(
-            /^(\d{5})(\d{1,3})$/,
+            /^(\d{5})(\d{3})$/,
             "$1-$2"
         );
 
@@ -47,7 +49,7 @@ const Mascaras = {
         }
 
         return numeros.replace(
-            /^(\d{2})(\d{4})(\d{1,4})$/,
+            /^(\d{2})(\d{4})(\d{4})$/,
             "($1) $2-$3"
         );
 
@@ -74,7 +76,7 @@ const Mascaras = {
         }
 
         return numeros.replace(
-            /^(\d{2})(\d{5})(\d{1,4})$/,
+            /^(\d{2})(\d{5})(\d{4})$/,
             "($1) $2-$3"
         );
 
@@ -89,27 +91,69 @@ const Mascaras = {
             return "";
         }
 
-        if (numeros.length <= 2) return numeros;
+        if (numeros.length <= 2) {
+            return numeros;
+        }
 
-        if (numeros.length <= 5)
-            return numeros.replace(/^(\d{2})(\d+)/, "$1.$2");
+        if (numeros.length <= 5) {
 
-        if (numeros.length <= 8)
+            return numeros.replace(
+                /^(\d{2})(\d+)/,
+                "$1.$2"
+            );
+
+        }
+
+        if (numeros.length <= 8) {
+
             return numeros.replace(
                 /^(\d{2})(\d{3})(\d+)/,
                 "$1.$2.$3"
             );
 
-        if (numeros.length <= 12)
+        }
+
+        if (numeros.length <= 12) {
+
             return numeros.replace(
                 /^(\d{2})(\d{3})(\d{3})(\d+)/,
                 "$1.$2.$3/$4"
             );
 
+        }
+
         return numeros.replace(
             /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
             "$1.$2.$3/$4-$5"
         );
+
+    },
+
+
+    limparCEP(valor) {
+
+        return this.somenteNumeros(valor).slice(0, 8);
+
+    },
+
+
+    limparTelefone(valor) {
+
+        return this.somenteNumeros(valor).slice(0, 10);
+
+    },
+
+
+    limparWhatsApp(valor) {
+
+        return this.somenteNumeros(valor).slice(0, 11);
+
+    },
+
+
+    limparCNPJ(valor) {
+
+        return this.somenteNumeros(valor).slice(0, 14);
 
     }
 

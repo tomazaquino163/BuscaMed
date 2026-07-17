@@ -1,3 +1,5 @@
+"use strict";
+
 /* ======================================================
    EDIÇÃO DOS DADOS DA FARMÁCIA
 ====================================================== */
@@ -5,7 +7,6 @@
 const EditarFarmacia = {
 
     elementos: {},
-
     dadosFarmacia: null,
 
 
@@ -18,13 +19,18 @@ const EditarFarmacia = {
         this.mapearElementos();
         this.adicionarEventos();
 
-        UploadLogoFarmacia.inicializar();
+        if (
+            typeof UploadLogoFarmacia !== "undefined" &&
+            typeof UploadLogoFarmacia.inicializar === "function"
+        ) {
+            UploadLogoFarmacia.inicializar();
+        }
 
     },
 
 
     /* ==================================================
-       ELEMENTOS DO HTML
+       MAPEAMENTO DOS ELEMENTOS
     ================================================== */
 
     mapearElementos() {
@@ -32,17 +38,23 @@ const EditarFarmacia = {
         this.elementos = {
 
             botaoAbrir:
-                document.getElementById("botao-editar-farmacia"),
+                document.getElementById(
+                    "botao-editar-farmacia"
+                ),
 
             modal:
-                document.getElementById("modal-editar-farmacia"),
+                document.getElementById(
+                    "modal-editar-farmacia"
+                ),
 
             formulario:
-                document.getElementById("formulario-editar-farmacia"),
+                document.getElementById(
+                    "formulario-editar-farmacia"
+                ),
 
             botaoSalvar:
-                document.querySelector(
-                    '#formulario-editar-farmacia button[type="submit"]'
+                document.getElementById(
+                    "botao-salvar-farmacia"
                 ),
 
             botoesFechar:
@@ -51,43 +63,69 @@ const EditarFarmacia = {
                 ),
 
             nomeFantasia:
-                document.getElementById("editar-nome-fantasia"),
+                document.getElementById(
+                    "editar-nome-fantasia"
+                ),
 
             razaoSocial:
-                document.getElementById("editar-razao-social"),
+                document.getElementById(
+                    "editar-razao-social"
+                ),
 
             cnpj:
-                document.getElementById("editar-cnpj"),
+                document.getElementById(
+                    "editar-cnpj"
+                ),
 
             responsavel:
-                document.getElementById("editar-responsavel"),
+                document.getElementById(
+                    "editar-responsavel"
+                ),
 
             emailComercial:
-                document.getElementById("editar-email-comercial"),
+                document.getElementById(
+                    "editar-email-comercial"
+                ),
 
             telefone:
-                document.getElementById("editar-telefone"),
+                document.getElementById(
+                    "editar-telefone"
+                ),
 
             whatsapp:
-                document.getElementById("editar-whatsapp"),
+                document.getElementById(
+                    "editar-whatsapp"
+                ),
 
             endereco:
-                document.getElementById("editar-endereco"),
+                document.getElementById(
+                    "editar-endereco"
+                ),
 
             bairro:
-                document.getElementById("editar-bairro"),
+                document.getElementById(
+                    "editar-bairro"
+                ),
 
             cidade:
-                document.getElementById("editar-cidade"),
+                document.getElementById(
+                    "editar-cidade"
+                ),
 
             estado:
-                document.getElementById("editar-estado"),
+                document.getElementById(
+                    "editar-estado"
+                ),
 
             cep:
-                document.getElementById("editar-cep"),
+                document.getElementById(
+                    "editar-cep"
+                ),
 
             erroFormulario:
-                document.getElementById("erro-formulario-farmacia")
+                document.getElementById(
+                    "erro-formulario-farmacia"
+                )
 
         };
 
@@ -101,45 +139,63 @@ const EditarFarmacia = {
     adicionarEventos() {
 
         const {
-            formulario,
             botaoAbrir,
+            formulario,
             modal,
-            botoesFechar
+            botoesFechar,
+            telefone,
+            whatsapp,
+            cep
         } = this.elementos;
 
 
-        if (botaoAbrir) {
+        botaoAbrir?.addEventListener("click", () => {
 
-            botaoAbrir.addEventListener("click", () => {
+            this.abrir();
 
-                this.abrir();
-
-            });
-
-        }
+        });
 
 
-        if (formulario) {
-
-            formulario.addEventListener("submit", async (evento) => {
+        formulario?.addEventListener(
+            "submit",
+            async (evento) => {
 
                 evento.preventDefault();
 
                 await this.salvar();
 
-            });
+            }
+        );
 
-        }
 
-        if (this.elementos.cep) {
+        telefone?.addEventListener("input", (evento) => {
 
-            this.elementos.cep.addEventListener("input", (e) => {
+            evento.target.value =
+                Mascaras.formatarTelefone(
+                    evento.target.value
+                );
 
-                e.target.value = this.formatarCEP(e.target.value);
+        });
 
-            });
 
-        }
+        whatsapp?.addEventListener("input", (evento) => {
+
+            evento.target.value =
+                Mascaras.formatarWhatsApp(
+                    evento.target.value
+                );
+
+        });
+
+
+        cep?.addEventListener("input", (evento) => {
+
+            evento.target.value =
+                Mascaras.formatarCEP(
+                    evento.target.value
+                );
+
+        });
 
 
         botoesFechar.forEach((botao) => {
@@ -153,18 +209,19 @@ const EditarFarmacia = {
         });
 
 
-        document.addEventListener("keydown", (evento) => {
+        document.addEventListener(
+            "keydown",
+            (evento) => {
 
-            if (
-                evento.key === "Escape" &&
-                modal?.classList.contains("aberto")
-            ) {
-
-                this.fechar();
+                if (
+                    evento.key === "Escape" &&
+                    modal?.classList.contains("aberto")
+                ) {
+                    this.fechar();
+                }
 
             }
-
-        });
+        );
 
     },
 
@@ -190,12 +247,18 @@ const EditarFarmacia = {
 
         this.carregarDadosAtuais();
         this.preencherFormulario();
+        this.limparMensagemErro();
 
-        UploadLogoFarmacia.limpar();
+
+        if (
+            typeof UploadLogoFarmacia !== "undefined" &&
+            typeof UploadLogoFarmacia.limpar === "function"
+        ) {
+            UploadLogoFarmacia.limpar();
+        }
 
 
         modal.classList.add("aberto");
-
         document.body.classList.add("modal-aberto");
 
 
@@ -216,8 +279,7 @@ const EditarFarmacia = {
 
         const {
             modal,
-            formulario,
-            erroFormulario
+            formulario
         } = this.elementos;
 
 
@@ -225,19 +287,18 @@ const EditarFarmacia = {
 
         document.body.classList.remove("modal-aberto");
 
-
         formulario?.reset();
 
-        UploadLogoFarmacia.limpar();
 
-
-        if (erroFormulario) {
-
-            erroFormulario.textContent = "";
-
+        if (
+            typeof UploadLogoFarmacia !== "undefined" &&
+            typeof UploadLogoFarmacia.limpar === "function"
+        ) {
+            UploadLogoFarmacia.limpar();
         }
 
 
+        this.limparMensagemErro();
         this.limparErrosCampos();
 
     },
@@ -249,12 +310,16 @@ const EditarFarmacia = {
 
     carregarDadosAtuais() {
 
-        this.dadosFarmacia = estado?.farmacia || null;
+        this.dadosFarmacia =
+            typeof estado !== "undefined"
+                ? estado.farmacia
+                : null;
+
 
         if (!this.dadosFarmacia) {
 
             console.warn(
-                "Os dados atuais da farmácia ainda não foram carregados."
+                "Os dados da farmácia ainda não foram carregados."
             );
 
         }
@@ -271,9 +336,7 @@ const EditarFarmacia = {
         const farmacia = this.dadosFarmacia;
 
         if (!farmacia) {
-
             return;
-
         }
 
 
@@ -289,7 +352,7 @@ const EditarFarmacia = {
 
         this.definirValor(
             this.elementos.cnpj,
-            farmacia.cnpj
+            Mascaras.formatarCNPJ(farmacia.cnpj)
         );
 
         this.definirValor(
@@ -304,12 +367,12 @@ const EditarFarmacia = {
 
         this.definirValor(
             this.elementos.telefone,
-            farmacia.phone
+            Mascaras.formatarTelefone(farmacia.phone)
         );
 
         this.definirValor(
             this.elementos.whatsapp,
-            farmacia.whatsapp
+            Mascaras.formatarWhatsApp(farmacia.whatsapp)
         );
 
         this.definirValor(
@@ -334,7 +397,7 @@ const EditarFarmacia = {
 
         this.definirValor(
             this.elementos.cep,
-            Mascaras.formatarCEP(farmacia.postal_code) 
+            Mascaras.formatarCEP(farmacia.postal_code)
         );
 
     },
@@ -346,41 +409,59 @@ const EditarFarmacia = {
 
     obterDadosFormulario() {
 
+        const {
+            nomeFantasia,
+            responsavel,
+            emailComercial,
+            telefone,
+            whatsapp,
+            endereco,
+            bairro,
+            cidade,
+            estado,
+            cep
+        } = this.elementos;
+
+
         return {
 
             trade_name:
-                this.elementos.nomeFantasia?.value.trim() || "",
+                nomeFantasia?.value.trim() || "",
 
             responsible_name:
-                this.elementos.responsavel?.value.trim() || "",
+                responsavel?.value.trim() || "",
 
             commercial_email:
-                this.elementos.emailComercial?.value.trim() || "",
+                emailComercial?.value.trim() || "",
 
             phone:
-                this.elementos.telefone?.value.trim() || "",
+                Mascaras.somenteNumeros(
+                    telefone?.value
+                ).slice(0, 11),
 
             whatsapp:
-                this.elementos.whatsapp?.value.trim() || "",
+                Mascaras.somenteNumeros(
+                    whatsapp?.value
+                ).slice(0, 11),
 
             address:
-                this.elementos.endereco?.value.trim() || "",
+                endereco?.value.trim() || "",
 
             neighborhood:
-                this.elementos.bairro?.value.trim() || "",
+                bairro?.value.trim() || "",
 
             city:
-                this.elementos.cidade?.value.trim() || "",
+                cidade?.value.trim() || "",
 
             state:
-                this.elementos.estado?.value
+                estado?.value
                     .trim()
                     .toUpperCase() || "",
 
             postal_code:
-                this.elementos.cep?.value
-                    .replace(/\D/g, "")
-                    .slice(0, 8) || ""
+                Mascaras.somenteNumeros(
+                    cep?.value
+                ).slice(0, 8)
 
         };
 
@@ -394,42 +475,49 @@ const EditarFarmacia = {
     validarFormulario(dados) {
 
         this.limparErrosCampos();
-
-        const { erroFormulario } = this.elementos;
-
-        if (erroFormulario) {
-            erroFormulario.textContent = "";
-        }
+        this.limparMensagemErro();
 
 
         const camposObrigatorios = [
 
             {
-                chave: "trade_name",
+                valor: dados.trade_name,
                 elemento: this.elementos.nomeFantasia,
                 mensagem: "Informe o nome fantasia."
             },
 
             {
-                chave: "responsible_name",
+                valor: dados.responsible_name,
                 elemento: this.elementos.responsavel,
                 mensagem: "Informe o nome do responsável."
             },
 
             {
-                chave: "commercial_email",
+                valor: dados.commercial_email,
                 elemento: this.elementos.emailComercial,
                 mensagem: "Informe o e-mail comercial."
             },
 
             {
-                chave: "city",
+                valor: dados.phone,
+                elemento: this.elementos.telefone,
+                mensagem: "Informe o telefone."
+            },
+
+            {
+                valor: dados.address,
+                elemento: this.elementos.endereco,
+                mensagem: "Informe o endereço."
+            },
+
+            {
+                valor: dados.city,
                 elemento: this.elementos.cidade,
                 mensagem: "Informe a cidade."
             },
 
             {
-                chave: "state",
+                valor: dados.state,
                 elemento: this.elementos.estado,
                 mensagem: "Informe o estado."
             }
@@ -437,19 +525,16 @@ const EditarFarmacia = {
         ];
 
 
-        const campoInvalido = camposObrigatorios.find(
-            (campo) => !dados[campo.chave]
-        );
+        const campoVazio =
+            camposObrigatorios.find(
+                (campo) => !campo.valor
+            );
 
 
-        if (campoInvalido) {
+        if (campoVazio) {
 
-            if (erroFormulario) {
-                erroFormulario.textContent =
-                    campoInvalido.mensagem;
-            }
-
-            campoInvalido.elemento?.focus();
+            this.exibirErro(campoVazio.mensagem);
+            campoVazio.elemento?.focus();
 
             return false;
 
@@ -464,10 +549,9 @@ const EditarFarmacia = {
 
         if (!emailValido) {
 
-            if (erroFormulario) {
-                erroFormulario.textContent =
-                    "Informe um e-mail comercial válido.";
-            }
+            this.exibirErro(
+                "Informe um e-mail comercial válido."
+            );
 
             this.elementos.emailComercial?.focus();
 
@@ -476,14 +560,62 @@ const EditarFarmacia = {
         }
 
 
+        if (
+            dados.phone.length !== 10 &&
+            dados.phone.length !== 11
+        ) {
+
+            this.exibirErro(
+                "Informe um telefone válido com DDD."
+            );
+
+            this.elementos.telefone?.focus();
+
+            return false;
+
+        }
+
+
+        if (
+            dados.whatsapp &&
+            dados.whatsapp.length !== 10 &&
+            dados.whatsapp.length !== 11
+        ) {
+
+            this.exibirErro(
+                "Informe um WhatsApp válido com DDD."
+            );
+
+            this.elementos.whatsapp?.focus();
+
+            return false;
+
+        }
+
+
         if (dados.state.length !== 2) {
 
-            if (erroFormulario) {
-                erroFormulario.textContent =
-                    "Informe a sigla do estado com duas letras.";
-            }
+            this.exibirErro(
+                "Selecione uma sigla de estado válida."
+            );
 
             this.elementos.estado?.focus();
+
+            return false;
+
+        }
+
+
+        if (
+            dados.postal_code &&
+            dados.postal_code.length !== 8
+        ) {
+
+            this.exibirErro(
+                "Informe um CEP válido com 8 números."
+            );
+
+            this.elementos.cep?.focus();
 
             return false;
 
@@ -496,31 +628,161 @@ const EditarFarmacia = {
 
 
     /* ==================================================
-       ESTADO DO BOTÃO
+       SALVAR
     ================================================== */
 
-    definirSalvando(salvando) {
+    async salvar() {
 
-        const botao = this.elementos.botaoSalvar;
+        const dados = this.obterDadosFormulario();
 
-        if (!botao) {
+        if (!this.validarFormulario(dados)) {
             return;
         }
 
 
-        if (!botao.dataset.textoOriginal) {
+        this.definirSalvando(true);
 
-            botao.dataset.textoOriginal =
-                botao.textContent.trim();
+
+        try {
+
+            let logoUrl =
+                this.dadosFarmacia?.logo_url || null;
+
+
+            if (
+                typeof UploadLogoFarmacia !== "undefined" &&
+                typeof UploadLogoFarmacia.possuiArquivo ===
+                "function" &&
+                UploadLogoFarmacia.possuiArquivo()
+            ) {
+
+                logoUrl =
+                    await UploadLogoFarmacia
+                        .enviarParaStorage();
+
+            }
+
+
+            const { data, error } =
+                await supabaseClient.rpc(
+                    "update_own_pharmacy",
+                    {
+                        p_trade_name:
+                            dados.trade_name,
+
+                        p_responsible_name:
+                            dados.responsible_name,
+
+                        p_commercial_email:
+                            dados.commercial_email,
+
+                        p_phone:
+                            dados.phone || null,
+
+                        p_whatsapp:
+                            dados.whatsapp || null,
+
+                        p_address:
+                            dados.address || null,
+
+                        p_neighborhood:
+                            dados.neighborhood || null,
+
+                        p_city:
+                            dados.city,
+
+                        p_state:
+                            dados.state,
+
+                        p_postal_code:
+                            dados.postal_code || null,
+
+                        p_logo_url:
+                            logoUrl
+                    }
+                );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            this.atualizarEstadoLocal(
+                dados,
+                logoUrl,
+                data
+            );
+
+
+            if (
+                typeof preencherInformacoesFarmacia ===
+                "function"
+            ) {
+                preencherInformacoesFarmacia();
+            }
+
+
+            this.fechar();
+
+
+            if (
+                typeof mostrarNotificacao === "function"
+            ) {
+
+                mostrarNotificacao(
+                    "Dados da farmácia atualizados com sucesso.",
+                    "sucesso"
+                );
+
+            }
+
+        } catch (erro) {
+
+            console.error(
+                "Erro ao atualizar a farmácia:",
+                erro
+            );
+
+
+            let mensagem =
+                "Não foi possível atualizar os dados da farmácia.";
+
+
+            if (
+                typeof traduzirErroSupabase === "function"
+            ) {
+
+                mensagem =
+                    traduzirErroSupabase(erro) ||
+                    mensagem;
+
+            } else if (erro?.message) {
+
+                mensagem = erro.message;
+
+            }
+
+
+            this.exibirErro(mensagem);
+
+
+            if (
+                typeof mostrarNotificacao === "function"
+            ) {
+
+                mostrarNotificacao(
+                    mensagem,
+                    "erro"
+                );
+
+            }
+
+        } finally {
+
+            this.definirSalvando(false);
 
         }
-
-
-        botao.disabled = salvando;
-
-        botao.textContent = salvando
-            ? "Salvando..."
-            : botao.dataset.textoOriginal;
 
     },
 
@@ -529,7 +791,11 @@ const EditarFarmacia = {
        ATUALIZAR ESTADO LOCAL
     ================================================== */
 
-    atualizarEstadoLocal(dados, logoUrl, respostaRpc) {
+    atualizarEstadoLocal(
+        dados,
+        logoUrl,
+        respostaRpc
+    ) {
 
         let farmaciaAtualizada = null;
 
@@ -568,181 +834,32 @@ const EditarFarmacia = {
 
 
     /* ==================================================
-       SALVAR ALTERAÇÕES
+       ESTADO DO BOTÃO
     ================================================== */
 
-    async salvar() {
+    definirSalvando(salvando) {
 
-        const dados = this.obterDadosFormulario();
+        const botao = this.elementos.botaoSalvar;
 
-        if (!this.validarFormulario(dados)) {
+        if (!botao) {
             return;
         }
 
 
-        const { erroFormulario } = this.elementos;
+        if (!botao.dataset.textoOriginal) {
 
-        this.definirSalvando(true);
-
-
-        try {
-
-            let logoUrl =
-                this.dadosFarmacia?.logo_url || null;
-
-
-            if (UploadLogoFarmacia.possuiArquivo()) {
-
-                logoUrl =
-                    await UploadLogoFarmacia
-                        .enviarParaStorage();
-
-            }
-
-
-            const { data, error } =
-                await supabaseClient.rpc(
-                    "update_own_pharmacy",
-                    {
-
-                        p_trade_name:
-                            dados.trade_name,
-
-                        p_responsible_name:
-                            dados.responsible_name,
-
-                        p_commercial_email:
-                            dados.commercial_email,
-
-                        p_phone:
-                            dados.phone || null,
-
-                        p_whatsapp:
-                            dados.whatsapp || null,
-
-                        p_address:
-                            dados.address || null,
-
-                        p_neighborhood:
-                            dados.neighborhood || null,
-
-                        p_city:
-                            dados.city,
-
-                        p_state:
-                            dados.state,
-
-                        p_postal_code:
-                            dados.postal_code || null,
-
-                        p_logo_url:
-                            logoUrl
-
-                    }
-                );
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            this.atualizarEstadoLocal(
-                dados,
-                logoUrl,
-                data
-            );
-
-
-            if (
-                typeof preencherInformacoesFarmacia ===
-                "function"
-            ) {
-
-                preencherInformacoesFarmacia();
-
-            }
-
-
-            if (
-                typeof preencherLogoFarmacia ===
-                "function"
-            ) {
-
-                preencherLogoFarmacia(logoUrl);
-
-            }
-
-
-            UploadLogoFarmacia.limpar();
-
-            this.fechar();
-
-
-            if (
-                typeof mostrarNotificacao ===
-                "function"
-            ) {
-
-                mostrarNotificacao(
-                    "Dados da farmácia atualizados com sucesso.",
-                    "sucesso"
-                );
-
-            }
-
-
-        } catch (erro) {
-
-            console.error(
-                "Erro ao atualizar a farmácia:",
-                erro
-            );
-
-
-            let mensagem =
-                "Não foi possível atualizar os dados da farmácia.";
-
-
-            if (
-                typeof traduzirErroSupabase ===
-                "function"
-            ) {
-
-                mensagem =
-                    traduzirErroSupabase(erro) ||
-                    mensagem;
-
-            } else if (erro?.message) {
-
-                mensagem = erro.message;
-
-            }
-
-
-            if (erroFormulario) {
-                erroFormulario.textContent = mensagem;
-            }
-
-
-            if (
-                typeof mostrarNotificacao ===
-                "function"
-            ) {
-
-                mostrarNotificacao(
-                    mensagem,
-                    "erro"
-                );
-
-            }
-
-
-        } finally {
-
-            this.definirSalvando(false);
+            botao.dataset.textoOriginal =
+                botao.textContent.trim();
 
         }
+
+
+        botao.disabled = salvando;
+
+        botao.textContent =
+            salvando
+                ? "Salvando..."
+                : botao.dataset.textoOriginal;
 
     },
 
@@ -754,9 +871,7 @@ const EditarFarmacia = {
     definirValor(elemento, valor) {
 
         if (!elemento) {
-
             return;
-
         }
 
         elemento.value = valor ?? "";
@@ -764,6 +879,27 @@ const EditarFarmacia = {
     },
 
 
+    exibirErro(mensagem) {
+
+        if (this.elementos.erroFormulario) {
+
+            this.elementos.erroFormulario.textContent =
+                mensagem;
+
+        }
+
+    },
+
+
+    limparMensagemErro() {
+
+        if (this.elementos.erroFormulario) {
+
+            this.elementos.erroFormulario.textContent = "";
+
+        }
+
+    },
 
 
     limparErrosCampos() {
@@ -776,9 +912,6 @@ const EditarFarmacia = {
 
             });
 
-    },
-
- 
+    }
 
 };
-
