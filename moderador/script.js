@@ -66,11 +66,19 @@ let usuarioModerador = null;
 let farmaciaSelecionadaParaRejeicao = null;
 let temporizadorNotificacao = null;
 
+
+/* =========================================================
+   FUNÇÕES AUXILIARES
+========================================================= */
+
 function escaparHtml(valor) {
     const div = document.createElement("div");
+
     div.textContent = valor ?? "";
+
     return div.innerHTML;
 }
+
 
 function formatarCnpj(cnpj) {
     const numeros = String(cnpj || "")
@@ -83,10 +91,20 @@ function formatarCnpj(cnpj) {
 
     return numeros
         .replace(/^(\d{2})(\d)/, "$1.$2")
-        .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-        .replace(/\.(\d{3})(\d)/, ".$1/$2")
-        .replace(/(\d{4})(\d)/, "$1-$2");
+        .replace(
+            /^(\d{2})\.(\d{3})(\d)/,
+            "$1.$2.$3"
+        )
+        .replace(
+            /\.(\d{3})(\d)/,
+            ".$1/$2"
+        )
+        .replace(
+            /(\d{4})(\d)/,
+            "$1-$2"
+        );
 }
+
 
 function formatarTelefone(telefone) {
     const numeros = String(telefone || "")
@@ -94,85 +112,132 @@ function formatarTelefone(telefone) {
         .slice(0, 11);
 
     if (numeros.length === 11) {
-        return numeros
-            .replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+        return numeros.replace(
+            /^(\d{2})(\d{5})(\d{4})$/,
+            "($1) $2-$3"
+        );
     }
 
     if (numeros.length === 10) {
-        return numeros
-            .replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+        return numeros.replace(
+            /^(\d{2})(\d{4})(\d{4})$/,
+            "($1) $2-$3"
+        );
     }
 
     return telefone || "Não informado";
 }
+
 
 function formatarData(data) {
     if (!data) {
         return "Não informada";
     }
 
+    const dataConvertida = new Date(data);
+
+    if (Number.isNaN(dataConvertida.getTime())) {
+        return "Data inválida";
+    }
+
     return new Intl.DateTimeFormat("pt-BR", {
         dateStyle: "short",
         timeStyle: "short"
-    }).format(new Date(data));
+    }).format(dataConvertida);
 }
+
 
 function traduzirStatus(status) {
     const statusTraduzidos = {
         pending: "Pendente",
         approved: "Aprovada",
         rejected: "Rejeitada",
-        suspended: "Suspensa"
+        suspended: "Suspensa",
+        archived: "Arquivada"
     };
 
     return statusTraduzidos[status] || status;
 }
 
-function mostrarNotificacao(mensagem, tipo = "sucesso") {
+
+function mostrarNotificacao(
+    mensagem,
+    tipo = "sucesso"
+) {
     clearTimeout(temporizadorNotificacao);
 
     notificacao.textContent = mensagem;
-    notificacao.className = `notificacao ${tipo} visivel`;
+
+    notificacao.className =
+        `notificacao ${tipo} visivel`;
 
     temporizadorNotificacao = setTimeout(() => {
         notificacao.classList.remove("visivel");
     }, 4000);
 }
 
+
 function mostrarCarregamentoLista(elemento) {
     elemento.innerHTML = `
         <div class="estado-lista">
             <div class="mini-spinner"></div>
-            <strong>Carregando informações...</strong>
+
+            <strong>
+                Carregando informações...
+            </strong>
         </div>
     `;
 }
 
-function mostrarListaVazia(elemento, tipo = "pendentes") {
+
+function mostrarListaVazia(
+    elemento,
+    tipo = "pendentes"
+) {
     const mensagens = {
         pendentes: {
             icone: "🏥",
             titulo: "Nenhuma solicitação pendente",
-            texto: "As novas farmácias aparecerão aqui para análise."
+            texto:
+                "As novas farmácias aparecerão aqui para análise."
         },
 
         farmacias: {
             icone: "🔎",
             titulo: "Nenhuma farmácia encontrada",
-            texto: "Não existem farmácias com o filtro selecionado."
+            texto:
+                "Não existem farmácias com o filtro selecionado."
+        },
+
+        arquivadas: {
+            icone: "📦",
+            titulo: "Nenhuma farmácia arquivada",
+            texto:
+                "As farmácias arquivadas aparecerão aqui."
         }
     };
 
-    const conteudo = mensagens[tipo];
+    const conteudo =
+        mensagens[tipo] ||
+        mensagens.farmacias;
 
     elemento.innerHTML = `
         <div class="estado-lista">
-            <div class="icone-vazio">${conteudo.icone}</div>
-            <strong>${conteudo.titulo}</strong>
-            <p>${conteudo.texto}</p>
+            <div class="icone-vazio">
+                ${conteudo.icone}
+            </div>
+
+            <strong>
+                ${conteudo.titulo}
+            </strong>
+
+            <p>
+                ${conteudo.texto}
+            </p>
         </div>
     `;
 }
+
 
 function criarDadosFarmacia(farmacia) {
     const nomeFantasia =
@@ -203,24 +268,46 @@ function criarDadosFarmacia(farmacia) {
     };
 }
 
-function criarCardFarmacia(farmacia, modo = "moderacao") {
-    const dados = criarDadosFarmacia(farmacia);
 
-    const email = farmacia.commercial_email || "Não informado";
+/* =========================================================
+   CRIAÇÃO DOS CARDS
+========================================================= */
+
+function criarCardFarmacia(
+    farmacia,
+    modo = "moderacao"
+) {
+    const dados =
+        criarDadosFarmacia(farmacia);
+
+    const email =
+        farmacia.commercial_email ||
+        "Não informado";
+
     const telefone = formatarTelefone(
-        farmacia.whatsapp || farmacia.phone
+        farmacia.whatsapp ||
+        farmacia.phone
     );
 
     const enderecoCompleto = [
         farmacia.address,
-        farmacia.neighborhood
+        farmacia.neighborhood,
+        farmacia.postal_code
+            ? `CEP ${farmacia.postal_code}`
+            : null
     ]
         .filter(Boolean)
         .join(" - ") || "Não informado";
 
     let botoes = "";
 
-    if (modo === "moderacao" && farmacia.status === "pending") {
+
+    /* Botões para solicitações pendentes */
+
+    if (
+        modo === "moderacao" &&
+        farmacia.status === "pending"
+    ) {
         botoes = `
             <div class="acoes-farmacia">
                 <button
@@ -244,6 +331,9 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
         `;
     }
 
+
+    /* Botões da lista geral de farmácias */
+
     if (modo === "gerenciamento") {
         if (farmacia.status === "approved") {
             botoes = `
@@ -260,9 +350,20 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
             `;
         }
 
+
         if (farmacia.status === "suspended") {
             botoes = `
                 <div class="acoes-farmacia">
+                    <button
+                        type="button"
+                        class="botao-arquivar"
+                        data-acao="arquivar"
+                        data-id="${farmacia.id}"
+                        data-status-anterior="suspended"
+                    >
+                        📦 Arquivar
+                    </button>
+
                     <button
                         type="button"
                         class="botao-reativar"
@@ -274,6 +375,43 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
                 </div>
             `;
         }
+
+
+        if (farmacia.status === "rejected") {
+            botoes = `
+                <div class="acoes-farmacia">
+                    <button
+                        type="button"
+                        class="botao-arquivar"
+                        data-acao="arquivar"
+                        data-id="${farmacia.id}"
+                        data-status-anterior="rejected"
+                    >
+                        📦 Arquivar
+                    </button>
+                </div>
+            `;
+        }
+
+
+        if (farmacia.status === "archived") {
+            botoes = `
+                <div class="acoes-farmacia">
+                    <button
+                        type="button"
+                        class="botao-restaurar"
+                        data-acao="restaurar"
+                        data-id="${farmacia.id}"
+                        data-status-anterior="${
+                            farmacia.previous_status || ""
+                        }"
+                    >
+                        ♻ Restaurar
+                    </button>
+                </div>
+            `;
+        }
+
 
         if (farmacia.status === "pending") {
             botoes = `
@@ -300,16 +438,44 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
         }
     }
 
-    const motivo =
-        farmacia.status === "rejected" &&
-        farmacia.rejection_reason
+
+    const motivoRejeicaoHtml =
+        farmacia.rejection_reason &&
+        (
+            farmacia.status === "rejected" ||
+            farmacia.status === "archived"
+        )
             ? `
                 <div class="motivo-rejeicao">
-                    <strong>Motivo da rejeição:</strong>
-                    ${escaparHtml(farmacia.rejection_reason)}
+                    <strong>
+                        Motivo da rejeição:
+                    </strong>
+
+                    ${escaparHtml(
+                        farmacia.rejection_reason
+                    )}
                 </div>
             `
             : "";
+
+
+    const statusAnteriorHtml =
+        farmacia.status === "archived"
+            ? `
+                <div class="dado-farmacia">
+                    <small>Status anterior</small>
+
+                    <strong>
+                        ${escaparHtml(
+                            traduzirStatus(
+                                farmacia.previous_status
+                            )
+                        )}
+                    </strong>
+                </div>
+            `
+            : "";
+
 
     return `
         <article
@@ -318,43 +484,64 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
         >
             <div class="topo-cartao-farmacia">
                 <div class="identidade-farmacia">
-                    <span class="icone-farmacia">🏥</span>
+                    <span class="icone-farmacia">
+                        🏥
+                    </span>
 
                     <div>
                         <h3 class="nome-farmacia">
-                            ${escaparHtml(dados.nomeFantasia)}
+                            ${escaparHtml(
+                                dados.nomeFantasia
+                            )}
                         </h3>
 
                         <p class="razao-social">
-                            ${escaparHtml(dados.razaoSocial)}
+                            ${escaparHtml(
+                                dados.razaoSocial
+                            )}
                         </p>
                     </div>
                 </div>
 
-                <span class="selo-status ${farmacia.status}">
-                    ${traduzirStatus(farmacia.status)}
+                <span
+                    class="selo-status ${farmacia.status}"
+                >
+                    ${traduzirStatus(
+                        farmacia.status
+                    )}
                 </span>
             </div>
 
             <div class="dados-farmacia">
                 <div class="dado-farmacia">
                     <small>Responsável</small>
+
                     <strong>
-                        ${escaparHtml(dados.responsavel)}
+                        ${escaparHtml(
+                            dados.responsavel
+                        )}
                     </strong>
                 </div>
 
                 <div class="dado-farmacia">
                     <small>CNPJ</small>
+
                     <strong>
-                        ${escaparHtml(formatarCnpj(farmacia.cnpj))}
+                        ${escaparHtml(
+                            formatarCnpj(
+                                farmacia.cnpj
+                            )
+                        )}
                     </strong>
                 </div>
 
                 <div class="dado-farmacia">
                     <small>Localização</small>
+
                     <strong>
-                        ${escaparHtml(dados.localizacao)}
+                        ${escaparHtml(
+                            dados.localizacao
+                        )}
                     </strong>
                 </div>
 
@@ -364,18 +551,27 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
                     ${
                         farmacia.commercial_email
                             ? `
-                                <a href="mailto:${escaparHtml(email)}">
+                                <a
+                                    href="mailto:${
+                                        escaparHtml(email)
+                                    }"
+                                >
                                     ${escaparHtml(email)}
                                 </a>
                             `
                             : `
-                                <strong>Não informado</strong>
+                                <strong>
+                                    Não informado
+                                </strong>
                             `
                     }
                 </div>
 
                 <div class="dado-farmacia">
-                    <small>Telefone / WhatsApp</small>
+                    <small>
+                        Telefone / WhatsApp
+                    </small>
+
                     <strong>
                         ${escaparHtml(telefone)}
                     </strong>
@@ -383,15 +579,25 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
 
                 <div class="dado-farmacia">
                     <small>Endereço</small>
+
                     <strong>
-                        ${escaparHtml(enderecoCompleto)}
+                        ${escaparHtml(
+                            enderecoCompleto
+                        )}
                     </strong>
                 </div>
 
                 <div class="dado-farmacia">
-                    <small>Solicitação enviada</small>
+                    <small>
+                        Solicitação enviada
+                    </small>
+
                     <strong>
-                        ${escaparHtml(formatarData(farmacia.created_at))}
+                        ${escaparHtml(
+                            formatarData(
+                                farmacia.created_at
+                            )
+                        )}
                     </strong>
                 </div>
 
@@ -399,48 +605,71 @@ function criarCardFarmacia(farmacia, modo = "moderacao") {
                     farmacia.reviewed_at
                         ? `
                             <div class="dado-farmacia">
-                                <small>Última análise</small>
+                                <small>
+                                    Última análise
+                                </small>
+
                                 <strong>
                                     ${escaparHtml(
-                                        formatarData(farmacia.reviewed_at)
+                                        formatarData(
+                                            farmacia.reviewed_at
+                                        )
                                     )}
                                 </strong>
                             </div>
                         `
                         : ""
                 }
+
+                ${statusAnteriorHtml}
             </div>
 
-            ${motivo}
+            ${motivoRejeicaoHtml}
+
             ${botoes}
         </article>
     `;
 }
 
+
+/* =========================================================
+   AUTENTICAÇÃO DO MODERADOR
+========================================================= */
+
 async function protegerPainel() {
     try {
-        usuarioModerador = await obterUsuarioAtual();
+        usuarioModerador =
+            await obterUsuarioAtual();
 
         if (!usuarioModerador) {
-            window.location.href = "../login-moderador.html";
+            window.location.href =
+                "../login-moderador.html";
+
             return false;
         }
 
-        const perfil = await obterPerfilUsuario(
-            usuarioModerador.id
-        );
+        const perfil =
+            await obterPerfilUsuario(
+                usuarioModerador.id
+            );
 
         if (
             !perfil ||
-            !["moderator", "admin"].includes(perfil.role)
+            !["moderator", "admin"].includes(
+                perfil.role
+            )
         ) {
             await fazerLogout();
-            window.location.href = "../login-moderador.html";
+
+            window.location.href =
+                "../login-moderador.html";
+
             return false;
         }
 
         emailModerador.textContent =
-            usuarioModerador.email || "Moderador";
+            usuarioModerador.email ||
+            "Moderador";
 
         avatarModerador.textContent =
             usuarioModerador.email
@@ -451,15 +680,25 @@ async function protegerPainel() {
 
         return true;
     } catch (erro) {
-        console.error("Erro ao proteger painel:", erro);
+        console.error(
+            "Erro ao proteger painel:",
+            erro
+        );
 
-        window.location.href = "../login-moderador.html";
+        window.location.href =
+            "../login-moderador.html";
+
         return false;
     }
 }
 
+
+/* =========================================================
+   CONTADORES
+========================================================= */
+
 async function carregarContadores() {
-    const status = [
+    const statusDisponiveis = [
         "pending",
         "approved",
         "rejected",
@@ -467,24 +706,32 @@ async function carregarContadores() {
     ];
 
     const resultados = await Promise.all(
-        status.map(async (situacao) => {
-            const { count, error } = await supabaseClient
-                .from("pharmacies")
-                .select("id", {
-                    count: "exact",
-                    head: true
-                })
-                .eq("status", situacao);
+        statusDisponiveis.map(
+            async (situacao) => {
+                const {
+                    count,
+                    error
+                } = await supabaseClient
+                    .from("pharmacies")
+                    .select("id", {
+                        count: "exact",
+                        head: true
+                    })
+                    .eq(
+                        "status",
+                        situacao
+                    );
 
-            if (error) {
-                throw error;
+                if (error) {
+                    throw error;
+                }
+
+                return {
+                    status: situacao,
+                    quantidade: count || 0
+                };
             }
-
-            return {
-                status: situacao,
-                quantidade: count || 0
-            };
-        })
+        )
     );
 
     const contagem = Object.fromEntries(
@@ -507,8 +754,16 @@ async function carregarContadores() {
         contagem.suspended || 0;
 }
 
+
+/* =========================================================
+   CARREGAMENTO DE PENDENTES
+========================================================= */
+
 async function buscarFarmaciasPendentes() {
-    const { data, error } = await supabaseClient
+    const {
+        data,
+        error
+    } = await supabaseClient
         .from("pharmacies")
         .select("*")
         .eq("status", "pending")
@@ -523,16 +778,31 @@ async function buscarFarmaciasPendentes() {
     return data || [];
 }
 
+
 async function carregarPendentes() {
-    mostrarCarregamentoLista(listaPendentes);
-    mostrarCarregamentoLista(listaSolicitacoes);
+    mostrarCarregamentoLista(
+        listaPendentes
+    );
+
+    mostrarCarregamentoLista(
+        listaSolicitacoes
+    );
 
     try {
-        const farmacias = await buscarFarmaciasPendentes();
+        const farmacias =
+            await buscarFarmaciasPendentes();
 
         if (farmacias.length === 0) {
-            mostrarListaVazia(listaPendentes, "pendentes");
-            mostrarListaVazia(listaSolicitacoes, "pendentes");
+            mostrarListaVazia(
+                listaPendentes,
+                "pendentes"
+            );
+
+            mostrarListaVazia(
+                listaSolicitacoes,
+                "pendentes"
+            );
+
             return;
         }
 
@@ -549,25 +819,43 @@ async function carregarPendentes() {
         listaSolicitacoes.innerHTML = cards;
     } catch (erro) {
         console.error(
-            "Erro ao carregar farmácias pendentes:",
+            "Erro ao carregar solicitações:",
             erro
         );
 
-        listaPendentes.innerHTML = `
+        const mensagemErro = `
             <div class="estado-lista">
-                <div class="icone-vazio">⚠️</div>
-                <strong>Erro ao carregar solicitações</strong>
-                <p>${escaparHtml(erro.message)}</p>
+                <div class="icone-vazio">
+                    ⚠️
+                </div>
+
+                <strong>
+                    Erro ao carregar solicitações
+                </strong>
+
+                <p>
+                    ${escaparHtml(erro.message)}
+                </p>
             </div>
         `;
 
+        listaPendentes.innerHTML =
+            mensagemErro;
+
         listaSolicitacoes.innerHTML =
-            listaPendentes.innerHTML;
+            mensagemErro;
     }
 }
 
+
+/* =========================================================
+   CARREGAMENTO DE TODAS AS FARMÁCIAS
+========================================================= */
+
 async function carregarTodasFarmacias() {
-    mostrarCarregamentoLista(listaFarmacias);
+    mostrarCarregamentoLista(
+        listaFarmacias
+    );
 
     try {
         let consulta = supabaseClient
@@ -577,14 +865,30 @@ async function carregarTodasFarmacias() {
                 ascending: false
             });
 
-        if (filtroStatus.value !== "all") {
+        const statusSelecionado =
+            filtroStatus.value;
+
+        /*
+        Quando o filtro for "Todos", as arquivadas
+        permanecem ocultas da lista principal.
+        */
+
+        if (statusSelecionado === "all") {
+            consulta = consulta.neq(
+                "status",
+                "archived"
+            );
+        } else {
             consulta = consulta.eq(
                 "status",
-                filtroStatus.value
+                statusSelecionado
             );
         }
 
-        const { data, error } = await consulta;
+        const {
+            data,
+            error
+        } = await consulta;
 
         if (error) {
             throw error;
@@ -593,18 +897,28 @@ async function carregarTodasFarmacias() {
         const farmacias = data || [];
 
         if (farmacias.length === 0) {
-            mostrarListaVazia(listaFarmacias, "farmacias");
+            const tipoLista =
+                statusSelecionado === "archived"
+                    ? "arquivadas"
+                    : "farmacias";
+
+            mostrarListaVazia(
+                listaFarmacias,
+                tipoLista
+            );
+
             return;
         }
 
-        listaFarmacias.innerHTML = farmacias
-            .map((farmacia) => {
-                return criarCardFarmacia(
-                    farmacia,
-                    "gerenciamento"
-                );
-            })
-            .join("");
+        listaFarmacias.innerHTML =
+            farmacias
+                .map((farmacia) => {
+                    return criarCardFarmacia(
+                        farmacia,
+                        "gerenciamento"
+                    );
+                })
+                .join("");
     } catch (erro) {
         console.error(
             "Erro ao carregar farmácias:",
@@ -613,13 +927,26 @@ async function carregarTodasFarmacias() {
 
         listaFarmacias.innerHTML = `
             <div class="estado-lista">
-                <div class="icone-vazio">⚠️</div>
-                <strong>Erro ao carregar farmácias</strong>
-                <p>${escaparHtml(erro.message)}</p>
+                <div class="icone-vazio">
+                    ⚠️
+                </div>
+
+                <strong>
+                    Erro ao carregar farmácias
+                </strong>
+
+                <p>
+                    ${escaparHtml(erro.message)}
+                </p>
             </div>
         `;
     }
 }
+
+
+/* =========================================================
+   ATUALIZAÇÃO COMPLETA
+========================================================= */
 
 async function atualizarPainelCompleto() {
     try {
@@ -630,7 +957,7 @@ async function atualizarPainelCompleto() {
         ]);
     } catch (erro) {
         console.error(
-            "Erro ao atualizar o painel:",
+            "Erro ao atualizar painel:",
             erro
         );
 
@@ -641,6 +968,11 @@ async function atualizarPainelCompleto() {
     }
 }
 
+
+/* =========================================================
+   APROVAR E REJEITAR
+========================================================= */
+
 async function atualizarStatusFarmacia(
     farmaciaId,
     novoStatus,
@@ -649,16 +981,27 @@ async function atualizarStatusFarmacia(
     const atualizacao = {
         status: novoStatus,
         reviewed_by: usuarioModerador.id,
-        reviewed_at: new Date().toISOString()
+        reviewed_at:
+            new Date().toISOString()
     };
 
     if (novoStatus === "rejected") {
-        atualizacao.rejection_reason = motivo;
+        atualizacao.rejection_reason =
+            motivo;
+
+        atualizacao.previous_status =
+            null;
     } else {
-        atualizacao.rejection_reason = null;
+        atualizacao.rejection_reason =
+            null;
+
+        atualizacao.previous_status =
+            null;
     }
 
-    const { error } = await supabaseClient
+    const {
+        error
+    } = await supabaseClient
         .from("pharmacies")
         .update(atualizacao)
         .eq("id", farmaciaId);
@@ -668,7 +1011,11 @@ async function atualizarStatusFarmacia(
     }
 }
 
-async function aprovarFarmacia(farmaciaId, botao) {
+
+async function aprovarFarmacia(
+    farmaciaId,
+    botao
+) {
     const confirmou = window.confirm(
         "Deseja aprovar esta farmácia?"
     );
@@ -677,11 +1024,13 @@ async function aprovarFarmacia(farmaciaId, botao) {
         return;
     }
 
-    const textoOriginal = botao.textContent;
+    const textoOriginal =
+        botao.textContent;
 
     try {
         botao.disabled = true;
-        botao.textContent = "Aprovando...";
+        botao.textContent =
+            "Aprovando...";
 
         await atualizarStatusFarmacia(
             farmaciaId,
@@ -705,30 +1054,54 @@ async function aprovarFarmacia(farmaciaId, botao) {
         );
 
         botao.disabled = false;
-        botao.textContent = textoOriginal;
+        botao.textContent =
+            textoOriginal;
     }
 }
 
-function abrirModalRejeicao(farmaciaId) {
-    farmaciaSelecionadaParaRejeicao = farmaciaId;
+
+function abrirModalRejeicao(
+    farmaciaId
+) {
+    farmaciaSelecionadaParaRejeicao =
+        farmaciaId;
 
     motivoRejeicao.value = "";
     erroMotivo.textContent = "";
 
-    modalRejeicao.classList.add("aberto");
-    motivoRejeicao.focus();
+    modalRejeicao.classList.add(
+        "aberto"
+    );
+
+    setTimeout(() => {
+        motivoRejeicao.focus();
+    }, 100);
 }
+
 
 function fecharModalRejeicao() {
-    modalRejeicao.classList.remove("aberto");
+    modalRejeicao.classList.remove(
+        "aberto"
+    );
 
-    farmaciaSelecionadaParaRejeicao = null;
+    farmaciaSelecionadaParaRejeicao =
+        null;
+
     motivoRejeicao.value = "";
     erroMotivo.textContent = "";
 }
 
+
 async function rejeitarFarmacia() {
-    const motivo = motivoRejeicao.value.trim();
+    const motivo =
+        motivoRejeicao.value.trim();
+
+    if (!farmaciaSelecionadaParaRejeicao) {
+        erroMotivo.textContent =
+            "Nenhuma farmácia foi selecionada.";
+
+        return;
+    }
 
     if (motivo.length < 5) {
         erroMotivo.textContent =
@@ -741,7 +1114,9 @@ async function rejeitarFarmacia() {
         confirmarRejeicao.textContent;
 
     try {
-        confirmarRejeicao.disabled = true;
+        confirmarRejeicao.disabled =
+            true;
+
         confirmarRejeicao.textContent =
             "Rejeitando...";
 
@@ -767,11 +1142,18 @@ async function rejeitarFarmacia() {
         erroMotivo.textContent =
             `Erro: ${erro.message}`;
     } finally {
-        confirmarRejeicao.disabled = false;
+        confirmarRejeicao.disabled =
+            false;
+
         confirmarRejeicao.textContent =
             textoOriginal;
     }
 }
+
+
+/* =========================================================
+   SUSPENDER E REATIVAR
+========================================================= */
 
 async function suspenderFarmacia(
     farmaciaId,
@@ -785,9 +1167,13 @@ async function suspenderFarmacia(
         return;
     }
 
+    const textoOriginal =
+        botao.textContent;
+
     try {
         botao.disabled = true;
-        botao.textContent = "Suspendendo...";
+        botao.textContent =
+            "Suspendendo...";
 
         await atualizarStatusFarmacia(
             farmaciaId,
@@ -811,9 +1197,11 @@ async function suspenderFarmacia(
         );
 
         botao.disabled = false;
-        botao.textContent = "Suspender farmácia";
+        botao.textContent =
+            textoOriginal;
     }
 }
+
 
 async function reativarFarmacia(
     farmaciaId,
@@ -827,9 +1215,13 @@ async function reativarFarmacia(
         return;
     }
 
+    const textoOriginal =
+        botao.textContent;
+
     try {
         botao.disabled = true;
-        botao.textContent = "Reativando...";
+        botao.textContent =
+            "Reativando...";
 
         await atualizarStatusFarmacia(
             farmaciaId,
@@ -853,88 +1245,350 @@ async function reativarFarmacia(
         );
 
         botao.disabled = false;
-        botao.textContent = "Reativar farmácia";
+        botao.textContent =
+            textoOriginal;
     }
 }
 
-function tratarCliqueEmFarmacia(evento) {
-    const botao = evento.target.closest(
-        "[data-acao]"
+
+/* =========================================================
+   ARQUIVAR E RESTAURAR
+========================================================= */
+
+async function arquivarFarmacia(
+    farmaciaId,
+    statusAnterior,
+    botao
+) {
+    const statusPermitidos = [
+        "rejected",
+        "suspended"
+    ];
+
+    if (
+        !statusPermitidos.includes(
+            statusAnterior
+        )
+    ) {
+        mostrarNotificacao(
+            "Essa farmácia não pode ser arquivada.",
+            "erro"
+        );
+
+        return;
+    }
+
+    const confirmou = window.confirm(
+        "Deseja arquivar esta farmácia?\n\n" +
+        "Ela ficará oculta da lista principal, " +
+        "mas poderá ser restaurada depois."
     );
+
+    if (!confirmou) {
+        return;
+    }
+
+    const textoOriginal =
+        botao.textContent;
+
+    try {
+        botao.disabled = true;
+        botao.textContent =
+            "Arquivando...";
+
+        const {
+            error
+        } = await supabaseClient
+            .from("pharmacies")
+            .update({
+                status: "archived",
+                previous_status:
+                    statusAnterior,
+                reviewed_by:
+                    usuarioModerador.id,
+                reviewed_at:
+                    new Date().toISOString()
+            })
+            .eq("id", farmaciaId);
+
+        if (error) {
+            throw error;
+        }
+
+        mostrarNotificacao(
+            "Farmácia arquivada com sucesso!"
+        );
+
+        await atualizarPainelCompleto();
+    } catch (erro) {
+        console.error(
+            "Erro ao arquivar farmácia:",
+            erro
+        );
+
+        mostrarNotificacao(
+            `Erro ao arquivar: ${erro.message}`,
+            "erro"
+        );
+
+        botao.disabled = false;
+        botao.textContent =
+            textoOriginal;
+    }
+}
+
+
+async function restaurarFarmacia(
+    farmaciaId,
+    statusAnterior,
+    botao
+) {
+    const statusPermitidos = [
+        "rejected",
+        "suspended"
+    ];
+
+    if (
+        !statusPermitidos.includes(
+            statusAnterior
+        )
+    ) {
+        mostrarNotificacao(
+            "Não foi possível identificar o status anterior da farmácia.",
+            "erro"
+        );
+
+        return;
+    }
+
+    const statusTraduzido =
+        statusAnterior === "rejected"
+            ? "rejeitada"
+            : "suspensa";
+
+    const confirmou = window.confirm(
+        `Deseja restaurar esta farmácia para o status "${statusTraduzido}"?`
+    );
+
+    if (!confirmou) {
+        return;
+    }
+
+    const textoOriginal =
+        botao.textContent;
+
+    try {
+        botao.disabled = true;
+        botao.textContent =
+            "Restaurando...";
+
+        const atualizacao = {
+            status: statusAnterior,
+            previous_status: null,
+            reviewed_by:
+                usuarioModerador.id,
+            reviewed_at:
+                new Date().toISOString()
+        };
+
+        const {
+            error
+        } = await supabaseClient
+            .from("pharmacies")
+            .update(atualizacao)
+            .eq("id", farmaciaId);
+
+        if (error) {
+            throw error;
+        }
+
+        mostrarNotificacao(
+            `Farmácia restaurada como ${statusTraduzido}.`
+        );
+
+        await atualizarPainelCompleto();
+    } catch (erro) {
+        console.error(
+            "Erro ao restaurar farmácia:",
+            erro
+        );
+
+        mostrarNotificacao(
+            `Erro ao restaurar: ${erro.message}`,
+            "erro"
+        );
+
+        botao.disabled = false;
+        botao.textContent =
+            textoOriginal;
+    }
+}
+
+
+/* =========================================================
+   CLIQUES NOS BOTÕES DOS CARDS
+========================================================= */
+
+function tratarCliqueEmFarmacia(
+    evento
+) {
+    const botao =
+        evento.target.closest(
+            "[data-acao]"
+        );
 
     if (!botao) {
         return;
     }
 
-    const farmaciaId = botao.dataset.id;
-    const acao = botao.dataset.acao;
+    const farmaciaId =
+        botao.dataset.id;
 
-    if (acao === "aprovar") {
-        aprovarFarmacia(
-            farmaciaId,
-            botao
+    const acao =
+        botao.dataset.acao;
+
+    const statusAnterior =
+        botao.dataset.statusAnterior;
+
+    if (!farmaciaId) {
+        mostrarNotificacao(
+            "Não foi possível identificar a farmácia.",
+            "erro"
         );
+
+        return;
     }
 
-    if (acao === "rejeitar") {
-        abrirModalRejeicao(farmaciaId);
-    }
+    switch (acao) {
+        case "aprovar":
+            aprovarFarmacia(
+                farmaciaId,
+                botao
+            );
+            break;
 
-    if (acao === "suspender") {
-        suspenderFarmacia(
-            farmaciaId,
-            botao
-        );
-    }
+        case "rejeitar":
+            abrirModalRejeicao(
+                farmaciaId
+            );
+            break;
 
-    if (acao === "reativar") {
-        reativarFarmacia(
-            farmaciaId,
-            botao
-        );
+        case "suspender":
+            suspenderFarmacia(
+                farmaciaId,
+                botao
+            );
+            break;
+
+        case "reativar":
+            reativarFarmacia(
+                farmaciaId,
+                botao
+            );
+            break;
+
+        case "arquivar":
+            arquivarFarmacia(
+                farmaciaId,
+                statusAnterior,
+                botao
+            );
+            break;
+
+        case "restaurar":
+            restaurarFarmacia(
+                farmaciaId,
+                statusAnterior,
+                botao
+            );
+            break;
+
+        default:
+            console.warn(
+                "Ação desconhecida:",
+                acao
+            );
     }
 }
 
-function configurarNavegacao() {
-    const botoesMenu = document.querySelectorAll(
-        ".item-menu"
-    );
 
-    const secoes = document.querySelectorAll(
-        ".secao-painel"
-    );
+/* =========================================================
+   NAVEGAÇÃO DO PAINEL
+========================================================= */
+
+function configurarNavegacao() {
+    const botoesMenu =
+        document.querySelectorAll(
+            ".item-menu"
+        );
+
+    const secoes =
+        document.querySelectorAll(
+            ".secao-painel"
+        );
 
     botoesMenu.forEach((botao) => {
-        botao.addEventListener("click", () => {
-            botoesMenu.forEach((item) => {
-                item.classList.remove("ativo");
-            });
+        botao.addEventListener(
+            "click",
+            () => {
+                botoesMenu.forEach(
+                    (item) => {
+                        item.classList.remove(
+                            "ativo"
+                        );
+                    }
+                );
 
-            secoes.forEach((secao) => {
-                secao.classList.remove("ativa");
-            });
+                secoes.forEach(
+                    (secao) => {
+                        secao.classList.remove(
+                            "ativa"
+                        );
+                    }
+                );
 
-            botao.classList.add("ativo");
+                botao.classList.add(
+                    "ativo"
+                );
 
-            const secao = document.getElementById(
-                `secao-${botao.dataset.secao}`
-            );
+                const secao =
+                    document.getElementById(
+                        `secao-${botao.dataset.secao}`
+                    );
 
-            secao.classList.add("ativa");
+                if (secao) {
+                    secao.classList.add(
+                        "ativa"
+                    );
+                }
 
-            if (botao.dataset.secao === "farmacias") {
-                carregarTodasFarmacias();
+                if (
+                    botao.dataset.secao ===
+                    "farmacias"
+                ) {
+                    carregarTodasFarmacias();
+                }
+
+                if (
+                    botao.dataset.secao ===
+                    "solicitacoes"
+                ) {
+                    carregarPendentes();
+                }
             }
-
-            if (botao.dataset.secao === "solicitacoes") {
-                carregarPendentes();
-            }
-        });
+        );
     });
 }
 
+
+/* =========================================================
+   EVENTOS
+========================================================= */
+
 document
-    .querySelectorAll("[data-fechar-modal]")
+    .querySelectorAll(
+        "[data-fechar-modal]"
+    )
     .forEach((elemento) => {
         elemento.addEventListener(
             "click",
@@ -942,84 +1596,137 @@ document
         );
     });
 
-document.addEventListener("keydown", (evento) => {
-    if (
-        evento.key === "Escape" &&
-        modalRejeicao.classList.contains("aberto")
-    ) {
-        fecharModalRejeicao();
+
+document.addEventListener(
+    "keydown",
+    (evento) => {
+        if (
+            evento.key === "Escape" &&
+            modalRejeicao.classList.contains(
+                "aberto"
+            )
+        ) {
+            fecharModalRejeicao();
+        }
     }
-});
+);
+
 
 listaPendentes.addEventListener(
     "click",
     tratarCliqueEmFarmacia
 );
 
+
 listaSolicitacoes.addEventListener(
     "click",
     tratarCliqueEmFarmacia
 );
+
 
 listaFarmacias.addEventListener(
     "click",
     tratarCliqueEmFarmacia
 );
 
+
 confirmarRejeicao.addEventListener(
     "click",
     rejeitarFarmacia
 );
 
+
 document
-    .getElementById("botao-atualizar")
+    .getElementById(
+        "botao-atualizar"
+    )
     .addEventListener(
         "click",
         atualizarPainelCompleto
     );
 
+
 document
-    .getElementById("botao-atualizar-solicitacoes")
+    .getElementById(
+        "botao-atualizar-solicitacoes"
+    )
     .addEventListener(
         "click",
         carregarPendentes
     );
 
+
 document
-    .getElementById("botao-atualizar-farmacias")
+    .getElementById(
+        "botao-atualizar-farmacias"
+    )
     .addEventListener(
         "click",
         carregarTodasFarmacias
     );
+
 
 filtroStatus.addEventListener(
     "change",
     carregarTodasFarmacias
 );
 
+
 document
-    .getElementById("botao-sair")
-    .addEventListener("click", async () => {
-        try {
-            await fazerLogout();
-        } finally {
-            window.location.href =
-                "../login-moderador.html";
+    .getElementById(
+        "botao-sair"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+            try {
+                await fazerLogout();
+            } catch (erro) {
+                console.error(
+                    "Erro ao sair:",
+                    erro
+                );
+            } finally {
+                window.location.href =
+                    "../login-moderador.html";
+            }
         }
-    });
+    );
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+========================================================= */
 
 async function iniciarPainel() {
-    const autorizado = await protegerPainel();
+    try {
+        const autorizado =
+            await protegerPainel();
 
-    if (!autorizado) {
-        return;
+        if (!autorizado) {
+            return;
+        }
+
+        configurarNavegacao();
+
+        await atualizarPainelCompleto();
+    } catch (erro) {
+        console.error(
+            "Erro ao iniciar painel:",
+            erro
+        );
+
+        mostrarNotificacao(
+            "O painel não pôde ser carregado.",
+            "erro"
+        );
+    } finally {
+        if (telaCarregamento) {
+            telaCarregamento.style.display =
+                "none";
+        }
     }
-
-    configurarNavegacao();
-
-    await atualizarPainelCompleto();
-
-    telaCarregamento.style.display = "none";
 }
+
 
 iniciarPainel();

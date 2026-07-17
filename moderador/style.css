@@ -24,6 +24,13 @@
     --roxo: #7852a9;
     --roxo-fundo: #eee3fa;
 
+    --azul: #3976a8;
+    --azul-escuro: #2d638f;
+    --azul-fundo: #e2eff8;
+
+    --cinza-arquivo: #59636d;
+    --cinza-arquivo-fundo: #e8ecef;
+
     --sombra: 0 18px 45px rgba(31, 67, 47, 0.09);
 }
 
@@ -34,9 +41,15 @@ html {
 body {
     min-height: 100vh;
     margin: 0;
+
     color: var(--texto);
     background: var(--fundo);
+
     font-family: Arial, Helvetica, sans-serif;
+}
+
+body.modal-aberto {
+    overflow: hidden;
 }
 
 button,
@@ -49,6 +62,19 @@ textarea {
 button {
     cursor: pointer;
 }
+
+button:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+    outline: 3px solid rgba(19, 116, 71, 0.25);
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   BARRA LATERAL
+========================================================= */
 
 .barra-lateral {
     position: fixed;
@@ -130,17 +156,27 @@ button {
 
     color: rgba(255, 255, 255, 0.88);
     background: transparent;
+
     border: 0;
     border-radius: 11px;
 
     text-align: left;
     font-weight: 700;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .item-menu:hover,
 .item-menu.ativo {
     color: white;
     background: rgba(255, 255, 255, 0.16);
+}
+
+.item-menu:hover {
+    transform: translateX(2px);
 }
 
 .item-menu span,
@@ -156,6 +192,11 @@ button {
 .botao-sair:hover {
     background: rgba(255, 255, 255, 0.13);
 }
+
+
+/* =========================================================
+   CONTEÚDO PRINCIPAL
+========================================================= */
 
 .conteudo-principal {
     min-height: 100vh;
@@ -230,7 +271,25 @@ button {
 
 .secao-painel.ativa {
     display: block;
+    animation: aparecerSecao 0.25s ease;
 }
+
+@keyframes aparecerSecao {
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================================================
+   BANNER
+========================================================= */
 
 .banner {
     min-height: 245px;
@@ -293,6 +352,11 @@ button {
     font-size: 5rem;
 }
 
+
+/* =========================================================
+   CARTÕES DE RESUMO
+========================================================= */
+
 .resumos {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -315,6 +379,15 @@ button {
     border-radius: 17px;
 
     box-shadow: var(--sombra);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.cartao-resumo:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 50px rgba(31, 67, 47, 0.13);
 }
 
 .icone-resumo {
@@ -364,6 +437,11 @@ button {
     font-size: 1.5rem;
 }
 
+
+/* =========================================================
+   PAINEL DE LISTAGEM
+========================================================= */
+
 .painel-listagem {
     padding: 28px;
 
@@ -389,7 +467,8 @@ button {
 }
 
 .botao-secundario {
-    padding: 11px 17px;
+    min-height: 42px;
+    padding: 0 17px;
 
     color: var(--verde-principal);
     background: var(--verde-claro);
@@ -398,10 +477,19 @@ button {
     border-radius: 10px;
 
     font-weight: 800;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 .botao-secundario:hover {
     background: #d4ecdf;
+    transform: translateY(-1px);
+}
+
+.botao-secundario:active {
+    transform: translateY(0);
 }
 
 .filtros {
@@ -412,19 +500,31 @@ button {
 
 .filtros select {
     min-height: 42px;
-    padding: 0 12px;
+    padding: 0 36px 0 12px;
 
     color: var(--texto);
     background: white;
 
     border: 1px solid var(--borda);
     border-radius: 10px;
+
+    outline: none;
+}
+
+.filtros select:focus {
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 4px rgba(19, 116, 71, 0.1);
 }
 
 .lista-farmacias {
     display: grid;
     gap: 17px;
 }
+
+
+/* =========================================================
+   ESTADOS DA LISTA
+========================================================= */
 
 .estado-lista {
     min-height: 200px;
@@ -437,6 +537,7 @@ button {
     padding: 30px;
 
     color: var(--texto-suave);
+
     border: 2px dashed var(--borda);
     border-radius: 16px;
 
@@ -453,8 +554,16 @@ button {
 }
 
 .estado-lista p {
+    max-width: 530px;
     margin: 8px 0 0;
+
+    line-height: 1.5;
 }
+
+
+/* =========================================================
+   CARTÃO DE FARMÁCIA
+========================================================= */
 
 .cartao-farmacia {
     overflow: hidden;
@@ -465,11 +574,13 @@ button {
 
     transition:
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .cartao-farmacia:hover {
     transform: translateY(-2px);
+    border-color: #c9dacf;
     box-shadow: var(--sombra);
 }
 
@@ -486,6 +597,8 @@ button {
     display: flex;
     align-items: flex-start;
     gap: 14px;
+
+    min-width: 0;
 }
 
 .icone-farmacia {
@@ -507,17 +620,29 @@ button {
 .nome-farmacia {
     margin: 0;
     font-size: 1.14rem;
+    overflow-wrap: anywhere;
 }
 
 .razao-social {
     margin: 5px 0 0;
+
     color: var(--texto-suave);
+
     line-height: 1.45;
+    overflow-wrap: anywhere;
 }
 
+
+/* =========================================================
+   SELOS DE STATUS
+========================================================= */
+
 .selo-status {
+    flex-shrink: 0;
+
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 5px;
 
     padding: 7px 10px;
@@ -526,6 +651,7 @@ button {
 
     font-size: 0.75rem;
     font-weight: 900;
+    white-space: nowrap;
 }
 
 .selo-status.pending {
@@ -547,6 +673,16 @@ button {
     color: var(--roxo);
     background: var(--roxo-fundo);
 }
+
+.selo-status.archived {
+    color: var(--cinza-arquivo);
+    background: var(--cinza-arquivo-fundo);
+}
+
+
+/* =========================================================
+   DADOS DA FARMÁCIA
+========================================================= */
 
 .dados-farmacia {
     display: grid;
@@ -590,6 +726,10 @@ button {
     text-decoration: none;
 }
 
+.dado-farmacia a:hover {
+    text-decoration: underline;
+}
+
 .motivo-rejeicao {
     margin: 0 23px 21px;
     padding: 13px 15px;
@@ -601,11 +741,18 @@ button {
     border-radius: 8px;
 
     line-height: 1.5;
+    overflow-wrap: anywhere;
 }
+
+
+/* =========================================================
+   BOTÕES DE AÇÕES
+========================================================= */
 
 .acoes-farmacia {
     display: flex;
     justify-content: flex-end;
+    flex-wrap: wrap;
     gap: 10px;
 
     padding: 17px 23px;
@@ -617,7 +764,9 @@ button {
 .botao-aprovar,
 .botao-rejeitar,
 .botao-suspender,
-.botao-reativar {
+.botao-reativar,
+.botao-arquivar,
+.botao-restaurar {
     min-height: 42px;
     padding: 0 16px;
 
@@ -625,6 +774,12 @@ button {
     border-radius: 10px;
 
     font-weight: 800;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
 }
 
 .botao-aprovar,
@@ -636,6 +791,7 @@ button {
 .botao-aprovar:hover,
 .botao-reativar:hover {
     background: var(--verde-escuro);
+    transform: translateY(-1px);
 }
 
 .botao-rejeitar {
@@ -645,6 +801,7 @@ button {
 
 .botao-rejeitar:hover {
     background: #ffd2ce;
+    transform: translateY(-1px);
 }
 
 .botao-suspender {
@@ -654,15 +811,54 @@ button {
 
 .botao-suspender:hover {
     background: #e5d5f6;
+    transform: translateY(-1px);
+}
+
+.botao-arquivar {
+    color: var(--cinza-arquivo);
+    background: var(--cinza-arquivo-fundo);
+}
+
+.botao-arquivar:hover {
+    color: #3f474f;
+    background: #dce2e6;
+    transform: translateY(-1px);
+}
+
+.botao-restaurar {
+    color: white;
+    background: var(--azul);
+}
+
+.botao-restaurar:hover {
+    background: var(--azul-escuro);
+    transform: translateY(-1px);
+}
+
+.botao-aprovar:active,
+.botao-rejeitar:active,
+.botao-suspender:active,
+.botao-reativar:active,
+.botao-arquivar:active,
+.botao-restaurar:active {
+    transform: translateY(0);
 }
 
 .botao-aprovar:disabled,
 .botao-rejeitar:disabled,
 .botao-suspender:disabled,
-.botao-reativar:disabled {
+.botao-reativar:disabled,
+.botao-arquivar:disabled,
+.botao-restaurar:disabled {
     cursor: not-allowed;
     opacity: 0.65;
+    transform: none;
 }
+
+
+/* =========================================================
+   MODAL
+========================================================= */
 
 .modal {
     position: fixed;
@@ -700,6 +896,20 @@ button {
     border-radius: 20px;
 
     box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25);
+
+    animation: abrirModal 0.22s ease;
+}
+
+@keyframes abrirModal {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .fechar-modal {
@@ -760,7 +970,9 @@ button {
 
 .conteudo-modal label {
     display: block;
+
     margin-bottom: 8px;
+
     font-weight: 800;
 }
 
@@ -768,6 +980,7 @@ button {
     width: 100%;
     resize: vertical;
 
+    min-height: 120px;
     padding: 13px;
 
     color: var(--texto);
@@ -775,6 +988,7 @@ button {
 
     border: 1px solid var(--borda);
     border-radius: 11px;
+
     outline: none;
 }
 
@@ -785,6 +999,7 @@ button {
 
 .erro-modal {
     display: block;
+
     min-height: 18px;
     margin-top: 6px;
 
@@ -811,6 +1026,15 @@ button {
 
     font-weight: 800;
 }
+
+.botao-cancelar:hover {
+    background: #e1e8e4;
+}
+
+
+/* =========================================================
+   NOTIFICAÇÃO
+========================================================= */
 
 .notificacao {
     position: fixed;
@@ -852,6 +1076,11 @@ button {
     background: var(--vermelho);
 }
 
+
+/* =========================================================
+   CARREGAMENTO
+========================================================= */
+
 .tela-carregamento {
     position: fixed;
     inset: 0;
@@ -864,6 +1093,11 @@ button {
 
     color: var(--texto);
     background: white;
+}
+
+.tela-carregamento p {
+    margin: 14px 0 0;
+    color: var(--texto-suave);
 }
 
 .spinner,
@@ -896,6 +1130,11 @@ button {
     }
 }
 
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
 @media (max-width: 1100px) {
     .resumos {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -926,7 +1165,14 @@ button {
 
     .item-menu {
         justify-content: center;
+
         padding: 12px 8px;
+
+        text-align: center;
+    }
+
+    .item-menu:hover {
+        transform: none;
     }
 
     .botao-sair {
@@ -950,11 +1196,20 @@ button {
         flex-direction: column;
     }
 
+    .usuario-logado {
+        width: 100%;
+    }
+
+    .usuario-logado small {
+        max-width: calc(100vw - 110px);
+    }
+
     .resumos {
         grid-template-columns: 1fr;
     }
 
     .banner {
+        min-height: auto;
         padding: 27px 22px;
     }
 
@@ -976,12 +1231,21 @@ button {
         flex-direction: column;
     }
 
+    .filtros select,
+    .botao-secundario {
+        width: 100%;
+    }
+
     .dados-farmacia {
         grid-template-columns: 1fr;
     }
 
     .topo-cartao-farmacia {
         flex-direction: column;
+    }
+
+    .selo-status {
+        align-self: flex-start;
     }
 
     .acoes-farmacia {
@@ -994,5 +1258,25 @@ button {
 
     .menu {
         grid-template-columns: 1fr;
+    }
+
+    .conteudo-modal {
+        padding: 26px 20px 22px;
+    }
+
+    .acoes-modal {
+        flex-direction: column-reverse;
+    }
+
+    .acoes-modal button {
+        width: 100%;
+    }
+
+    .notificacao {
+        right: 14px;
+        bottom: 14px;
+        left: 14px;
+
+        max-width: none;
     }
 }

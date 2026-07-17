@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Painel do Moderador | BuscaMed</title>
 
@@ -30,29 +28,17 @@
         </a>
 
         <nav class="menu">
-            <button
-                type="button"
-                class="item-menu ativo"
-                data-secao="visao-geral"
-            >
+            <button type="button" class="item-menu ativo" data-secao="visao-geral">
                 <span>▦</span>
                 Visão geral
             </button>
 
-            <button
-                type="button"
-                class="item-menu"
-                data-secao="solicitacoes"
-            >
+            <button type="button" class="item-menu" data-secao="solicitacoes">
                 <span>⌛</span>
                 Solicitações
             </button>
 
-            <button
-                type="button"
-                class="item-menu"
-                data-secao="farmacias"
-            >
+            <button type="button" class="item-menu" data-secao="farmacias">
                 <span>✚</span>
                 Farmácias
             </button>
@@ -83,10 +69,7 @@
             </div>
         </header>
 
-        <section
-            id="secao-visao-geral"
-            class="secao-painel ativa"
-        >
+        <section id="secao-visao-geral" class="secao-painel ativa">
             <section class="banner">
                 <div>
                     <span class="banner-etiqueta">
@@ -155,11 +138,7 @@
                         <h2>Solicitações pendentes</h2>
                     </div>
 
-                    <button
-                        type="button"
-                        id="botao-atualizar"
-                        class="botao-secundario"
-                    >
+                    <button type="button" id="botao-atualizar" class="botao-secundario">
                         Atualizar
                     </button>
                 </div>
@@ -173,10 +152,7 @@
             </section>
         </section>
 
-        <section
-            id="secao-solicitacoes"
-            class="secao-painel"
-        >
+        <section id="secao-solicitacoes" class="secao-painel">
             <section class="painel-listagem">
                 <div class="cabecalho-listagem">
                     <div>
@@ -184,26 +160,16 @@
                         <h2>Todas as solicitações pendentes</h2>
                     </div>
 
-                    <button
-                        type="button"
-                        id="botao-atualizar-solicitacoes"
-                        class="botao-secundario"
-                    >
+                    <button type="button" id="botao-atualizar-solicitacoes" class="botao-secundario">
                         Atualizar
                     </button>
                 </div>
 
-                <div
-                    id="lista-solicitacoes"
-                    class="lista-farmacias"
-                ></div>
+                <div id="lista-solicitacoes" class="lista-farmacias"></div>
             </section>
         </section>
 
-        <section
-            id="secao-farmacias"
-            class="secao-painel"
-        >
+        <section id="secao-farmacias" class="secao-painel">
             <section class="painel-listagem">
                 <div class="cabecalho-listagem">
                     <div>
@@ -232,25 +198,22 @@
                                 Suspensas
                             </option>
 
+                            <option value="archived">
+                                Arquivadas
+                            </option>
+
                             <option value="pending">
                                 Pendentes
                             </option>
                         </select>
 
-                        <button
-                            type="button"
-                            id="botao-atualizar-farmacias"
-                            class="botao-secundario"
-                        >
+                        <button type="button" id="botao-atualizar-farmacias" class="botao-secundario">
                             Atualizar
                         </button>
                     </div>
                 </div>
 
-                <div
-                    id="lista-farmacias"
-                    class="lista-farmacias"
-                ></div>
+                <div id="lista-farmacias" class="lista-farmacias"></div>
             </section>
         </section>
     </main>
@@ -258,18 +221,8 @@
     <div id="modal-rejeicao" class="modal">
         <div class="fundo-modal" data-fechar-modal></div>
 
-        <section
-            class="conteudo-modal"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="titulo-modal-rejeicao"
-        >
-            <button
-                type="button"
-                class="fechar-modal"
-                data-fechar-modal
-                aria-label="Fechar"
-            >
+        <section class="conteudo-modal" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-rejeicao">
+            <button type="button" class="fechar-modal" data-fechar-modal aria-label="Fechar">
                 ×
             </button>
 
@@ -290,29 +243,17 @@
                 Motivo da rejeição
             </label>
 
-            <textarea
-                id="motivo-rejeicao"
-                maxlength="500"
-                rows="5"
-                placeholder="Ex.: Dados incompletos, CNPJ inválido..."
-            ></textarea>
+            <textarea id="motivo-rejeicao" maxlength="500" rows="5"
+                placeholder="Ex.: Dados incompletos, CNPJ inválido..."></textarea>
 
             <small id="erro-motivo" class="erro-modal"></small>
 
             <div class="acoes-modal">
-                <button
-                    type="button"
-                    class="botao-cancelar"
-                    data-fechar-modal
-                >
+                <button type="button" class="botao-cancelar" data-fechar-modal>
                     Cancelar
                 </button>
 
-                <button
-                    type="button"
-                    id="confirmar-rejeicao"
-                    class="botao-rejeitar"
-                >
+                <button type="button" id="confirmar-rejeicao" class="botao-rejeitar">
                     Confirmar rejeição
                 </button>
             </div>
@@ -327,4 +268,5 @@
     <script src="../auth.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
