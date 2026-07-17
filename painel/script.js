@@ -330,12 +330,14 @@ function renderizarPainelBloqueado() {
 ========================================================= */
 
 function preencherInformacoesFarmacia() {
+
     const farmacia = estado.farmacia;
 
-    const nome =
+    const nome = Mascaras.formatarNome(
         farmacia.trade_name ||
         farmacia.legal_name ||
-        "Farmácia";
+        "Farmácia"
+    );
 
     elementos.nomeCabecalhoFarmacia.textContent = nome;
     elementos.nomeBannerFarmacia.textContent = nome;
@@ -345,41 +347,54 @@ function preencherInformacoesFarmacia() {
         nome.trim().charAt(0).toUpperCase() || "F";
 
     elementos.perfilNomeFantasia.textContent = nome;
+
     elementos.perfilRazaoSocial.textContent =
-        farmacia.legal_name || "Razão social não informada";
+        Mascaras.formatarNome(farmacia.legal_name) ||
+        "Razão social não informada";
 
     elementos.perfilCnpj.textContent =
-        Mascaras.formatarCNPJ(farmacia.cnpj) || "Não informado";
+        Mascaras.formatarCNPJ(farmacia.cnpj) ||
+        "Não informado";
 
     elementos.perfilResponsavel.textContent =
-        farmacia.responsible_name || "Não informado";
+        Mascaras.formatarNome(farmacia.responsible_name) ||
+        "Não informado";
 
     elementos.perfilEmail.textContent =
         farmacia.commercial_email || "Não informado";
 
     elementos.perfilTelefone.textContent =
-        Mascaras.formatarTelefone(farmacia.phone) || "Não informado";
+        Mascaras.formatarTelefone(farmacia.phone) ||
+        "Não informado";
 
     elementos.perfilWhatsapp.textContent =
-        Mascaras.formatarWhatsApp(farmacia.whatsapp) || "Não informado";
+        Mascaras.formatarWhatsApp(farmacia.whatsapp) ||
+        "Não informado";
 
     elementos.perfilEndereco.textContent =
-        farmacia.address || "Não informado";
+        Mascaras.formatarNome(farmacia.address) ||
+        "Não informado";
 
     elementos.perfilBairro.textContent =
-        farmacia.neighborhood || "Não informado";
+        Mascaras.formatarNome(farmacia.neighborhood) ||
+        "Não informado";
 
     elementos.perfilCidade.textContent =
-        montarCidadeEstado(farmacia.city, farmacia.state);
+        montarCidadeEstado(
+            Mascaras.formatarNome(farmacia.city),
+            farmacia.state
+        );
 
     elementos.perfilCep.textContent =
-        Mascaras.formatarCEP(farmacia.postal_code) || "Não informado";
+        Mascaras.formatarCEP(farmacia.postal_code) ||
+        "Não informado";
 
     elementos.perfilDataCadastro.textContent =
         formatarData(farmacia.created_at);
 
     preencherStatusPerfil(farmacia.status);
     preencherLogoFarmacia(farmacia.logo_url);
+
 }
 
 function preencherStatusPerfil(status) {

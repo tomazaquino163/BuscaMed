@@ -155,6 +155,72 @@ const Mascaras = {
 
         return this.somenteNumeros(valor).slice(0, 14);
 
+    },
+
+    formatarNome(valor) {
+
+    const texto = (valor || "").trim();
+
+    if (!texto) {
+        return "";
     }
+
+    const palavrasMinusculas = new Set([
+        "da",
+        "das",
+        "de",
+        "do",
+        "dos",
+        "e"
+    ]);
+
+    const siglasConhecidas = new Set([
+        "UPA",
+        "UBS",
+        "SUS",
+        "LTDA",
+        "ME",
+        "EPP"
+    ]);
+
+    return texto
+        .split(/\s+/)
+        .map((palavra, indice) => {
+
+            const palavraLimpa = palavra
+                .replace(/[.,;:!?()]/g, "");
+
+            const pontuacaoFinal =
+                palavra.slice(palavraLimpa.length);
+
+            const maiuscula =
+                palavraLimpa.toLocaleUpperCase("pt-BR");
+
+            const minuscula =
+                palavraLimpa.toLocaleLowerCase("pt-BR");
+
+            if (siglasConhecidas.has(maiuscula)) {
+                return maiuscula + pontuacaoFinal;
+            }
+
+            if (
+                indice > 0 &&
+                palavrasMinusculas.has(minuscula)
+            ) {
+                return minuscula + pontuacaoFinal;
+            }
+
+            return (
+                minuscula
+                    .charAt(0)
+                    .toLocaleUpperCase("pt-BR") +
+                minuscula.slice(1) +
+                pontuacaoFinal
+            );
+
+        })
+        .join(" ");
+
+},
 
 };
