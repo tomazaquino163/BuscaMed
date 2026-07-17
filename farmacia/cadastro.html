@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Cadastro de Farmácia | BuscaMed</title>
+
+    <link rel="stylesheet" href="cadastro.css">
+</head>
+
+<body>
+    <header class="topo">
+        <a href="../index.html" class="marca">
+            <span class="marca-icone">+</span>
+
+            <span class="marca-texto">
+                <strong>BuscaMed</strong>
+                <small>Farmácias parceiras</small>
+            </span>
+        </a>
+
+        <a href="../login.html" class="link-login">
+            Já sou parceiro
+        </a>
+    </header>
+
+    <main class="pagina-cadastro">
+        <section class="apresentacao">
+            <span class="etiqueta">
+                Seja uma farmácia parceira
+            </span>
+
+            <h1>
+                Leve suas ofertas para mais pessoas com o BuscaMed
+            </h1>
+
+            <p>
+                Cadastre sua farmácia para divulgar medicamentos e preços.
+                Após o envio, a solicitação será analisada por um moderador.
+            </p>
+
+            <div class="passos">
+                <article class="passo">
+                    <span>1</span>
+
+                    <div>
+                        <strong>Preencha o cadastro</strong>
+                        <p>
+                            Informe os dados da farmácia e crie seu acesso.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="passo">
+                    <span>2</span>
+
+                    <div>
+                        <strong>Aguarde a análise</strong>
+                        <p>
+                            O moderador verificará o estabelecimento.
+                        </p>
+                    </div>
+                </article>
+
+                <article class="passo">
+                    <span>3</span>
+
+                    <div>
+                        <strong>Gerencie seus medicamentos</strong>
+                        <p>
+                            Após a aprovação, você poderá usar o painel.
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <section class="cartao-cadastro">
+            <div class="cabecalho-formulario">
+                <p class="subtitulo">Solicitação de acesso</p>
+
+                <h2>Cadastre sua farmácia</h2>
+
+                <p>
+                    Os campos marcados com <span>*</span>
+                    são obrigatórios.
+                </p>
+            </div>
+
+            <form id="form-cadastro" novalidate>
+                <fieldset>
+                    <legend>Dados do estabelecimento</legend>
+
+                    <div class="grade-campos">
+                        <div class="campo campo-largo">
+                            <label for="nome">
+                                Nome da farmácia <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nome"
+                                maxlength="120"
+                                placeholder="Ex.: Farmácia Saúde"
+                                autocomplete="organization"
+                                required
+                            >
+
+                            <small
+                                class="erro-campo"
+                                data-erro="nome"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="cnpj">
+                                CNPJ <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cnpj"
+                                maxlength="18"
+                                inputmode="numeric"
+                                placeholder="00.000.000/0000-00"
+                                required
+                            >
+
+                            <small
+                                class="erro-campo"
+                                data-erro="cnpj"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="telefone">
+                                Telefone <span>*</span>
+                            </label>
+
+                            <input
+                                type="tel"
+                                id="telefone"
+                                maxlength="15"
+                                inputmode="tel"
+                                placeholder="(43) 99999-9999"
+                                autocomplete="tel"
+                                required
+                            >
+
+                            <small
+                                class="erro-campo"
+                                data-erro="telefone"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="cidade">
+                                Cidade <span>*</span>
+                            </label>
+
+                            <input
+                                type="text"
+                                id="cidade"
+                                maxlength="80"
+                                placeholder="Santo Antônio da Platina"
+                                autocomplete="address-level2"
+                                required
+                            >
+
+                            <small
+                                class="erro-campo"
+                                data-erro="cidade"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="estado">
+                                Estado <span>*</span>
+                            </label>
+
+                            <select id="estado" required>
+                                <option value="">Selecione</option>
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR" selected>PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
+                            </select>
+
+                            <small
+                                class="erro-campo"
+                                data-erro="estado"
+                            ></small>
+                        </div>
+
+                        <div class="campo campo-largo">
+                            <label for="endereco">
+                                Endereço
+                            </label>
+
+                            <input
+                                type="text"
+                                id="endereco"
+                                maxlength="180"
+                                placeholder="Rua, número e bairro"
+                                autocomplete="street-address"
+                            >
+                        </div>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Dados de acesso</legend>
+
+                    <div class="grade-campos">
+                        <div class="campo campo-largo">
+                            <label for="email">
+                                E-mail <span>*</span>
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                maxlength="160"
+                                placeholder="contato@farmacia.com.br"
+                                autocomplete="email"
+                                required
+                            >
+
+                            <small
+                                class="erro-campo"
+                                data-erro="email"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="senha">
+                                Senha <span>*</span>
+                            </label>
+
+                            <div class="campo-senha">
+                                <input
+                                    type="password"
+                                    id="senha"
+                                    minlength="8"
+                                    maxlength="72"
+                                    placeholder="Mínimo de 8 caracteres"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="botao-senha"
+                                    data-alvo="senha"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+
+                            <small
+                                class="erro-campo"
+                                data-erro="senha"
+                            ></small>
+                        </div>
+
+                        <div class="campo">
+                            <label for="confirmar-senha">
+                                Confirmar senha <span>*</span>
+                            </label>
+
+                            <div class="campo-senha">
+                                <input
+                                    type="password"
+                                    id="confirmar-senha"
+                                    minlength="8"
+                                    maxlength="72"
+                                    placeholder="Digite a senha novamente"
+                                    autocomplete="new-password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    class="botao-senha"
+                                    data-alvo="confirmar-senha"
+                                >
+                                    Mostrar
+                                </button>
+                            </div>
+
+                            <small
+                                class="erro-campo"
+                                data-erro="confirmar-senha"
+                            ></small>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <label class="termos">
+                    <input type="checkbox" id="aceite">
+
+                    <span>
+                        Confirmo que os dados informados são verdadeiros
+                        e que represento o estabelecimento cadastrado.
+                    </span>
+                </label>
+
+                <small
+                    class="erro-campo erro-termos"
+                    data-erro="aceite"
+                ></small>
+
+                <div
+                    id="mensagem-formulario"
+                    class="mensagem-formulario"
+                ></div>
+
+                <button type="submit" id="botao-cadastrar">
+                    Enviar solicitação
+                </button>
+            </form>
+
+            <p class="rodape-formulario">
+                Já possui cadastro?
+                <a href="../login.html">
+                    Acesse o painel da farmácia
+                </a>
+            </p>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="../config.js"></script>
+    <script src="../supabase.js"></script>
+    <script src="cadastro.js"></script>
+</body>
+</html>

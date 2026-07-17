@@ -2,20 +2,162 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
     <title>Painel do Moderador | BuscaMed</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>Painel do Moderador</h1>
-    <p>Login realizado com sucesso.</p>
+    <div id="tela-carregamento" class="tela-carregamento">
+        <div class="carregador"></div>
+        <p>Verificando acesso...</p>
+    </div>
 
-    <a href="../login-moderador.html">
-        Voltar
-    </a>
+    <div id="aplicacao" class="aplicacao escondido">
+        <aside class="menu-lateral">
+            <div class="marca">
+                <div class="icone-marca">+</div>
+
+                <div>
+                    <h1>BuscaMed</h1>
+                    <span>Moderação</span>
+                </div>
+            </div>
+
+            <nav class="navegacao">
+                <a href="#" class="item-menu ativo">
+                    <span>▦</span>
+                    Visão geral
+                </a>
+
+                <a href="#solicitacoes" class="item-menu">
+                    <span>⌛</span>
+                    Solicitações
+                </a>
+
+                <a href="#farmacias" class="item-menu">
+                    <span>✚</span>
+                    Farmácias
+                </a>
+            </nav>
+
+            <button id="botao-sair" class="botao-sair">
+                Sair da conta
+            </button>
+        </aside>
+
+        <main class="conteudo">
+            <header class="cabecalho">
+                <div>
+                    <p class="subtitulo">Painel administrativo</p>
+                    <h2>Olá, moderador!</h2>
+                </div>
+
+                <div class="usuario">
+                    <div class="avatar">M</div>
+
+                    <div>
+                        <strong>Moderador</strong>
+                        <span id="email-usuario">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <section class="boas-vindas">
+                <div>
+                    <span class="etiqueta">BuscaMed</span>
+
+                    <h3>Gerencie as farmácias participantes</h3>
+
+                    <p>
+                        Analise solicitações de cadastro, aprove estabelecimentos
+                        legítimos e acompanhe a situação das farmácias.
+                    </p>
+                </div>
+
+                <div class="icone-boas-vindas">⚕</div>
+            </section>
+
+            <section class="resumo">
+                <article class="cartao-resumo">
+                    <div class="icone-resumo pendente">⌛</div>
+
+                    <div>
+                        <span>Pendentes</span>
+                        <strong id="total-pendentes">0</strong>
+                    </div>
+                </article>
+
+                <article class="cartao-resumo">
+                    <div class="icone-resumo aprovada">✓</div>
+
+                    <div>
+                        <span>Aprovadas</span>
+                        <strong id="total-aprovadas">0</strong>
+                    </div>
+                </article>
+
+                <article class="cartao-resumo">
+                    <div class="icone-resumo rejeitada">×</div>
+
+                    <div>
+                        <span>Rejeitadas</span>
+                        <strong id="total-rejeitadas">0</strong>
+                    </div>
+                </article>
+
+                <article class="cartao-resumo">
+                    <div class="icone-resumo suspensa">!</div>
+
+                    <div>
+                        <span>Suspensas</span>
+                        <strong id="total-suspensas">0</strong>
+                    </div>
+                </article>
+            </section>
+
+            <section id="solicitacoes" class="secao">
+                <div class="cabecalho-secao">
+                    <div>
+                        <p class="subtitulo">Novos cadastros</p>
+                        <h3>Solicitações pendentes</h3>
+                    </div>
+
+                    <button
+                        id="botao-atualizar"
+                        class="botao-secundario"
+                        type="button"
+                    >
+                        Atualizar
+                    </button>
+                </div>
+
+                <div id="mensagem-painel" class="mensagem-painel"></div>
+
+                <div id="lista-solicitacoes" class="lista-solicitacoes">
+                    <div class="estado-vazio">
+                        <div>🏥</div>
+                        <h4>Nenhuma solicitação pendente</h4>
+                        <p>
+                            As novas farmácias aparecerão aqui para análise.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="../config.js"></script>
+    <script src="../supabase.js"></script>
+    <script src="../auth.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
