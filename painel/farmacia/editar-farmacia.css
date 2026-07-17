@@ -1,0 +1,266 @@
+/* ======================================================
+   MODAL DE EDIÇÃO DA FARMÁCIA
+====================================================== */
+
+.modal-editar-farmacia{
+    max-width:1000px;
+    width:min(95vw,1000px);
+}
+
+.descricao-modal-farmacia{
+    margin-top:.4rem;
+    color:var(--cor-texto-secundario);
+    line-height:1.5;
+}
+
+/* ======================================================
+   LOGOMARCA
+====================================================== */
+
+.secao-logo-edicao{
+
+    display:flex;
+    align-items:center;
+    gap:2rem;
+
+    margin:2rem 0;
+    padding:1.5rem;
+
+    border:1px solid var(--cor-borda);
+    border-radius:18px;
+
+    background:var(--cor-fundo-secundario);
+
+}
+
+.preview-logo-farmacia{
+
+    width:140px;
+    height:140px;
+
+    border-radius:20px;
+
+    overflow:hidden;
+
+    border:2px dashed var(--cor-borda);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:#fff;
+
+    font-size:3rem;
+
+    flex-shrink:0;
+
+}
+
+.preview-logo-farmacia img{
+
+    width:100%;
+    height:100%;
+    object-fit:cover;
+
+}
+
+.controles-logo-farmacia{
+
+    flex:1;
+
+}
+
+.controles-logo-farmacia strong{
+
+    display:block;
+    margin-bottom:.5rem;
+    font-size:1rem;
+
+}
+
+.controles-logo-farmacia p{
+
+    color:var(--cor-texto-secundario);
+    line-height:1.5;
+    margin-bottom:1.3rem;
+
+}
+
+.acoes-logo-farmacia{
+
+    display:flex;
+    gap:1rem;
+    flex-wrap:wrap;
+
+}
+
+.botao-selecionar-logo{
+
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+
+    cursor:pointer;
+
+    padding:.8rem 1.3rem;
+
+    border-radius:12px;
+
+    background:var(--cor-primaria);
+    color:#fff;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.botao-selecionar-logo:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.botao-remover-logo{
+
+    cursor:pointer;
+
+    padding:.8rem 1.3rem;
+
+    border-radius:12px;
+
+    border:1px solid #dc2626;
+
+    background:#fff;
+
+    color:#dc2626;
+
+    transition:.25s;
+
+}
+
+.botao-remover-logo:hover{
+
+    background:#dc2626;
+    color:#fff;
+
+}
+
+.erro-logo-farmacia{
+
+    display:block;
+
+    margin-top:.8rem;
+
+    color:#dc2626;
+
+    min-height:18px;
+
+}
+
+/* ======================================================
+   FORMULÁRIO
+====================================================== */
+
+.grade-editar-farmacia{
+
+    margin-top:2rem;
+
+}
+
+.campo-duplo{
+
+    grid-column:span 2;
+
+}
+
+/* ======================================================
+   CAMPOS BLOQUEADOS
+====================================================== */
+
+.campo-bloqueado input{
+
+    background:#f3f4f6 !important;
+
+    color:#6b7280;
+
+    cursor:not-allowed;
+
+}
+
+.campo-bloqueado small{
+
+    display:block;
+
+    margin-top:.5rem;
+
+    color:#6b7280;
+
+    line-height:1.4;
+
+}
+
+/* ======================================================
+   MENSAGENS
+====================================================== */
+
+.erro-formulario{
+
+    color:#dc2626;
+
+    margin-top:1.5rem;
+
+    min-height:22px;
+
+}
+
+/* ======================================================
+   RESPONSIVO
+====================================================== */
+
+@media (max-width:900px){
+
+    .secao-logo-edicao{
+
+        flex-direction:column;
+        align-items:center;
+
+        text-align:center;
+
+    }
+
+    .preview-logo-farmacia{
+
+        width:120px;
+        height:120px;
+
+    }
+
+}
+
+@media (max-width:768px){
+
+    .campo-duplo{
+
+        grid-column:span 1;
+
+    }
+
+}
+
+@media (max-width:560px){
+
+    .acoes-logo-farmacia{
+
+        flex-direction:column;
+
+    }
+
+    .botao-selecionar-logo,
+    .botao-remover-logo{
+
+        width:100%;
+
+    }
+
+}

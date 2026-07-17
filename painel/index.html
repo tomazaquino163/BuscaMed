@@ -419,10 +419,15 @@
                         </h2>
 
                         <p class="descricao-secao">
-                            Confira as informações cadastradas
-                            no BuscaMed.
+                            Confira e mantenha atualizadas as informações
+                            cadastradas no BuscaMed.
                         </p>
                     </div>
+
+
+                    <button type="button" id="botao-editar-farmacia" class="botao-principal">
+                        ✏️ Editar dados
+                    </button>
 
                 </div>
 
@@ -543,6 +548,306 @@
         </section>
 
     </main>
+
+    <!-- =====================================================
+              MODAL DE EDIÇÃO DA FARMÁCIA
+        ====================================================== -->
+
+    <div id="modal-editar-farmacia" class="modal" role="dialog" aria-modal="true"
+        aria-labelledby="titulo-modal-editar-farmacia">
+
+        <div class="fundo-modal" data-fechar-edicao-farmacia></div>
+
+
+        <div class="conteudo-modal conteudo-modal-grande modal-editar-farmacia">
+
+            <button type="button" class="fechar-modal" data-fechar-edicao-farmacia aria-label="Fechar">
+                ×
+            </button>
+
+
+            <div class="cabecalho-modal">
+
+                <div class="icone-modal farmacia">
+                    🏥
+                </div>
+
+                <div>
+                    <p class="subtitulo-secao">
+                        Cadastro da farmácia
+                    </p>
+
+                    <h2 id="titulo-modal-editar-farmacia">
+                        Editar dados
+                    </h2>
+
+                    <p class="descricao-modal-farmacia">
+                        Mantenha suas informações atualizadas para
+                        facilitar o contato dos clientes.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <form id="formulario-editar-farmacia" novalidate>
+
+                <!-- LOGOMARCA -->
+
+                <section class="secao-logo-edicao">
+
+                    <div id="preview-logo-farmacia" class="preview-logo-farmacia">
+                        🏥
+                    </div>
+
+
+                    <div class="controles-logo-farmacia">
+
+                        <strong>Logomarca da farmácia</strong>
+
+                        <p>
+                            Escolha uma imagem quadrada em JPG, PNG ou WEBP,
+                            com tamanho máximo de 2 MB.
+                        </p>
+
+
+                        <div class="acoes-logo-farmacia">
+
+                            <label for="arquivo-logo-farmacia" class="botao-selecionar-logo">
+                                📷 Selecionar imagem
+                            </label>
+
+                            <input type="file" id="arquivo-logo-farmacia" accept="image/jpeg,image/png,image/webp"
+                                hidden>
+
+
+                            <button type="button" id="botao-remover-logo" class="botao-remover-logo oculto">
+                                Remover imagem
+                            </button>
+
+                        </div>
+
+
+                        <small id="erro-logo-farmacia" class="erro-logo-farmacia"></small>
+
+                    </div>
+
+                </section>
+
+
+                <!-- CAMPOS EDITÁVEIS -->
+
+                <div class="grade-formulario grade-editar-farmacia">
+
+                    <div class="campo-formulario campo-duplo">
+
+                        <label for="editar-nome-fantasia">
+                            Nome fantasia *
+                        </label>
+
+                        <input type="text" id="editar-nome-fantasia" maxlength="150" autocomplete="organization"
+                            required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-nome-fantasia"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario campo-duplo campo-bloqueado">
+
+                        <label for="editar-razao-social">
+                            🔒 Razão social
+                        </label>
+
+                        <input type="text" id="editar-razao-social" readonly tabindex="-1">
+
+                        <small>
+                            Para alterar a razão social, entre em contato
+                            com a moderação.
+                        </small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-cnpj">
+                            🔒 CNPJ
+                        </label>
+
+                        <input type="text" id="editar-cnpj" readonly tabindex="-1">
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-responsavel">
+                            Responsável *
+                        </label>
+
+                        <input type="text" id="editar-responsavel" maxlength="150" autocomplete="name" required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-responsavel"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-email-comercial">
+                            E-mail comercial *
+                        </label>
+
+                        <input type="email" id="editar-email-comercial" maxlength="180" autocomplete="email" required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-email-comercial"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-telefone">
+                            Telefone *
+                        </label>
+
+                        <input type="tel" id="editar-telefone" maxlength="20" inputmode="tel" autocomplete="tel"
+                            required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-telefone"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-whatsapp">
+                            WhatsApp
+                        </label>
+
+                        <input type="tel" id="editar-whatsapp" maxlength="20" inputmode="tel">
+
+                    </div>
+
+
+                    <div class="campo-formulario campo-duplo">
+
+                        <label for="editar-endereco">
+                            Endereço *
+                        </label>
+
+                        <input type="text" id="editar-endereco" maxlength="220" autocomplete="street-address" required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-endereco"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-bairro">
+                            Bairro
+                        </label>
+
+                        <input type="text" id="editar-bairro" maxlength="120">
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-cidade">
+                            Cidade *
+                        </label>
+
+                        <input type="text" id="editar-cidade" maxlength="120" autocomplete="address-level2" required>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-cidade"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-estado">
+                            Estado *
+                        </label>
+
+                        <select id="editar-estado" required>
+                            <option value="">
+                                Selecione
+                            </option>
+
+                            <option value="AC">AC</option>
+                            <option value="AL">AL</option>
+                            <option value="AP">AP</option>
+                            <option value="AM">AM</option>
+                            <option value="BA">BA</option>
+                            <option value="CE">CE</option>
+                            <option value="DF">DF</option>
+                            <option value="ES">ES</option>
+                            <option value="GO">GO</option>
+                            <option value="MA">MA</option>
+                            <option value="MT">MT</option>
+                            <option value="MS">MS</option>
+                            <option value="MG">MG</option>
+                            <option value="PA">PA</option>
+                            <option value="PB">PB</option>
+                            <option value="PR">PR</option>
+                            <option value="PE">PE</option>
+                            <option value="PI">PI</option>
+                            <option value="RJ">RJ</option>
+                            <option value="RN">RN</option>
+                            <option value="RS">RS</option>
+                            <option value="RO">RO</option>
+                            <option value="RR">RR</option>
+                            <option value="SC">SC</option>
+                            <option value="SP">SP</option>
+                            <option value="SE">SE</option>
+                            <option value="TO">TO</option>
+                        </select>
+
+                        <small class="erro-campo" data-erro-farmacia="editar-estado"></small>
+
+                    </div>
+
+
+                    <div class="campo-formulario">
+
+                        <label for="editar-cep">
+                            CEP
+                        </label>
+
+                        <input type="text" id="editar-cep" maxlength="9" inputmode="numeric" autocomplete="postal-code"
+                            placeholder="00000-000">
+
+                    </div>
+
+                </div>
+
+
+                <div id="erro-formulario-farmacia" class="erro-formulario" aria-live="polite"></div>
+
+
+                <div class="acoes-modal">
+
+                    <button type="button" class="botao-cancelar" data-fechar-edicao-farmacia>
+                        Cancelar
+                    </button>
+
+
+                    <button type="submit" id="botao-salvar-farmacia" class="botao-principal">
+                        Salvar alterações
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
 
 
     <!-- =====================================================
