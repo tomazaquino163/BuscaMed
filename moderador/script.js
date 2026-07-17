@@ -396,20 +396,31 @@ function criarCardFarmacia(
 
         if (farmacia.status === "archived") {
             botoes = `
-                <div class="acoes-farmacia">
-                    <button
-                        type="button"
-                        class="botao-restaurar"
-                        data-acao="restaurar"
-                        data-id="${farmacia.id}"
-                        data-status-anterior="${
-                            farmacia.previous_status || ""
-                        }"
-                    >
-                        ♻ Restaurar
-                    </button>
-                </div>
-            `;
+        <div class="acoes-farmacia">
+            <button
+                type="button"
+                class="botao-restaurar"
+                data-acao="restaurar"
+                data-id="${farmacia.id}"
+                data-status-anterior="${farmacia.previous_status || ""
+                }"
+            >
+                ♻ Restaurar
+            </button>
+
+            <button
+                type="button"
+                class="botao-excluir-permanente"
+                data-acao="excluir-permanente"
+                data-id="${farmacia.id}"
+                data-nome="${escaparHtml(
+                    dados.nomeFantasia
+                )}"
+            >
+                🗑 Excluir permanentemente
+            </button>
+        </div>
+    `;
         }
 
 
@@ -441,10 +452,10 @@ function criarCardFarmacia(
 
     const motivoRejeicaoHtml =
         farmacia.rejection_reason &&
-        (
-            farmacia.status === "rejected" ||
-            farmacia.status === "archived"
-        )
+            (
+                farmacia.status === "rejected" ||
+                farmacia.status === "archived"
+            )
             ? `
                 <div class="motivo-rejeicao">
                     <strong>
@@ -452,8 +463,8 @@ function criarCardFarmacia(
                     </strong>
 
                     ${escaparHtml(
-                        farmacia.rejection_reason
-                    )}
+                farmacia.rejection_reason
+            )}
                 </div>
             `
             : "";
@@ -467,10 +478,10 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            traduzirStatus(
-                                farmacia.previous_status
-                            )
-                        )}
+                traduzirStatus(
+                    farmacia.previous_status
+                )
+            )}
                     </strong>
                 </div>
             `
@@ -491,14 +502,14 @@ function criarCardFarmacia(
                     <div>
                         <h3 class="nome-farmacia">
                             ${escaparHtml(
-                                dados.nomeFantasia
-                            )}
+        dados.nomeFantasia
+    )}
                         </h3>
 
                         <p class="razao-social">
                             ${escaparHtml(
-                                dados.razaoSocial
-                            )}
+        dados.razaoSocial
+    )}
                         </p>
                     </div>
                 </div>
@@ -507,8 +518,8 @@ function criarCardFarmacia(
                     class="selo-status ${farmacia.status}"
                 >
                     ${traduzirStatus(
-                        farmacia.status
-                    )}
+        farmacia.status
+    )}
                 </span>
             </div>
 
@@ -518,8 +529,8 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            dados.responsavel
-                        )}
+        dados.responsavel
+    )}
                     </strong>
                 </div>
 
@@ -528,10 +539,10 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            formatarCnpj(
-                                farmacia.cnpj
-                            )
-                        )}
+        formatarCnpj(
+            farmacia.cnpj
+        )
+    )}
                     </strong>
                 </div>
 
@@ -540,31 +551,29 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            dados.localizacao
-                        )}
+        dados.localizacao
+    )}
                     </strong>
                 </div>
 
                 <div class="dado-farmacia">
                     <small>E-mail comercial</small>
 
-                    ${
-                        farmacia.commercial_email
-                            ? `
+                    ${farmacia.commercial_email
+            ? `
                                 <a
-                                    href="mailto:${
-                                        escaparHtml(email)
-                                    }"
+                                    href="mailto:${escaparHtml(email)
+            }"
                                 >
                                     ${escaparHtml(email)}
                                 </a>
                             `
-                            : `
+            : `
                                 <strong>
                                     Não informado
                                 </strong>
                             `
-                    }
+        }
                 </div>
 
                 <div class="dado-farmacia">
@@ -582,8 +591,8 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            enderecoCompleto
-                        )}
+            enderecoCompleto
+        )}
                     </strong>
                 </div>
 
@@ -594,16 +603,15 @@ function criarCardFarmacia(
 
                     <strong>
                         ${escaparHtml(
-                            formatarData(
-                                farmacia.created_at
-                            )
-                        )}
+            formatarData(
+                farmacia.created_at
+            )
+        )}
                     </strong>
                 </div>
 
-                ${
-                    farmacia.reviewed_at
-                        ? `
+                ${farmacia.reviewed_at
+            ? `
                             <div class="dado-farmacia">
                                 <small>
                                     Última análise
@@ -611,15 +619,15 @@ function criarCardFarmacia(
 
                                 <strong>
                                     ${escaparHtml(
-                                        formatarData(
-                                            farmacia.reviewed_at
-                                        )
-                                    )}
+                formatarData(
+                    farmacia.reviewed_at
+                )
+            )}
                                 </strong>
                             </div>
                         `
-                        : ""
-                }
+            : ""
+        }
 
                 ${statusAnteriorHtml}
             </div>
@@ -874,10 +882,9 @@ async function carregarTodasFarmacias() {
         */
 
         if (statusSelecionado === "all") {
-            consulta = consulta.neq(
-                "status",
-                "archived"
-            );
+            consulta = consulta
+                .neq("status", "archived")
+                .neq("status", "deleted");
         } else {
             consulta = consulta.eq(
                 "status",
@@ -1424,6 +1431,66 @@ async function restaurarFarmacia(
     }
 }
 
+async function excluirFarmaciaPermanentemente(
+    farmaciaId,
+    nomeFarmacia,
+    botao
+) {
+    const confirmou = window.confirm(
+        `Deseja remover a farmácia "${nomeFarmacia}" do painel?\n\n` +
+        "O registro será mantido no banco para segurança e histórico."
+    );
+
+    if (!confirmou) {
+        return;
+    }
+
+    const textoOriginal = botao.textContent;
+
+    try {
+        botao.disabled = true;
+        botao.textContent = "Excluindo...";
+
+        const { data, error } = await supabaseClient
+            .from("pharmacies")
+            .update({
+                status: "deleted",
+                previous_status: null,
+                reviewed_by: usuarioModerador.id,
+                reviewed_at: new Date().toISOString()
+            })
+            .eq("id", farmaciaId)
+            .eq("status", "archived")
+            .select();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data || data.length === 0) {
+            throw new Error(
+                "Nenhuma farmácia arquivada foi encontrada."
+            );
+        }
+
+        mostrarNotificacao(
+            `A farmácia "${nomeFarmacia}" foi removida do painel.`
+        );
+
+        await atualizarPainelCompleto();
+    } catch (erro) {
+        console.error("Erro ao excluir farmácia:", erro);
+
+        mostrarNotificacao(
+            `Erro ao excluir: ${erro.message}`,
+            "erro"
+        );
+
+        botao.disabled = false;
+        botao.textContent = textoOriginal;
+    }
+}
+
 
 /* =========================================================
    CLIQUES NOS BOTÕES DOS CARDS
@@ -1499,6 +1566,15 @@ function tratarCliqueEmFarmacia(
             restaurarFarmacia(
                 farmaciaId,
                 statusAnterior,
+                botao
+            );
+            break;
+
+        case "excluir-permanente":
+            excluirFarmaciaPermanentemente(
+                farmaciaId,
+                botao.dataset.nome ||
+                "Farmácia",
                 botao
             );
             break;

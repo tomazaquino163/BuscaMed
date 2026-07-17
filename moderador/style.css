@@ -782,6 +782,42 @@ a:focus-visible {
         opacity 0.2s ease;
 }
 
+.botao-excluir-permanente {
+    min-height: 42px;
+    padding: 0 16px;
+
+    border: 0;
+    border-radius: 10px;
+
+    font-weight: 800;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.botao-excluir-permanente {
+    color: white;
+    background: var(--vermelho);
+}
+
+.botao-excluir-permanente:hover {
+    background: #96231d;
+    transform: translateY(-1px);
+}
+
+.botao-excluir-permanente:active {
+    transform: translateY(0);
+}
+
+.botao-excluir-permanente:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    transform: none;
+}
+
 .botao-aprovar,
 .botao-reativar {
     color: white;
