@@ -131,6 +131,16 @@ const EditarFarmacia = {
 
         }
 
+        if (this.elementos.cep) {
+
+            this.elementos.cep.addEventListener("input", (e) => {
+
+                e.target.value = this.formatarCEP(e.target.value);
+
+            });
+
+        }
+
 
         botoesFechar.forEach((botao) => {
 
@@ -324,7 +334,7 @@ const EditarFarmacia = {
 
         this.definirValor(
             this.elementos.cep,
-            farmacia.postal_code
+            Mascaras.formatarCEP(farmacia.postal_code) 
         );
 
     },
@@ -754,6 +764,8 @@ const EditarFarmacia = {
     },
 
 
+
+
     limparErrosCampos() {
 
         document
@@ -764,6 +776,9 @@ const EditarFarmacia = {
 
             });
 
-    }
+    },
+
+ 
 
 };
+

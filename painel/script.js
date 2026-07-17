@@ -373,7 +373,7 @@ function preencherInformacoesFarmacia() {
         montarCidadeEstado(farmacia.city, farmacia.state);
 
     elementos.perfilCep.textContent =
-        farmacia.postal_code || "Não informado";
+        Mascaras.formatarCEP(farmacia.postal_code) || "Não informado";
 
     elementos.perfilDataCadastro.textContent =
         formatarData(farmacia.created_at);
@@ -697,53 +697,49 @@ function criarCartaoMedicamento(medicamento) {
 
                         <div class="detalhes-medicamento">
 
-                            ${
-                                medicamento.active_ingredient
-                                    ? `
+                            ${medicamento.active_ingredient
+            ? `
                                         <span>
                                             <strong>Princípio ativo:</strong>
                                             ${escaparHtml(
-                                                medicamento.active_ingredient
-                                            )}
+                medicamento.active_ingredient
+            )}
                                         </span>
                                     `
-                                    : ""
-                            }
+            : ""
+        }
 
-                            ${
-                                dosagem
-                                    ? `
+                            ${dosagem
+            ? `
                                         <span>
                                             <strong>Dosagem:</strong>
                                             ${escaparHtml(dosagem)}
                                         </span>
                                     `
-                                    : ""
-                            }
+            : ""
+        }
 
-                            ${
-                                medicamento.manufacturer
-                                    ? `
+                            ${medicamento.manufacturer
+            ? `
                                         <span>
                                             <strong>Fabricante:</strong>
                                             ${escaparHtml(
-                                                medicamento.manufacturer
-                                            )}
+                medicamento.manufacturer
+            )}
                                         </span>
                                     `
-                                    : ""
-                            }
+            : ""
+        }
 
-                            ${
-                                categoria
-                                    ? `
+                            ${categoria
+            ? `
                                         <span>
                                             <strong>Categoria:</strong>
                                             ${escaparHtml(categoria)}
                                         </span>
                                     `
-                                    : ""
-                            }
+            : ""
+        }
 
                         </div>
                     </div>
@@ -752,50 +748,44 @@ function criarCartaoMedicamento(medicamento) {
 
                 <div class="etiquetas-medicamento">
 
-                    <span class="etiqueta-medicamento ${
-                        ativo ? "ativo" : "inativo"
-                    }">
+                    <span class="etiqueta-medicamento ${ativo ? "ativo" : "inativo"
+        }">
                         ${ativo ? "Ativo" : "Inativo"}
                     </span>
 
-                    <span class="etiqueta-medicamento ${
-                        quantidade > 0 ? "estoque" : "sem-estoque"
-                    }">
-                        ${
-                            quantidade > 0
-                                ? `${quantidade} em estoque`
-                                : "Sem estoque"
-                        }
+                    <span class="etiqueta-medicamento ${quantidade > 0 ? "estoque" : "sem-estoque"
+        }">
+                        ${quantidade > 0
+            ? `${quantidade} em estoque`
+            : "Sem estoque"
+        }
                     </span>
 
-                    ${
-                        exigeReceita
-                            ? `
+                    ${exigeReceita
+            ? `
                                 <span class="etiqueta-medicamento receita">
                                     Exige receita
                                 </span>
                             `
-                            : ""
-                    }
+            : ""
+        }
 
-                    ${
-                        possuiPromocao
-                            ? `
+                    ${possuiPromocao
+            ? `
                                 <span class="etiqueta-medicamento promocao">
                                     Em promoção
                                 </span>
                             `
-                            : ""
-                    }
+            : ""
+        }
 
                 </div>
 
 
                 <div class="preco-medicamento">
 
-                    ${
-                        possuiPromocao
-                            ? `
+                    ${possuiPromocao
+            ? `
                                 <span class="preco-atual">
                                     ${formatarMoeda(precoPromocional)}
                                 </span>
@@ -804,12 +794,12 @@ function criarCartaoMedicamento(medicamento) {
                                     ${formatarMoeda(preco)}
                                 </span>
                             `
-                            : `
+            : `
                                 <span class="preco-atual">
                                     ${formatarMoeda(preco)}
                                 </span>
                             `
-                    }
+        }
 
                 </div>
 
@@ -829,9 +819,8 @@ function criarCartaoMedicamento(medicamento) {
 
                 <button
                     type="button"
-                    class="botao-alternar ${
-                        ativo ? "inativar" : ""
-                    }"
+                    class="botao-alternar ${ativo ? "inativar" : ""
+        }"
                     data-acao="alternar"
                     data-id="${medicamento.id}"
                 >
