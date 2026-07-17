@@ -18,6 +18,8 @@ const EditarFarmacia = {
         this.mapearElementos();
         this.adicionarEventos();
 
+        UploadLogoFarmacia.inicializar();
+
     },
 
 
@@ -300,6 +302,10 @@ const EditarFarmacia = {
         this.definirValor(
             this.elementos.cep,
             farmacia.postal_code
+        );
+
+        UploadLogoFarmacia.carregarLogo(
+            farmacia.logo_url
         );
 
     },
