@@ -995,11 +995,10 @@ a {
 .localizacao {
     max-width: 100%;
     margin-top: 6px;
-    overflow: hidden;
     color: var(--cinza-600);
     font-size: 0.82rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .preco-bloco {
