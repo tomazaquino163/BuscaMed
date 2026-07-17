@@ -349,7 +349,7 @@ function preencherInformacoesFarmacia() {
         farmacia.legal_name || "Razão social não informada";
 
     elementos.perfilCnpj.textContent =
-        farmacia.cnpj || "Não informado";
+        Mascaras.formatarCNPJ(farmacia.cnpj) || "Não informado";
 
     elementos.perfilResponsavel.textContent =
         farmacia.responsible_name || "Não informado";
@@ -358,10 +358,10 @@ function preencherInformacoesFarmacia() {
         farmacia.commercial_email || "Não informado";
 
     elementos.perfilTelefone.textContent =
-        farmacia.phone || "Não informado";
+        Mascaras.formatarTelefone(farmacia.phone) || "Não informado";
 
     elementos.perfilWhatsapp.textContent =
-        farmacia.whatsapp || "Não informado";
+        Mascaras.formatarWhatsApp(farmacia.whatsapp) || "Não informado";
 
     elementos.perfilEndereco.textContent =
         farmacia.address || "Não informado";
