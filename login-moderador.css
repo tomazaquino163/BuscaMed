@@ -1,0 +1,166 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #24342d;
+    background:
+        radial-gradient(circle at top left, #dff5e8, transparent 42%),
+        linear-gradient(135deg, #f5faf7, #e8f3ed);
+}
+
+button,
+input {
+    font: inherit;
+}
+
+.pagina-login {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+}
+
+.cartao-login {
+    width: min(100%, 430px);
+    padding: 38px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(22, 101, 52, 0.12);
+    border-radius: 22px;
+    box-shadow: 0 20px 55px rgba(26, 64, 45, 0.14);
+}
+
+.cabecalho-login {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.cabecalho-login h1 {
+    margin: 0;
+    color: #167348;
+    font-size: 2.2rem;
+}
+
+.cabecalho-login p {
+    margin: 10px 0 0;
+    color: #68766f;
+}
+
+.campo {
+    margin-bottom: 20px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.campo input {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 15px;
+    color: #24342d;
+    background: #ffffff;
+    border: 1px solid #ccd8d1;
+    border-radius: 11px;
+    outline: none;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.campo input:focus {
+    border-color: #239660;
+    box-shadow: 0 0 0 4px rgba(35, 150, 96, 0.13);
+}
+
+.campo-senha {
+    position: relative;
+}
+
+.campo-senha input {
+    padding-right: 86px;
+}
+
+.botao-mostrar-senha {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    padding: 6px;
+    color: #167348;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    transform: translateY(-50%);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+#botao-entrar {
+    width: 100%;
+    min-height: 52px;
+    margin-top: 4px;
+    color: white;
+    background: #167348;
+    border: 0;
+    border-radius: 11px;
+    cursor: pointer;
+    font-weight: 700;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+#botao-entrar:hover {
+    background: #105c39;
+    transform: translateY(-1px);
+}
+
+#botao-entrar:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+    transform: none;
+}
+
+.mensagem {
+    min-height: 24px;
+    margin: 18px 0 0;
+    text-align: center;
+    font-size: 0.93rem;
+    font-weight: 700;
+}
+
+.mensagem.erro {
+    color: #b42318;
+}
+
+.mensagem.sucesso {
+    color: #167348;
+}
+
+.voltar-site {
+    display: block;
+    margin-top: 22px;
+    color: #53655b;
+    text-align: center;
+    text-decoration: none;
+}
+
+.voltar-site:hover {
+    color: #167348;
+}
+
+@media (max-width: 520px) {
+    .cartao-login {
+        padding: 30px 22px;
+        border-radius: 18px;
+    }
+
+    .cabecalho-login h1 {
+        font-size: 1.9rem;
+    }
+}

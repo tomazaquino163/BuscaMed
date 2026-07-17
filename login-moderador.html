@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Acesso do Moderador | BuscaMed</title>
+
+    <link rel="stylesheet" href="login-moderador.css">
+</head>
+
+<body>
+    <main class="pagina-login">
+        <section class="cartao-login">
+            <div class="cabecalho-login">
+                <h1>BuscaMed</h1>
+                <p>Acesso restrito ao moderador</p>
+            </div>
+
+            <form id="form-login">
+                <div class="campo">
+                    <label for="email">E-mail</label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        autocomplete="email"
+                        placeholder="moderador@email.com"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="senha">Senha</label>
+
+                    <div class="campo-senha">
+                        <input
+                            type="password"
+                            id="senha"
+                            name="senha"
+                            autocomplete="current-password"
+                            placeholder="Digite sua senha"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="botao-mostrar-senha"
+                            class="botao-mostrar-senha"
+                            aria-label="Mostrar senha"
+                        >
+                            Mostrar
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" id="botao-entrar">
+                    Entrar
+                </button>
+
+                <p id="mensagem" class="mensagem" aria-live="polite"></p>
+            </form>
+
+            <a href="index.html" class="voltar-site">
+                ← Voltar ao site
+            </a>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script src="supabase.js"></script>
+    <script src="auth.js"></script>
+    <script src="login-moderador.js"></script>
+</body>
+</html>
