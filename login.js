@@ -343,7 +343,7 @@ async function solicitarReativacao() {
 
         mostrarMensagem(
             erro?.message ||
-                "Não foi possível solicitar a reativação.",
+            "Não foi possível solicitar a reativação.",
             "erro"
         );
     } finally {
@@ -387,7 +387,10 @@ esqueciSenha.addEventListener(
 
         try {
             const redirectTo =
-                `${window.location.origin}${window.location.pathname}`;
+                new URL(
+                    "redefinir-senha.html",
+                    window.location.href
+                ).href;
 
             const {
                 error
