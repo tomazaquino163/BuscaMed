@@ -2,265 +2,293 @@
    MODAL DE EDIÇÃO DA FARMÁCIA
 ====================================================== */
 
-.modal-editar-farmacia{
-    max-width:1000px;
-    width:min(95vw,1000px);
+.modal-editar-farmacia {
+    width: min(95vw, 1000px);
+    max-width: 1000px;
 }
 
-.descricao-modal-farmacia{
-    margin-top:.4rem;
-    color:var(--cor-texto-secundario);
-    line-height:1.5;
+.descricao-modal-farmacia {
+    margin: 0.4rem 0 0;
+
+    color: var(--texto-suave);
+
+    line-height: 1.5;
 }
+
 
 /* ======================================================
    LOGOMARCA
 ====================================================== */
 
-.secao-logo-edicao{
+.secao-logo-edicao {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
 
-    display:flex;
-    align-items:center;
-    gap:2rem;
+    margin: 2rem 0;
+    padding: 1.5rem;
 
-    margin:2rem 0;
-    padding:1.5rem;
+    background: var(--verde-muito-claro);
 
-    border:1px solid var(--cor-borda);
-    border-radius:18px;
-
-    background:var(--cor-fundo-secundario);
-
+    border: 1px solid var(--borda);
+    border-radius: 18px;
 }
 
-.preview-logo-farmacia{
+.preview-logo-farmacia {
+    width: 140px;
+    height: 140px;
+    flex-shrink: 0;
 
-    width:140px;
-    height:140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    border-radius:20px;
+    overflow: hidden;
 
-    overflow:hidden;
+    color: var(--verde-principal);
+    background: var(--branco);
 
-    border:2px dashed var(--cor-borda);
+    border: 2px dashed var(--borda);
+    border-radius: 20px;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    background:#fff;
-
-    font-size:3rem;
-
-    flex-shrink:0;
-
+    font-size: 3rem;
 }
 
-.preview-logo-farmacia img{
+.preview-logo-farmacia img {
+    width: 100%;
+    height: 100%;
 
-    width:100%;
-    height:100%;
-    object-fit:cover;
-
+    object-fit: cover;
 }
 
-.controles-logo-farmacia{
-
-    flex:1;
-
+.controles-logo-farmacia {
+    flex: 1;
+    min-width: 0;
 }
 
-.controles-logo-farmacia strong{
+.controles-logo-farmacia strong {
+    display: block;
 
-    display:block;
-    margin-bottom:.5rem;
-    font-size:1rem;
+    margin-bottom: 0.5rem;
 
+    color: var(--texto);
+
+    font-size: 1rem;
 }
 
-.controles-logo-farmacia p{
+.controles-logo-farmacia p {
+    margin: 0 0 1.3rem;
 
-    color:var(--cor-texto-secundario);
-    line-height:1.5;
-    margin-bottom:1.3rem;
+    color: var(--texto-suave);
 
+    line-height: 1.5;
 }
 
-.acoes-logo-farmacia{
-
-    display:flex;
-    gap:1rem;
-    flex-wrap:wrap;
-
+.acoes-logo-farmacia {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.botao-selecionar-logo{
+.botao-selecionar-logo,
+.botao-remover-logo {
+    min-height: 42px;
 
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-    cursor:pointer;
+    padding: 0 1.3rem;
 
-    padding:.8rem 1.3rem;
+    border-radius: 10px;
 
-    border-radius:12px;
+    font-weight: 800;
 
-    background:var(--cor-primaria);
-    color:#fff;
-
-    font-weight:600;
-
-    transition:.25s;
-
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
 }
 
-.botao-selecionar-logo:hover{
+.botao-selecionar-logo {
+    cursor: pointer;
 
-    transform:translateY(-2px);
+    color: var(--branco);
+    background: var(--verde-principal);
 
+    border: 1px solid var(--verde-principal);
 }
 
-.botao-remover-logo{
+.botao-selecionar-logo:hover {
+    background: var(--verde-escuro);
+    border-color: var(--verde-escuro);
 
-    cursor:pointer;
-
-    padding:.8rem 1.3rem;
-
-    border-radius:12px;
-
-    border:1px solid #dc2626;
-
-    background:#fff;
-
-    color:#dc2626;
-
-    transition:.25s;
-
+    transform: translateY(-1px);
 }
 
-.botao-remover-logo:hover{
+.botao-remover-logo {
+    cursor: pointer;
 
-    background:#dc2626;
-    color:#fff;
+    color: var(--vermelho);
+    background: var(--branco);
 
+    border: 1px solid var(--vermelho);
 }
 
-.erro-logo-farmacia{
+.botao-remover-logo:hover {
+    color: var(--branco);
+    background: var(--vermelho);
 
-    display:block;
-
-    margin-top:.8rem;
-
-    color:#dc2626;
-
-    min-height:18px;
-
+    transform: translateY(-1px);
 }
+
+.botao-selecionar-logo:active,
+.botao-remover-logo:active {
+    transform: translateY(0);
+}
+
+.botao-remover-logo:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.65;
+    transform: none;
+}
+
+.erro-logo-farmacia {
+    min-height: 18px;
+
+    display: block;
+
+    margin-top: 0.8rem;
+
+    color: var(--vermelho);
+
+    line-height: 1.4;
+}
+
 
 /* ======================================================
    FORMULÁRIO
 ====================================================== */
 
-.grade-editar-farmacia{
-
-    margin-top:2rem;
-
+.grade-editar-farmacia {
+    margin-top: 2rem;
 }
 
-.campo-duplo{
-
-    grid-column:span 2;
-
+.campo-duplo {
+    grid-column: span 2;
 }
+
 
 /* ======================================================
    CAMPOS BLOQUEADOS
 ====================================================== */
 
-.campo-bloqueado input{
+.campo-bloqueado input {
+    color: var(--texto-suave);
+    background: #f1f4f2 !important;
 
-    background:#f3f4f6 !important;
+    border-color: var(--borda);
 
-    color:#6b7280;
-
-    cursor:not-allowed;
-
+    cursor: not-allowed;
 }
 
-.campo-bloqueado small{
-
-    display:block;
-
-    margin-top:.5rem;
-
-    color:#6b7280;
-
-    line-height:1.4;
-
+.campo-bloqueado input:focus {
+    border-color: var(--borda);
+    box-shadow: none;
 }
+
+.campo-bloqueado small {
+    display: block;
+
+    margin-top: 0.5rem;
+
+    color: var(--texto-suave);
+
+    line-height: 1.4;
+}
+
 
 /* ======================================================
    MENSAGENS
 ====================================================== */
 
-.erro-formulario{
+.erro-formulario {
+    min-height: 22px;
 
-    color:#dc2626;
+    margin: 1.5rem 0 0;
 
-    margin-top:1.5rem;
+    color: var(--vermelho);
 
-    min-height:22px;
-
+    line-height: 1.5;
 }
+
+
+/* ======================================================
+   FOCO E ACESSIBILIDADE
+====================================================== */
+
+.botao-selecionar-logo:focus-visible,
+.botao-remover-logo:focus-visible {
+    outline: 3px solid rgba(19, 116, 71, 0.25);
+    outline-offset: 2px;
+}
+
 
 /* ======================================================
    RESPONSIVO
 ====================================================== */
 
-@media (max-width:900px){
+@media (max-width: 900px) {
 
-    .secao-logo-edicao{
+    .secao-logo-edicao {
+        flex-direction: column;
+        align-items: center;
 
-        flex-direction:column;
-        align-items:center;
-
-        text-align:center;
-
+        text-align: center;
     }
 
-    .preview-logo-farmacia{
-
-        width:120px;
-        height:120px;
-
+    .preview-logo-farmacia {
+        width: 120px;
+        height: 120px;
     }
 
-}
-
-@media (max-width:768px){
-
-    .campo-duplo{
-
-        grid-column:span 1;
-
+    .acoes-logo-farmacia {
+        justify-content: center;
     }
 
 }
 
-@media (max-width:560px){
 
-    .acoes-logo-farmacia{
+@media (max-width: 768px) {
 
-        flex-direction:column;
+    .campo-duplo {
+        grid-column: span 1;
+    }
 
+}
+
+
+@media (max-width: 560px) {
+
+    .modal-editar-farmacia {
+        width: min(96vw, 1000px);
+    }
+
+    .secao-logo-edicao {
+        gap: 1.3rem;
+
+        padding: 1.2rem;
+    }
+
+    .acoes-logo-farmacia {
+        flex-direction: column;
     }
 
     .botao-selecionar-logo,
-    .botao-remover-logo{
-
-        width:100%;
-
+    .botao-remover-logo {
+        width: 100%;
     }
 
 }
