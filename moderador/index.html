@@ -15,146 +15,313 @@
 
 <body>
     <div id="tela-carregamento" class="tela-carregamento">
-        <div class="carregador"></div>
-        <p>Verificando acesso...</p>
+        <div class="spinner"></div>
+        <p>Carregando painel...</p>
     </div>
 
-    <div id="aplicacao" class="aplicacao escondido">
-        <aside class="menu-lateral">
-            <div class="marca">
-                <div class="icone-marca">+</div>
+    <aside class="barra-lateral">
+        <a href="#" class="logo">
+            <span class="logo-icone">+</span>
 
-                <div>
-                    <h1>BuscaMed</h1>
-                    <span>Moderação</span>
-                </div>
+            <span class="logo-texto">
+                <strong>BuscaMed</strong>
+                <small>Moderação</small>
+            </span>
+        </a>
+
+        <nav class="menu">
+            <button
+                type="button"
+                class="item-menu ativo"
+                data-secao="visao-geral"
+            >
+                <span>▦</span>
+                Visão geral
+            </button>
+
+            <button
+                type="button"
+                class="item-menu"
+                data-secao="solicitacoes"
+            >
+                <span>⌛</span>
+                Solicitações
+            </button>
+
+            <button
+                type="button"
+                class="item-menu"
+                data-secao="farmacias"
+            >
+                <span>✚</span>
+                Farmácias
+            </button>
+        </nav>
+
+        <button type="button" id="botao-sair" class="botao-sair">
+            <span>↪</span>
+            Sair
+        </button>
+    </aside>
+
+    <main class="conteudo-principal">
+        <header class="cabecalho-painel">
+            <div>
+                <p class="etiqueta-painel">Painel administrativo</p>
+                <h1>Olá, moderador!</h1>
             </div>
 
-            <nav class="navegacao">
-                <a href="#" class="item-menu ativo">
-                    <span>▦</span>
-                    Visão geral
-                </a>
-
-                <a href="#solicitacoes" class="item-menu">
-                    <span>⌛</span>
-                    Solicitações
-                </a>
-
-                <a href="#farmacias" class="item-menu">
-                    <span>✚</span>
-                    Farmácias
-                </a>
-            </nav>
-
-            <button id="botao-sair" class="botao-sair">
-                Sair da conta
-            </button>
-        </aside>
-
-        <main class="conteudo">
-            <header class="cabecalho">
-                <div>
-                    <p class="subtitulo">Painel administrativo</p>
-                    <h2>Olá, moderador!</h2>
+            <div class="usuario-logado">
+                <div class="avatar" id="avatar-moderador">
+                    M
                 </div>
 
-                <div class="usuario">
-                    <div class="avatar">M</div>
-
-                    <div>
-                        <strong>Moderador</strong>
-                        <span id="email-usuario">Carregando...</span>
-                    </div>
-                </div>
-            </header>
-
-            <section class="boas-vindas">
                 <div>
-                    <span class="etiqueta">BuscaMed</span>
+                    <strong>Moderador</strong>
+                    <small id="email-moderador">Carregando...</small>
+                </div>
+            </div>
+        </header>
 
-                    <h3>Gerencie as farmácias participantes</h3>
+        <section
+            id="secao-visao-geral"
+            class="secao-painel ativa"
+        >
+            <section class="banner">
+                <div>
+                    <span class="banner-etiqueta">
+                        BuscaMed
+                    </span>
+
+                    <h2>
+                        Gerencie as farmácias<br>
+                        participantes
+                    </h2>
 
                     <p>
-                        Analise solicitações de cadastro, aprove estabelecimentos
-                        legítimos e acompanhe a situação das farmácias.
+                        Analise solicitações de cadastro, aprove
+                        estabelecimentos legítimos e acompanhe a situação
+                        das farmácias.
                     </p>
                 </div>
 
-                <div class="icone-boas-vindas">⚕</div>
+                <div class="banner-simbolo">
+                    ⚕
+                </div>
             </section>
 
-            <section class="resumo">
+            <section class="resumos">
                 <article class="cartao-resumo">
-                    <div class="icone-resumo pendente">⌛</div>
+                    <span class="icone-resumo pendente">⌛</span>
 
                     <div>
-                        <span>Pendentes</span>
-                        <strong id="total-pendentes">0</strong>
+                        <small>Pendentes</small>
+                        <strong id="contador-pendentes">0</strong>
                     </div>
                 </article>
 
                 <article class="cartao-resumo">
-                    <div class="icone-resumo aprovada">✓</div>
+                    <span class="icone-resumo aprovada">✓</span>
 
                     <div>
-                        <span>Aprovadas</span>
-                        <strong id="total-aprovadas">0</strong>
+                        <small>Aprovadas</small>
+                        <strong id="contador-aprovadas">0</strong>
                     </div>
                 </article>
 
                 <article class="cartao-resumo">
-                    <div class="icone-resumo rejeitada">×</div>
+                    <span class="icone-resumo rejeitada">×</span>
 
                     <div>
-                        <span>Rejeitadas</span>
-                        <strong id="total-rejeitadas">0</strong>
+                        <small>Rejeitadas</small>
+                        <strong id="contador-rejeitadas">0</strong>
                     </div>
                 </article>
 
                 <article class="cartao-resumo">
-                    <div class="icone-resumo suspensa">!</div>
+                    <span class="icone-resumo suspensa">!</span>
 
                     <div>
-                        <span>Suspensas</span>
-                        <strong id="total-suspensas">0</strong>
+                        <small>Suspensas</small>
+                        <strong id="contador-suspensas">0</strong>
                     </div>
                 </article>
             </section>
 
-            <section id="solicitacoes" class="secao">
-                <div class="cabecalho-secao">
+            <section class="painel-listagem">
+                <div class="cabecalho-listagem">
                     <div>
-                        <p class="subtitulo">Novos cadastros</p>
-                        <h3>Solicitações pendentes</h3>
+                        <p class="etiqueta-painel">Novos cadastros</p>
+                        <h2>Solicitações pendentes</h2>
                     </div>
 
                     <button
+                        type="button"
                         id="botao-atualizar"
                         class="botao-secundario"
-                        type="button"
                     >
                         Atualizar
                     </button>
                 </div>
 
-                <div id="mensagem-painel" class="mensagem-painel"></div>
-
-                <div id="lista-solicitacoes" class="lista-solicitacoes">
-                    <div class="estado-vazio">
-                        <div>🏥</div>
-                        <h4>Nenhuma solicitação pendente</h4>
-                        <p>
-                            As novas farmácias aparecerão aqui para análise.
-                        </p>
+                <div id="lista-pendentes" class="lista-farmacias">
+                    <div class="estado-lista">
+                        <div class="mini-spinner"></div>
+                        <strong>Carregando solicitações...</strong>
                     </div>
                 </div>
             </section>
-        </main>
+        </section>
+
+        <section
+            id="secao-solicitacoes"
+            class="secao-painel"
+        >
+            <section class="painel-listagem">
+                <div class="cabecalho-listagem">
+                    <div>
+                        <p class="etiqueta-painel">Moderação</p>
+                        <h2>Todas as solicitações pendentes</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="botao-atualizar-solicitacoes"
+                        class="botao-secundario"
+                    >
+                        Atualizar
+                    </button>
+                </div>
+
+                <div
+                    id="lista-solicitacoes"
+                    class="lista-farmacias"
+                ></div>
+            </section>
+        </section>
+
+        <section
+            id="secao-farmacias"
+            class="secao-painel"
+        >
+            <section class="painel-listagem">
+                <div class="cabecalho-listagem">
+                    <div>
+                        <p class="etiqueta-painel">
+                            Estabelecimentos
+                        </p>
+
+                        <h2>Farmácias cadastradas</h2>
+                    </div>
+
+                    <div class="filtros">
+                        <select id="filtro-status">
+                            <option value="all">
+                                Todos os status
+                            </option>
+
+                            <option value="approved">
+                                Aprovadas
+                            </option>
+
+                            <option value="rejected">
+                                Rejeitadas
+                            </option>
+
+                            <option value="suspended">
+                                Suspensas
+                            </option>
+
+                            <option value="pending">
+                                Pendentes
+                            </option>
+                        </select>
+
+                        <button
+                            type="button"
+                            id="botao-atualizar-farmacias"
+                            class="botao-secundario"
+                        >
+                            Atualizar
+                        </button>
+                    </div>
+                </div>
+
+                <div
+                    id="lista-farmacias"
+                    class="lista-farmacias"
+                ></div>
+            </section>
+        </section>
+    </main>
+
+    <div id="modal-rejeicao" class="modal">
+        <div class="fundo-modal" data-fechar-modal></div>
+
+        <section
+            class="conteudo-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titulo-modal-rejeicao"
+        >
+            <button
+                type="button"
+                class="fechar-modal"
+                data-fechar-modal
+                aria-label="Fechar"
+            >
+                ×
+            </button>
+
+            <span class="icone-modal rejeicao">
+                ×
+            </span>
+
+            <h2 id="titulo-modal-rejeicao">
+                Rejeitar solicitação
+            </h2>
+
+            <p>
+                Informe o motivo da rejeição. Esse dado ficará registrado
+                no banco de dados.
+            </p>
+
+            <label for="motivo-rejeicao">
+                Motivo da rejeição
+            </label>
+
+            <textarea
+                id="motivo-rejeicao"
+                maxlength="500"
+                rows="5"
+                placeholder="Ex.: Dados incompletos, CNPJ inválido..."
+            ></textarea>
+
+            <small id="erro-motivo" class="erro-modal"></small>
+
+            <div class="acoes-modal">
+                <button
+                    type="button"
+                    class="botao-cancelar"
+                    data-fechar-modal
+                >
+                    Cancelar
+                </button>
+
+                <button
+                    type="button"
+                    id="confirmar-rejeicao"
+                    class="botao-rejeitar"
+                >
+                    Confirmar rejeição
+                </button>
+            </div>
+        </section>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <div id="notificacao" class="notificacao"></div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../config.js"></script>
     <script src="../supabase.js"></script>
     <script src="../auth.js"></script>
