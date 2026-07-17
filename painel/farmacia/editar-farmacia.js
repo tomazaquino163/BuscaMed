@@ -100,20 +100,8 @@ const EditarFarmacia = {
 
     adicionarEventos() {
 
-        const { formulario } = this.elementos;
-
-        if (formulario) {
-
-            formulario.addEventListener("submit", async (evento) => {
-
-                evento.preventDefault();
-
-                await this.salvar();
-
-            });
-
-        }
         const {
+            formulario,
             botaoAbrir,
             modal,
             botoesFechar
@@ -130,7 +118,6 @@ const EditarFarmacia = {
 
         }
 
-        const { formulario } = this.elementos;
 
         if (formulario) {
 
@@ -342,9 +329,10 @@ const EditarFarmacia = {
 
     },
 
+
     /* ==================================================
-   OBTER DADOS DO FORMULÁRIO
-================================================== */
+       OBTER DADOS DO FORMULÁRIO
+    ================================================== */
 
     obterDadosFormulario() {
 
@@ -438,9 +426,7 @@ const EditarFarmacia = {
 
 
         const campoInvalido = camposObrigatorios.find(
-
             (campo) => !dados[campo.chave]
-
         );
 
 
@@ -671,7 +657,7 @@ const EditarFarmacia = {
                 "function"
             ) {
 
-                preencherLogoFarmacia();
+                preencherLogoFarmacia(logoUrl);
 
             }
 
@@ -779,7 +765,3 @@ const EditarFarmacia = {
     }
 
 };
-
-
-
-
