@@ -162,6 +162,8 @@ const EditarFarmacia = {
         this.carregarDadosAtuais();
         this.preencherFormulario();
 
+        UploadLogoFarmacia.limpar();
+
 
         modal.classList.add("aberto");
 
@@ -302,10 +304,6 @@ const EditarFarmacia = {
         this.definirValor(
             this.elementos.cep,
             farmacia.postal_code
-        );
-
-        UploadLogoFarmacia.carregarLogo(
-            farmacia.logo_url
         );
 
     },

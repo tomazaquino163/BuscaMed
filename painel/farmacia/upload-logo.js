@@ -1,5 +1,10 @@
 /* ======================================================
-   UPLOAD DA LOGOMARCA DA FARMÁCIA
+   SELEÇÃO DA LOGO DA FARMÁCIA
+   Responsável apenas por:
+   - selecionar a imagem;
+   - validar formato e tamanho;
+   - mostrar o preview;
+   - remover e fornecer o arquivo selecionado.
 ====================================================== */
 
 const UploadLogoFarmacia = {
@@ -8,7 +13,7 @@ const UploadLogoFarmacia = {
 
     arquivoSelecionado: null,
 
-    logoAtual: null,
+    urlPreview: null,
 
 
     /* ==================================================
@@ -18,13 +23,25 @@ const UploadLogoFarmacia = {
     inicializar() {
 
         this.mapearElementos();
+
+        if (!this.elementos.inputArquivo || !this.elementos.preview) {
+
+            console.warn(
+                "UploadLogoFarmacia: elementos do upload não foram encontrados."
+            );
+
+            return;
+
+        }
+
         this.adicionarEventos();
+        this.limpar();
 
     },
 
 
     /* ==================================================
-       ELEMENTOS
+       MAPEAMENTO DOS ELEMENTOS
     ================================================== */
 
     mapearElementos() {
@@ -54,7 +71,7 @@ const UploadLogoFarmacia = {
 
     adicionarEventos() {
 
-        this.elementos.inputArquivo?.addEventListener(
+        this.elementos.inputArquivo.addEventListener(
 
             "change",
 
@@ -71,7 +88,9 @@ const UploadLogoFarmacia = {
 
             "click",
 
-            () => {
+            (evento) => {
+
+                evento.preventDefault();
 
                 this.removerImagem();
 
@@ -83,35 +102,20 @@ const UploadLogoFarmacia = {
 
 
     /* ==================================================
-       CARREGAR LOGO ATUAL
-    ================================================== */
-
-    carregarLogo(url) {
-
-        this.logoAtual = url || null;
-
-        this.arquivoSelecionado = null;
-
-        this.atualizarPreview();
-
-    },
-
-
-    /* ==================================================
-       SELEÇÃO
+       SELEÇÃO DO ARQUIVO
     ================================================== */
 
     selecionarArquivo(evento) {
 
-        const arquivo = evento.target.files[0];
+        const arquivo = evento.target.files?.[0];
+
+        this.limparErro();
 
         if (!arquivo) {
 
             return;
 
         }
-
-        this.limparErro();
 
         if (!this.validarArquivo(arquivo)) {
 
@@ -123,7 +127,7 @@ const UploadLogoFarmacia = {
 
         this.arquivoSelecionado = arquivo;
 
-        this.atualizarPreview();
+        this.mostrarPreview(arquivo);
 
     },
 
@@ -142,29 +146,30 @@ const UploadLogoFarmacia = {
 
         ];
 
+        const tamanhoMaximo = 2 * 1024 * 1024;
+
+
         if (!tiposPermitidos.includes(arquivo.type)) {
 
             this.mostrarErro(
-
-                "Formato inválido. Utilize JPG, PNG ou WEBP."
-
+                "Formato inválido. Selecione uma imagem JPG, PNG ou WEBP."
             );
 
             return false;
 
         }
 
-        if (arquivo.size > (2 * 1024 * 1024)) {
+
+        if (arquivo.size > tamanhoMaximo) {
 
             this.mostrarErro(
-
-                "A imagem deve ter no máximo 2 MB."
-
+                "A imagem deve possuir no máximo 2 MB."
             );
 
             return false;
 
         }
+
 
         return true;
 
@@ -175,78 +180,79 @@ const UploadLogoFarmacia = {
        PREVIEW
     ================================================== */
 
-    atualizarPreview() {
+    mostrarPreview(arquivo) {
 
-        const {
+        this.revogarUrlPreview();
 
-            preview,
-            botaoRemover
+        this.urlPreview = URL.createObjectURL(arquivo);
 
-        } = this.elementos;
+        const imagem = document.createElement("img");
 
-        preview.innerHTML = "";
+        imagem.src = this.urlPreview;
+        imagem.alt = "Pré-visualização da logo da farmácia";
 
-        if (this.arquivoSelecionado) {
+        imagem.addEventListener("error", () => {
 
-            const img = document.createElement("img");
-
-            img.src = URL.createObjectURL(
-                this.arquivoSelecionado
+            this.mostrarErro(
+                "Não foi possível carregar a imagem selecionada."
             );
 
-            preview.appendChild(img);
+            this.removerImagem();
 
-            botaoRemover.classList.remove("oculto");
+        });
 
-            return;
 
-        }
+        this.elementos.preview.replaceChildren(imagem);
 
-        if (this.logoAtual) {
+        this.elementos.botaoRemover?.classList.remove("oculto");
 
-            const img = document.createElement("img");
+    },
 
-            img.src = this.logoAtual;
 
-            preview.appendChild(img);
+    mostrarPlaceholder() {
 
-            botaoRemover.classList.remove("oculto");
+        this.elementos.preview.replaceChildren();
 
-            return;
+        const placeholder = document.createElement("span");
 
-        }
+        placeholder.textContent = "🏥";
+        placeholder.setAttribute("aria-hidden", "true");
 
-        preview.textContent = "🏥";
+        this.elementos.preview.appendChild(placeholder);
 
-        botaoRemover.classList.add("oculto");
+        this.elementos.botaoRemover?.classList.add("oculto");
 
     },
 
 
     /* ==================================================
-       REMOVER
+       REMOÇÃO
     ================================================== */
 
     removerImagem() {
 
         this.arquivoSelecionado = null;
 
-        this.logoAtual = null;
+        if (this.elementos.inputArquivo) {
 
-        this.elementos.inputArquivo.value = "";
+            this.elementos.inputArquivo.value = "";
 
-        this.atualizarPreview();
+        }
+
+        this.revogarUrlPreview();
+        this.limparErro();
+        this.mostrarPlaceholder();
 
     },
 
 
     /* ==================================================
-       GETTERS
+       CONSULTA DO ARQUIVO
     ================================================== */
 
-    possuiNovaImagem() {
+    possuiArquivo() {
 
-        return this.arquivoSelecionado !== null;
+        return this.arquivoSelecionado instanceof File;
 
     },
 
@@ -258,9 +264,41 @@ const UploadLogoFarmacia = {
     },
 
 
-    obterLogoAtual() {
+    /* ==================================================
+       LIMPEZA
+    ================================================== */
 
-        return this.logoAtual;
+    limpar() {
+
+        this.arquivoSelecionado = null;
+
+        if (this.elementos.inputArquivo) {
+
+            this.elementos.inputArquivo.value = "";
+
+        }
+
+        this.revogarUrlPreview();
+        this.limparErro();
+
+        if (this.elementos.preview) {
+
+            this.mostrarPlaceholder();
+
+        }
+
+    },
+
+
+    revogarUrlPreview() {
+
+        if (this.urlPreview) {
+
+            URL.revokeObjectURL(this.urlPreview);
+
+            this.urlPreview = null;
+
+        }
 
     },
 
@@ -271,13 +309,26 @@ const UploadLogoFarmacia = {
 
     mostrarErro(mensagem) {
 
-        this.elementos.erro.textContent = mensagem;
+        if (this.elementos.erro) {
+
+            this.elementos.erro.textContent = mensagem;
+
+        } else {
+
+            console.warn(mensagem);
+
+        }
 
     },
 
+
     limparErro() {
 
-        this.elementos.erro.textContent = "";
+        if (this.elementos.erro) {
+
+            this.elementos.erro.textContent = "";
+
+        }
 
     }
 
