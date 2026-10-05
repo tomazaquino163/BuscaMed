@@ -828,6 +828,8 @@ a {
 ======================================== */
 
 .resultado-busca {
+    min-width: 0;
+    max-width: 100%;
     margin-top: 26px;
 }
 
@@ -1145,6 +1147,7 @@ a {
 }
 
 .oferta-info {
+    flex: 1 1 0;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -1742,6 +1745,10 @@ a {
         gap: 40px;
     }
 
+    .hero-main {
+        width: 100%;
+    }
+
     .hero-image-wrapper {
         position: static;
         width: 100%;
@@ -1851,7 +1858,7 @@ a {
     }
 
     .melhor-oferta-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .medicamento-imagem-box {
@@ -1897,7 +1904,43 @@ a {
     }
 
     .oferta {
+        flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
+    }
+
+    .oferta-info {
+        flex: 0 1 auto;
+        width: 100%;
+    }
+
+    .oferta-info strong,
+    .oferta-info small,
+    .farmacia-resumo h3,
+    .detalhes-medicamento span,
+    .economia {
+        overflow-wrap: anywhere;
+    }
+
+    .oferta-info small {
+        white-space: normal;
+    }
+
+    .oferta-preco {
+        align-items: flex-start;
+        max-width: 100%;
+    }
+
+    .oferta-preco strong {
+        font-size: 1.15rem;
+    }
+
+    .preco-bloco {
+        min-width: 0;
+    }
+
+    .oferta-acoes {
+        grid-template-columns: minmax(0, 1fr);
     }
 
     .resultado-aviso {
