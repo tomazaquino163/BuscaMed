@@ -1,5 +1,8 @@
 .busca-regiao, .geo-farmacia { margin: 18px 0; padding: 18px; border: 1px solid #cfe0e4; border-radius: 14px; background: #f4faf6; color: #233b43; }
-.busca-regiao-grade { display: grid; grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); gap: 14px; }
+.busca-regiao-grade { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: end; }
+.busca-regiao-grade.com-localizacao { grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); }
+.busca-regiao-grade > div { min-width: 0; }
+.busca-regiao-grade > [hidden] { display: none; }
 .geo-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; align-items: end; }
 .geo-campos > div { min-width: 0; }
 .busca-regiao label, .geo-farmacia label { display: block; font-weight: 600; margin-bottom: 6px; }
@@ -15,7 +18,7 @@
 .geo-farmacia { grid-column: 1 / -1; }
 .resultado-regiao { margin-top: 8px; font-size: .9rem; color: #49676e; }
 .botao-geo:focus-visible, .botao-mais-ofertas:focus-visible { outline: 3px solid #dfb800; outline-offset: 3px; }
-@media (max-width: 600px) { .busca-regiao-grade, .geo-campos { grid-template-columns: 1fr; } .botao-geo { width: 100%; } }
+@media (max-width: 600px) { .busca-regiao-grade, .busca-regiao-grade.com-localizacao, .geo-campos { grid-template-columns: 1fr; } .botao-geo { width: 100%; } }
 /* No celular, as sugestões ocupam espaço para não cobrir o botão de busca. */
 @media (max-width: 850px) {
     .sugestoes-medicamentos { position: static; margin-top: 8px; }

@@ -16,7 +16,7 @@
     <title>BuscaMed - Compare preços de medicamentos</title>
 
     <link rel="stylesheet" href="style.css?v=20261005-mobile">
-<link rel="stylesheet" href="geolocalizacao.css?v=2">
+<link rel="stylesheet" href="geolocalizacao.css?v=4">
 </head>
 
 <body>
@@ -263,7 +263,7 @@
 <section class="busca-regiao" aria-label="Região da pesquisa">
     <div class="busca-regiao-grade">
         <div><label for="busca-cidade">Escolher cidade</label><select id="busca-cidade"><option value="">Carregando cidades…</option></select></div>
-        <div><label for="busca-raio">Raio da minha localização</label><select id="busca-raio" disabled>
+        <div id="busca-raio-campo" hidden><label for="busca-raio">Raio da minha localização</label><select id="busca-raio" disabled>
             <option value="5">5 km</option><option value="10" selected>10 km</option><option value="20">20 km</option><option value="50">50 km</option><option value="100">100 km</option>
         </select></div>
     </div>
@@ -641,7 +641,7 @@
 <script src="config.js"></script>
 <script src="supabase.js"></script>
 <script src="geolocalizacao.js?v=2"></script>
-<script src="busca-regiao.js?v=2"></script>
+<script src="busca-regiao.js?v=4"></script>
 <script src="script.js?v=2"></script>
 
 </body>
