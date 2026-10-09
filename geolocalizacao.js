@@ -6,10 +6,24 @@ window.BuscaGeo = {
         if (!Number.isFinite(numero) || Math.abs(numero) > limite) throw new Error('Coordenadas inválidas.');
         return numero;
     },
+    separarCoordenadas(valor) {
+        const texto = String(valor ?? '').trim();
+        if (!texto) return { latitude: null, longitude: null };
+        // Formato do Maps: latitude, longitude; sinais e casas decimais preservados.
+        const partes = texto.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))\s*,\s*([+-]?(?:\d+(?:\.\d+)?|\.\d+))$/);
+        if (!partes) throw new Error('Cole os dois números do Maps, separados por vírgula. Exemplo: -23.293357744559383, -50.073091540406544');
+        return { latitude: this.coordenada(partes[1], 90), longitude: this.coordenada(partes[2], 180) };
+    },
     lerCampos() {
         if (this.capturando) throw new Error('Aguarde a localização terminar antes de salvar.');
-        const latitude = this.coordenada(document.getElementById('geo-latitude').value, 90);
-        const longitude = this.coordenada(document.getElementById('geo-longitude').value, 180);
+        const campoUnico = document.getElementById('geo-coordenadas');
+        const valores = campoUnico ? this.separarCoordenadas(campoUnico.value) : {
+            latitude: this.coordenada(document.getElementById('geo-latitude').value, 90),
+            longitude: this.coordenada(document.getElementById('geo-longitude').value, 180)
+        };
+        const { latitude, longitude } = valores;
+        document.getElementById('geo-latitude').value = latitude ?? '';
+        document.getElementById('geo-longitude').value = longitude ?? '';
         if ((latitude === null) !== (longitude === null)) throw new Error('Preencha latitude e longitude, ou deixe ambas vazias.');
         return { latitude, longitude };
     },
@@ -17,6 +31,8 @@ window.BuscaGeo = {
         this.versaoCampos = (this.versaoCampos || 0) + 1;
         document.getElementById('geo-latitude').value = latitude ?? '';
         document.getElementById('geo-longitude').value = longitude ?? '';
+        const campoUnico = document.getElementById('geo-coordenadas');
+        if (campoUnico) campoUnico.value = latitude != null && longitude != null ? `${latitude}, ${longitude}` : '';
         this.atualizarMapa();
     },
     obterPosicao() {
@@ -67,7 +83,9 @@ window.BuscaGeo = {
                 if (atual === this.versaoCampos) status.textContent = erro.message;
             } finally { this.capturando = false; botao.disabled = false; this.atualizarMapa(); }
         });
-        for (const id of ['geo-latitude', 'geo-longitude']) {
+        const idsCoordenadas = document.getElementById('geo-coordenadas')
+            ? ['geo-coordenadas'] : ['geo-latitude', 'geo-longitude'];
+        for (const id of idsCoordenadas) {
             document.getElementById(id).addEventListener('input', () => {
                 this.versaoCampos++;
                 status.textContent = "Coordenadas alteradas. Confira no mapa antes de salvar.";

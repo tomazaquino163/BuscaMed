@@ -20,3 +20,5 @@
 @media (max-width: 850px) {
     .sugestoes-medicamentos { position: static; margin-top: 8px; }
 }
+
+.geo-campos.geo-campos-unico { grid-template-columns: minmax(0, 1fr); }
