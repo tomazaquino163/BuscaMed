@@ -1,5 +1,7 @@
 .busca-regiao, .geo-farmacia { margin: 18px 0; padding: 18px; border: 1px solid #cfe0e4; border-radius: 14px; background: #f4faf6; color: #233b43; }
-.busca-regiao-grade, .geo-campos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); gap: 14px; }
+.busca-regiao-grade { display: grid; grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); gap: 14px; }
+.geo-campos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; align-items: end; }
+.geo-campos > div { min-width: 0; }
 .busca-regiao label, .geo-farmacia label { display: block; font-weight: 600; margin-bottom: 6px; }
 .busca-regiao select, .geo-farmacia input { width: 100%; min-width: 0; min-height: 44px; border: 1px solid #bdd0d6; border-radius: 8px; padding: 10px; background: white; color: #233b43; font: inherit; box-sizing: border-box; }
 .botao-geo, .botao-mais-ofertas { background: #16804b; color: white; border: 0; padding: 12px 18px; border-radius: 9px; cursor: pointer; font: inherit; font-weight: 600; margin-top: 12px; }
