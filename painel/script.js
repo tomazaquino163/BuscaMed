@@ -166,6 +166,7 @@ async function iniciarPainel() {
                 carregarCategorias(),
                 carregarMedicamentos()
             ]);
+            restaurarRascunhoMedicamento();
         } else {
             renderizarPainelBloqueado();
         }
@@ -951,6 +952,96 @@ function abrirModalEditarMedicamento(id) {
     abrirModal(elementos.modalMedicamento);
 }
 
+// Rascunho restrito à aba atual, ao usuário e à farmácia.
+const CHAVE_RASCUNHO_MEDICAMENTO = "buscamed:medicamento:novo-login:v1";
+
+function erroDeAutenticacao(erro) {
+    return erro?.code === "SESSAO_INVALIDA" ||
+        erro?.status === 401 ||
+        ["PGRST301", "PGRST302", "PGRST303", "refresh_token_not_found",
+         "refresh_token_already_used", "session_not_found", "bad_jwt"].includes(erro?.code);
+}
+
+function sessaoInvalida() {
+    return Object.assign(new Error("Entre novamente para salvar o medicamento."),
+        { code: "SESSAO_INVALIDA" });
+}
+
+async function validarSessaoParaSalvarMedicamento() {
+    let { data, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+    if (!data?.session) throw sessaoInvalida();
+    if (data.session.expires_at * 1000 <= Date.now() + 60000) {
+        const renovacao = await supabaseClient.auth.refreshSession();
+        if (renovacao.error) throw renovacao.error;
+        data = renovacao.data;
+    }
+    if (!data?.session || data.session.user.id !== estado.usuario.id) {
+        throw sessaoInvalida();
+    }
+    // Confirma a autenticação no servidor antes de enviar a gravação.
+    const verificacao = await supabaseClient.auth.getUser();
+    if (verificacao.error) throw verificacao.error;
+    if (!verificacao.data?.user || verificacao.data.user.id !== estado.usuario.id) {
+        throw sessaoInvalida();
+    }
+}
+
+function removerRascunhoMedicamento() {
+    try { sessionStorage.removeItem(CHAVE_RASCUNHO_MEDICAMENTO); } catch (_) {}
+}
+
+function solicitarNovoLoginMedicamento() {
+    try {
+        const campos = Array.from(elementos.formularioMedicamento.elements)
+            .filter(campo => campo.id && ["INPUT", "SELECT", "TEXTAREA"].includes(campo.tagName)
+                && !["submit", "button", "password", "file"].includes(campo.type))
+            .map(campo => ({ id: campo.id, valor: campo.value, marcado: campo.checked }));
+        sessionStorage.setItem(CHAVE_RASCUNHO_MEDICAMENTO, JSON.stringify({
+            usuario: estado.usuario.id, farmacia: estado.farmacia.id,
+            criadoEm: Date.now(), campos
+        }));
+    } catch (_) {
+        elementos.erroFormularioMedicamento.textContent =
+            "Sua sessão precisa de novo login. Não foi possível guardar o rascunho nesta aba. Copie os dados antes de sair e entrar novamente.";
+        return;
+    }
+    elementos.erroFormularioMedicamento.textContent =
+        "Entre novamente para salvar. Seus dados foram guardados nesta aba.";
+    if (window.confirm("Sua sessão precisa de novo login. Os dados do medicamento foram guardados nesta aba e serão recuperados ao entrar na mesma conta. Ir para o login?")) {
+        // Sem repetir INSERT automaticamente: evita cadastros duplicados.
+        window.location.href = "../login.html";
+    }
+}
+
+function restaurarRascunhoMedicamento() {
+    try {
+        const rascunho = JSON.parse(sessionStorage.getItem(CHAVE_RASCUNHO_MEDICAMENTO));
+        if (!rascunho) return;
+        if (rascunho.usuario !== estado.usuario.id || rascunho.farmacia !== estado.farmacia.id ||
+            !Number.isFinite(rascunho.criadoEm) || Date.now() - rascunho.criadoEm > 86400000 ||
+            !Array.isArray(rascunho.campos)) {
+            removerRascunhoMedicamento();
+            return;
+        }
+        limparFormularioMedicamento();
+        for (const item of rascunho.campos) {
+            const campo = Array.from(elementos.formularioMedicamento.elements)
+                .find(campo => campo.id === item.id);
+            if (!campo || !["INPUT", "SELECT", "TEXTAREA"].includes(campo.tagName) ||
+                ["password", "file", "submit", "button"].includes(campo.type)) continue;
+            campo.value = item.valor;
+            if (campo.type === "checkbox" || campo.type === "radio") campo.checked = item.marcado === true;
+        }
+        elementos.tituloModalMedicamento.textContent = elementos.medicamentoId.value
+            ? "Editar medicamento" : "Novo medicamento";
+        abrirModal(elementos.modalMedicamento);
+        removerRascunhoMedicamento();
+        elementos.erroFormularioMedicamento.textContent =
+            "Dados recuperados. Confira o formulário e clique em Salvar medicamento.";
+    } catch (_) { removerRascunhoMedicamento(); }
+}
+
 async function salvarMedicamento(evento) {
     evento.preventDefault();
 
@@ -976,6 +1067,8 @@ async function salvarMedicamento(evento) {
     );
 
     try {
+        await validarSessaoParaSalvarMedicamento();
+
         const payload = {
             pharmacy_id: estado.farmacia.id,
             category_id: dados.category_id,
@@ -1017,6 +1110,7 @@ async function salvarMedicamento(evento) {
             throw resultado.error;
         }
 
+        removerRascunhoMedicamento();
         fecharModal(elementos.modalMedicamento);
 
         mostrarNotificacao(
@@ -1030,8 +1124,12 @@ async function salvarMedicamento(evento) {
     } catch (erro) {
         console.error("Erro ao salvar medicamento:", erro);
 
-        elementos.erroFormularioMedicamento.textContent =
-            traduzirErroSupabase(erro);
+        if (erroDeAutenticacao(erro)) {
+            solicitarNovoLoginMedicamento();
+        } else {
+            elementos.erroFormularioMedicamento.textContent =
+                traduzirErroSupabase(erro);
+        }
     } finally {
         alterarEstadoBotao(
             elementos.botaoSalvarMedicamento,
