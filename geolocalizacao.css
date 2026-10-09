@@ -1,0 +1,20 @@
+.busca-regiao, .geo-farmacia { margin: 18px 0; padding: 18px; border: 1px solid #cfe0e4; border-radius: 14px; background: #f4faf6; color: #233b43; }
+.busca-regiao-grade, .geo-campos { display: grid; grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr); gap: 14px; }
+.busca-regiao label, .geo-farmacia label { display: block; font-weight: 600; margin-bottom: 6px; }
+.busca-regiao select, .geo-farmacia input { width: 100%; min-width: 0; min-height: 44px; border: 1px solid #bdd0d6; border-radius: 8px; padding: 10px; background: white; color: #233b43; font: inherit; box-sizing: border-box; }
+.botao-geo, .botao-mais-ofertas { background: #16804b; color: white; border: 0; padding: 12px 18px; border-radius: 9px; cursor: pointer; font: inherit; font-weight: 600; margin-top: 12px; }
+.botao-geo:disabled, .botao-mais-ofertas:disabled { opacity: .6; cursor: wait; }
+.busca-regiao p, .geo-farmacia p { font-size: .9rem; line-height: 1.5; margin: 10px 0 0; }
+.geo-farmacia h3 { margin: 0 0 8px; font-size: 1rem; }
+.geo-farmacia a { display: inline-block; margin: 12px 0; color: #16804b; font-weight: 600; }
+.geo-farmacia a[hidden] { display: none; }
+.geo-farmacia details { margin-top: 12px; }
+.geo-farmacia summary { cursor: pointer; margin-bottom: 12px; }
+.geo-farmacia { grid-column: 1 / -1; }
+.resultado-regiao { margin-top: 8px; font-size: .9rem; color: #49676e; }
+.botao-geo:focus-visible, .botao-mais-ofertas:focus-visible { outline: 3px solid #dfb800; outline-offset: 3px; }
+@media (max-width: 600px) { .busca-regiao-grade, .geo-campos { grid-template-columns: 1fr; } .botao-geo { width: 100%; } }
+/* No celular, as sugestões ocupam espaço para não cobrir o botão de busca. */
+@media (max-width: 850px) {
+    .sugestoes-medicamentos { position: static; margin-top: 8px; }
+}

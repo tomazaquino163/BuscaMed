@@ -307,6 +307,8 @@ async function cadastrarFarmacia(usuarioId, dados) {
 
             postal_code: null,
 
+            latitude: dados.latitude,
+            longitude: dados.longitude,
             status: "pending"
         });
 
@@ -384,6 +386,7 @@ formulario.addEventListener(
         };
 
         try {
+            Object.assign(dados, BuscaGeo.lerCampos());
             const cnpjExistente =
                 await verificarCnpjExistente(
                     dados.cnpj
@@ -469,3 +472,4 @@ formulario.addEventListener(
         }
     }
 );
+BuscaGeo.iniciarCampos(["endereco", "cidade", "estado"]);

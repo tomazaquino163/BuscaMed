@@ -18,6 +18,7 @@ const EditarFarmacia = {
 
         this.mapearElementos();
         this.adicionarEventos();
+        BuscaGeo.iniciarCampos(["editar-endereco", "editar-cidade", "editar-estado", "editar-cep", "editar-bairro"]);
 
         if (
             typeof UploadLogoFarmacia !== "undefined" &&
@@ -340,6 +341,11 @@ const EditarFarmacia = {
         }
 
 
+        BuscaGeo.preencher(farmacia.latitude, farmacia.longitude);
+        document.getElementById("geo-status").textContent = farmacia.latitude != null && farmacia.longitude != null
+            ? "Localização cadastrada. Confira no mapa se corresponde à loja."
+            : "Sem localização cadastrada. Confirme a posição da loja para aparecer na busca por raio.";
+
         this.definirValor(
             this.elementos.nomeFantasia,
             farmacia.trade_name
@@ -645,6 +651,7 @@ const EditarFarmacia = {
 
         try {
 
+            const coordenadas = BuscaGeo.lerCampos();
             let logoUrl =
                 this.dadosFarmacia?.logo_url || null;
 
@@ -665,7 +672,7 @@ const EditarFarmacia = {
 
             const { data, error } =
                 await supabaseClient.rpc(
-                    "update_own_pharmacy",
+                    "update_own_pharmacy_v2",
                     {
                         p_trade_name:
                             dados.trade_name,
@@ -698,7 +705,9 @@ const EditarFarmacia = {
                             dados.postal_code || null,
 
                         p_logo_url:
-                            logoUrl
+                            logoUrl,
+                        p_latitude: coordenadas.latitude,
+                        p_longitude: coordenadas.longitude
                     }
                 );
 

@@ -11,6 +11,7 @@
     <title>Cadastro de Farmácia | BuscaMed</title>
 
     <link rel="stylesheet" href="cadastro.css">
+<link rel="stylesheet" href="../geolocalizacao.css?v=2">
 </head>
 
 <body>
@@ -236,6 +237,18 @@
                     </div>
                 </fieldset>
 
+<section class="geo-farmacia" aria-label="Localização da farmácia">
+    <h3>📍 Localização da farmácia</h3>
+    <p>Confirme o ponto exato da loja para aparecer nas buscas por distância. Sem coordenadas, a farmácia continua aparecendo na busca pela cidade.</p>
+    <button type="button" id="geo-capturar" class="botao-geo">Estou na farmácia: usar localização do aparelho</button>
+    <p>Está cadastrando de outro lugar? Abra o endereço da farmácia no Google Maps, clique com o botão direito no ponto da loja e copie a latitude e a longitude.</p>
+    <div class="geo-campos">
+        <div><label for="geo-latitude">Latitude da loja (opcional)</label><input id="geo-latitude" type="text" inputmode="decimal" placeholder="Ex.: -25.540000" maxlength="30"></div>
+        <div><label for="geo-longitude">Longitude da loja (opcional)</label><input id="geo-longitude" type="text" inputmode="decimal" placeholder="Ex.: -54.580000" maxlength="30"></div>
+    </div>
+    <a id="geo-mapa" href="#" target="_blank" rel="noopener noreferrer" hidden>Conferir localização no mapa ↗</a>
+    <p id="geo-status" role="status" aria-live="polite">Confira a posição antes de salvar. Alterar o endereço exige confirmar novamente as coordenadas.</p>
+</section>
                 <fieldset>
                     <legend>Dados de acesso</legend>
 
@@ -360,6 +373,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="../config.js"></script>
     <script src="../supabase.js"></script>
-    <script src="cadastro.js"></script>
+    <script src="../geolocalizacao.js?v=2"></script>
+    <script src="cadastro.js?v=2"></script>
 </body>
 </html>

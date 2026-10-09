@@ -16,6 +16,7 @@
     <title>BuscaMed - Compare preços de medicamentos</title>
 
     <link rel="stylesheet" href="style.css?v=20261005-mobile">
+<link rel="stylesheet" href="geolocalizacao.css?v=2">
 </head>
 
 <body>
@@ -259,6 +260,17 @@
 
                     </div>
 
+<section class="busca-regiao" aria-label="Região da pesquisa">
+    <div class="busca-regiao-grade">
+        <div><label for="busca-cidade">Escolher cidade</label><select id="busca-cidade"><option value="">Carregando cidades…</option></select></div>
+        <div><label for="busca-raio">Raio da minha localização</label><select id="busca-raio" disabled>
+            <option value="5">5 km</option><option value="10" selected>10 km</option><option value="20">20 km</option><option value="50">50 km</option><option value="100">100 km</option>
+        </select></div>
+    </div>
+    <button type="button" id="usar-localizacao" class="botao-geo">📍 Usar minha localização</button>
+    <p id="busca-regiao-status" role="status" aria-live="polite">Escolha uma cidade ou use sua localização.</p>
+    <p>O menor preço vem primeiro, mesmo quando a farmácia está mais longe dentro do raio. A busca por raio pode incluir cidades vizinhas.</p>
+</section>
                     <div class="search-input-area">
 
                         <div class="campo-com-sugestoes">
@@ -275,6 +287,7 @@
                                 <input
                                     type="search"
                                     id="medicamento"
+                                    maxlength="100"
                                     placeholder="Ex.: Dipirona, Captopril..."
                                     autocomplete="off"
                                     aria-autocomplete="list"
@@ -627,7 +640,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script src="supabase.js"></script>
-<script src="script.js"></script>
+<script src="geolocalizacao.js?v=2"></script>
+<script src="busca-regiao.js?v=2"></script>
+<script src="script.js?v=2"></script>
 
 </body>
 </html>

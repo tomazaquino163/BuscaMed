@@ -35,6 +35,9 @@ const anoAtual =
 
 let timerAutocomplete;
 let pesquisando = false;
+let versaoBusca = 0;
+let versaoSugestoes = 0;
+let ultimaBusca = null;
 
 
 /* ========================================
@@ -168,8 +171,11 @@ function localizacao(oferta) {
         .join(" - ");
 
     return [
+        oferta.address,
         bairro,
-        cidadeEstado
+        cidadeEstado,
+        typeof oferta.distance_km === "number" && Number.isFinite(oferta.distance_km)
+            ? `${oferta.distance_km.toLocaleString("pt-BR", { maximumFractionDigits: 1 })} km em linha reta` : ""
     ]
         .filter(Boolean)
         .join(" • ");
@@ -240,6 +246,7 @@ function atualizarLimpar() {
 
 
 function fecharSugestoes() {
+    versaoSugestoes++;
     sugestoesMedicamentos.innerHTML = "";
     sugestoesMedicamentos.style.display =
         "none";
@@ -416,29 +423,16 @@ async function buscarSugestoes() {
     try {
         validarSupabase();
 
-        const termoSeguro =
-            termo.replaceAll(",", " ");
-
-        const { data, error } =
-            await supabaseClient
-                .from(VIEW_OFERTAS)
-                .select(`
-                    name,
-                    dosage,
-                    dosage_unit,
-                    active_ingredient,
-                    manufacturer
-                `)
-                .or(
-                    `name.ilike.%${termoSeguro}%,` +
-                    `active_ingredient.ilike.%${termoSeguro}%,` +
-                    `manufacturer.ilike.%${termoSeguro}%`
-                )
-                .limit(40);
-
-        if (error) {
-            throw error;
-        }
+        const parametros = BuscaRegiao.parametros();
+        const versao = ++versaoSugestoes;
+        const regiaoVersao = BuscaRegiao.versao;
+        const { data: resposta, error } = await supabaseClient.rpc('buscamed_buscar_ofertas', {
+            ...parametros, p_termo: termo, p_pagina: 0
+        });
+        if (error) throw error;
+        if (versao !== versaoSugestoes || regiaoVersao !== BuscaRegiao.versao ||
+            termo !== normalizarTexto(campoMedicamento.value)) return;
+        const data = resposta?.offers || [];
 
         const medicamentosUnicos =
             new Map();
@@ -604,12 +598,12 @@ function logoFarmacia(oferta) {
 
 
 function imagemMedicamento(oferta) {
-    if (oferta.image_url) {
+    if (oferta.medicine_image_url || oferta.image_url) {
         return `
             <div class="medicamento-imagem-box">
                 <img
                     src="${escaparHtml(
-                        oferta.image_url
+                        oferta.medicine_image_url || oferta.image_url
                     )}"
                     alt="Imagem de ${escaparHtml(
                         nomeMedicamento(oferta)
@@ -688,7 +682,7 @@ function blocoPreco(oferta) {
    RENDERIZAÇÃO
 ======================================== */
 
-function renderizar(ofertas, termo) {
+function renderizar(ofertas, termo, total = ofertas.length, resumo = "", rolar = true) {
     const melhorOferta =
         ofertas[0];
 
@@ -716,6 +710,7 @@ function renderizar(ofertas, termo) {
         <section class="resultado-card">
 
             <header class="resultado-cabecalho">
+                <p class="resultado-regiao">${escaparHtml(resumo)} • Mostrando ${ofertas.length} de ${total} ofertas, do menor para o maior preço.</p>
 
                 <div class="resultado-meta">
 
@@ -724,9 +719,9 @@ function renderizar(ofertas, termo) {
                     </span>
 
                     <span class="resultado-contagem">
-                        ${ofertas.length}
+                        ${total}
                         ${
-                            ofertas.length === 1
+                            total === 1
                                 ? "oferta encontrada"
                                 : "ofertas encontradas"
                         }
@@ -985,6 +980,7 @@ function renderizar(ofertas, termo) {
                     : ""
             }
 
+            ${ofertas.length < total ? '<button type="button" id="mais-ofertas" class="botao-mais-ofertas">Mostrar mais ofertas</button>' : ''}
             <p class="resultado-aviso">
 
                 Preço e disponibilidade devem ser
@@ -995,7 +991,8 @@ function renderizar(ofertas, termo) {
         </section>
     `;
 
-    resultadoBusca.scrollIntoView({
+    document.getElementById("mais-ofertas")?.addEventListener("click", carregarMaisOfertas);
+    if (rolar) resultadoBusca.scrollIntoView({
         behavior: "smooth",
         block: "start"
     });
@@ -1007,154 +1004,71 @@ function renderizar(ofertas, termo) {
 ======================================== */
 
 async function pesquisarMedicamento() {
-    if (pesquisando) {
-        return;
-    }
-
-    const termoOriginal =
-        campoMedicamento.value.trim();
-
-    const termo =
-        normalizarTexto(
-            termoOriginal
-        );
-
+    if (pesquisando) return;
+    const termoOriginal = campoMedicamento.value.trim();
+    const termo = normalizarTexto(termoOriginal);
     fecharSugestoes();
-
-    if (!termo) {
-        mensagem(
-            "mensagem-erro",
-            `
-                <strong>
-                    ⚠️ Digite um medicamento.
-                </strong>
-
-                <br>
-
-                Você pode pesquisar pelo nome,
-                princípio ativo ou fabricante.
-            `
-        );
-
+    if (termo.length < 2) {
+        mensagem('mensagem-erro', '<strong>Digite pelo menos duas letras do medicamento, princípio ativo ou fabricante.</strong>');
         campoMedicamento.focus();
         return;
     }
-
+    let parametros;
+    try { parametros = BuscaRegiao.parametros(); }
+    catch (erro) { mensagem('mensagem-erro', escaparHtml(erro.message)); return; }
+    const versao = ++versaoBusca;
+    const resumo = BuscaRegiao.resumo();
+    ultimaBusca = null;
     estadoBusca(true);
-
-    mensagem(
-        "mensagem-carregando",
-        `
-            <span class="spinner"></span>
-
-            <span>
-                Consultando preços nas
-                farmácias participantes...
-            </span>
-        `
-    );
-
+    mensagem('mensagem-carregando', '<span class="spinner"></span> Consultando os menores preços na região selecionada…');
     try {
         validarSupabase();
-
-        const termoSeguro =
-            termo.replaceAll(",", " ");
-
-        const { data, error } =
-            await supabaseClient
-                .from(VIEW_OFERTAS)
-                .select("*")
-                .or(
-                    (
-                        `name.ilike.%${termoSeguro}%,` +
-                        `active_ingredient.ilike.%${termoSeguro}%,` +
-                        `manufacturer.ilike.%${termoSeguro}%,` +
-                        `package_description.ilike.%${termoSeguro}%`
-                    )
-                )
-                .limit(100);
-
-        if (error) {
-            throw error;
-        }
-
-        const ofertas =
-            (data || [])
-                .filter(
-                    (oferta) => {
-                        const preco =
-                            precoEfetivo(
-                                oferta
-                            );
-
-                        return (
-                            Number.isFinite(
-                                preco
-                            ) &&
-                            preco > 0
-                        );
-                    }
-                )
-                .sort(
-                    (
-                        ofertaA,
-                        ofertaB
-                    ) =>
-                        precoEfetivo(
-                            ofertaA
-                        ) -
-                        precoEfetivo(
-                            ofertaB
-                        )
-                );
-
+        const { data, error } = await supabaseClient.rpc('buscamed_buscar_ofertas', {
+            ...parametros, p_termo: termo, p_pagina: 0
+        });
+        if (versao !== versaoBusca) return;
+        if (error) throw error;
+        const ofertas = data?.offers || [];
         if (!ofertas.length) {
-            mensagem(
-                "mensagem-vazia",
-                `
-                    <strong>
-                        😕 Nenhuma oferta encontrada
-                    </strong>
-
-                    <br>
-
-                    Confira a escrita ou tente
-                    pesquisar pelo princípio ativo.
-                `
-            );
-
+            mensagem('mensagem-vazia', `<strong>Nenhuma oferta encontrada ${escaparHtml(resumo.toLocaleLowerCase('pt-BR'))}.</strong><br>Confira o medicamento, escolha outra cidade ou amplie o raio. Na busca por localização, só aparecem farmácias com coordenadas cadastradas.`);
             return;
         }
-
-        renderizar(
-            ofertas,
-            termoOriginal
-        );
+        ultimaBusca = { parametros, termo, termoOriginal, ofertas, total: Number(data.total), pagina: 0, resumo };
+        renderizar(ofertas, termoOriginal, ultimaBusca.total, resumo);
     } catch (erro) {
-        console.error(
-            "Erro na pesquisa:",
-            erro
-        );
-
-        mensagem(
-            "mensagem-erro",
-            `
-                <strong>
-                    Não foi possível consultar
-                    os preços agora.
-                </strong>
-
-                <br>
-
-                Verifique a conexão e tente
-                novamente em alguns instantes.
-            `
-        );
-    } finally {
-        estadoBusca(false);
-    }
+        if (versao !== versaoBusca) return;
+        console.error('Erro na pesquisa:', erro);
+        mensagem('mensagem-erro', '<strong>Não foi possível consultar os preços agora.</strong><br>Verifique a conexão e tente novamente.');
+    } finally { estadoBusca(false); }
 }
 
+async function carregarMaisOfertas() {
+    if (pesquisando || !ultimaBusca) return;
+    const busca = ultimaBusca;
+    const versao = versaoBusca;
+    const botao = document.getElementById('mais-ofertas');
+    estadoBusca(true);
+    if (botao) { botao.disabled = true; botao.textContent = 'Carregando…'; }
+    try {
+        const { data, error } = await supabaseClient.rpc('buscamed_buscar_ofertas', {
+            ...busca.parametros, p_termo: busca.termo, p_pagina: busca.pagina + 1
+        });
+        if (versao !== versaoBusca) return;
+        if (error) throw error;
+        busca.pagina++;
+        const ids = new Set(busca.ofertas.map(o => o.medicine_id));
+        busca.ofertas.push(...(data.offers || []).filter(o => !ids.has(o.medicine_id)));
+        busca.ofertas.sort((a, b) => precoEfetivo(a) - precoEfetivo(b) || String(a.medicine_id).localeCompare(String(b.medicine_id)));
+        // O estoque pode mudar entre páginas. Evita um botão sem fim.
+        busca.total = data.offers?.length ? Number(data.total) : busca.ofertas.length;
+        renderizar(busca.ofertas, busca.termoOriginal, busca.total, busca.resumo, false);
+    } catch (erro) {
+        if (versao === versaoBusca && botao) {
+            botao.disabled = false;
+            botao.textContent = 'Falha ao carregar. Tentar novamente';
+        }
+    } finally { estadoBusca(false); }
+}
 
 /* ========================================
    EVENTOS DA PESQUISA
@@ -1163,6 +1077,7 @@ async function pesquisarMedicamento() {
 campoMedicamento?.addEventListener(
     "input",
     () => {
+        versaoSugestoes++;
         clearTimeout(
             timerAutocomplete
         );
@@ -1187,6 +1102,9 @@ botaoPesquisar?.addEventListener(
 botaoLimpar?.addEventListener(
     "click",
     () => {
+        versaoBusca++;
+        versaoSugestoes++;
+        ultimaBusca = null;
         campoMedicamento.value = "";
         resultadoBusca.innerHTML = "";
 
@@ -1226,3 +1144,11 @@ document.addEventListener(
         }
     }
 );
+// Mudar a região invalida resultados e respostas ainda em trânsito.
+document.addEventListener('buscamed:regiao-alterada', () => {
+    versaoBusca++;
+    versaoSugestoes++;
+    ultimaBusca = null;
+    fecharSugestoes();
+    resultadoBusca.innerHTML = '';
+});
