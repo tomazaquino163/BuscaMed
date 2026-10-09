@@ -1,0 +1,31 @@
+.tutorial { width: min(1000px, calc(100% - 40px)); margin: 32px auto 70px; }
+.introducao { max-width: 760px; margin-bottom: 32px; }
+.introducao h1 { margin: 18px 0; font-size: clamp(2rem, 5vw, 3.4rem); line-height: 1.1; letter-spacing: -.035em; }
+.tutorial p { line-height: 1.65; color: var(--texto-suave); }
+.tutorial a { color: var(--verde-principal); font-weight: 700; text-underline-offset: 3px; }
+.aviso, .conferencia { padding: 16px 20px; background: var(--verde-claro); border-radius: 12px; }
+.etapas { list-style: none; padding: 0; margin: 0; display: grid; gap: 26px; }
+.etapa { padding: 28px; background: var(--branco); border: 1px solid var(--borda); border-radius: 22px; box-shadow: 0 10px 32px rgba(22, 72, 47, .06); }
+.texto-etapa { display: flex; align-items: flex-start; gap: 16px; }
+.numero { flex: 0 0 42px; height: 42px; display: grid; place-items: center; background: var(--verde-principal); color: white; border-radius: 12px; font-weight: 800; font-size: 1.15rem; }
+.etapa h2 { margin: 7px 0 12px; font-size: 1.4rem; }
+.etapa p { margin: 0 0 12px; }
+.etapa .dica { font-size: .93rem; }
+figure { margin: 16px 0 0; padding: 18px; background: #f6faf8; border: 1px solid var(--borda); border-radius: 14px; text-align: center; }
+figure img { display: block; max-width: 100%; width: auto; height: auto; margin: auto; border-radius: 8px; }
+figcaption { margin-top: 12px; color: var(--texto-suave); font-size: .86rem; line-height: 1.5; }
+.etapa .conferencia { margin: 18px 0 0; }
+.fim-tutorial { text-align: center; padding: 28px 12px; }
+.fim-tutorial h2 { color: var(--verde-principal); }
+.fim-tutorial .link-login { display: inline-block; }
+a:focus-visible { outline: 3px solid var(--verde-principal); outline-offset: 4px; }
+@media (max-width: 600px) {
+    .tutorial { width: calc(100% - 28px); margin-top: 24px; }
+    .etapa { padding: 20px 16px; }
+    .texto-etapa { gap: 12px; }
+    .numero { flex-basis: 34px; height: 34px; border-radius: 10px; }
+    .etapa h2 { margin-top: 4px; font-size: 1.2rem; }
+    figure { padding: 8px; }
+    .topo { gap: 10px; }
+    .link-login { font-size: .85rem; padding: 10px; }
+}
