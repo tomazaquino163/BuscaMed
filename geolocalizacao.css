@@ -25,3 +25,8 @@
 }
 
 .geo-campos.geo-campos-unico { grid-template-columns: minmax(0, 1fr); }
+
+/* Separador visual entre selecionar cidade e usar GPS */
+.busca-separador-ou { display: flex; align-items: center; gap: 14px; margin: 16px 0 2px; color: #16804b; font-weight: 700; font-size: .9rem; letter-spacing: .08em; }
+.busca-separador-ou::before, .busca-separador-ou::after { content: ""; flex: 1; height: 1px; background: #cfe0d8; }
+.busca-separador-ou span { flex: 0 0 auto; }

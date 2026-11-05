@@ -907,73 +907,55 @@ function renderizar(ofertas, termo, total = ofertas.length, resumo = "", rolar =
                                 Outras ofertas disponíveis
                             </h3>
 
-                            ${ofertas
-                                .slice(1)
-                                .map(
-                                    (oferta) => `
-                                        <div class="oferta">
-
+                            ${ofertas.slice(1).map((oferta) => {
+                                const contatoWhatsApp = linkWhatsApp(oferta);
+                                const detalhesOferta = [
+                                    oferta.manufacturer,
+                                    oferta.package_description,
+                                    oferta.active_ingredient
+                                ].filter(Boolean);
+                                return `
+                                    <details class="oferta oferta-expansivel">
+                                        <summary class="oferta-cabecalho" aria-label="Ver detalhes de ${escaparHtml(nomeFarmacia(oferta))}">
                                             <div class="oferta-info">
-
-                                                <strong>
-                                                    ${escaparHtml(
-                                                        nomeFarmacia(
-                                                            oferta
-                                                        )
-                                                    )}
-                                                </strong>
-
-                                                <small>
-                                                    ${[
-                                                        localizacao(
-                                                            oferta
-                                                        ),
-                                                        oferta
-                                                            .package_description
-                                                    ]
-                                                        .filter(
-                                                            Boolean
-                                                        )
-                                                        .map(
-                                                            escaparHtml
-                                                        )
-                                                        .join(
-                                                            " • "
-                                                        )}
-                                                </small>
-
+                                                <strong>${escaparHtml(nomeFarmacia(oferta))}</strong>
+                                                <small>${[localizacao(oferta), oferta.package_description]
+                                                    .filter(Boolean).map(escaparHtml).join(" • ")}</small>
                                             </div>
-
                                             <div class="oferta-preco">
-
-                                                ${
-                                                    emPromocao(
-                                                        oferta
-                                                    )
-                                                        ? `
-                                                            <del>
-                                                                ${formatarPreco(
-                                                                    oferta.price
-                                                                )}
-                                                            </del>
-                                                        `
-                                                        : ""
-                                                }
-
-                                                <strong>
-                                                    ${formatarPreco(
-                                                        precoEfetivo(
-                                                            oferta
-                                                        )
-                                                    )}
-                                                </strong>
-
+                                                ${emPromocao(oferta) ? `<del>${formatarPreco(oferta.price)}</del>` : ""}
+                                                <strong>${formatarPreco(precoEfetivo(oferta))}</strong>
                                             </div>
-
+                                            <span class="oferta-seta" aria-hidden="true">⌄</span>
+                                        </summary>
+                                        <div class="oferta-detalhes">
+                                            <div class="melhor-oferta-grid">
+                                                ${imagemMedicamento(oferta)}
+                                                <div class="oferta-conteudo">
+                                                    <div class="oferta-topo">
+                                                        <div class="farmacia-resumo">
+                                                            ${logoFarmacia(oferta)}
+                                                            <div>
+                                                                <small>Oferta disponível</small>
+                                                                <h3>${escaparHtml(nomeFarmacia(oferta))}</h3>
+                                                                ${localizacao(oferta) ? `<p class="localizacao">📍 ${escaparHtml(localizacao(oferta))}</p>` : ""}
+                                                            </div>
+                                                        </div>
+                                                        <div class="preco-bloco">
+                                                            ${blocoPreco(oferta).replace('Melhor preço', 'Preço disponível')}
+                                                        </div>
+                                                    </div>
+                                                    ${detalhesOferta.length ? `<div class="detalhes-medicamento">${detalhesOferta.map(d => `<span>${escaparHtml(d)}</span>`).join("")}</div>` : ""}
+                                                    <div class="oferta-acoes">
+                                                        ${contatoWhatsApp ? `<a href="${escaparHtml(contatoWhatsApp)}" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">💬 Conversar no WhatsApp</a>` : ""}
+                                                        ${oferta.phone ? `<a href="tel:${digitos(oferta.phone)}" class="btn-secundario">☎️ Ligar para a farmácia</a>` : ""}
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    `
-                                )
-                                .join("")}
+                                    </details>
+                                `;
+                            }).join("")}
 
                         </div>
                     `

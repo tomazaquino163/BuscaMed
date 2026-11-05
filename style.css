@@ -1972,3 +1972,47 @@ a {
         transition-duration: 0.01ms !important;
     }
 }
+/* BuscaMed: ofertas secundárias expansíveis (novembro/2026) */
+.outras-ofertas .oferta-expansivel {
+    display: block;
+    padding: 0;
+    border-bottom: 1px solid var(--cinza-100);
+}
+.outras-ofertas .oferta-cabecalho {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 0;
+    cursor: pointer;
+    list-style: none;
+    border-radius: 8px;
+}
+.outras-ofertas .oferta-cabecalho::-webkit-details-marker { display: none; }
+.outras-ofertas .oferta-cabecalho:hover { background: var(--cinza-50); }
+.outras-ofertas .oferta-cabecalho:focus-visible { outline: 3px solid var(--verde-700); outline-offset: 2px; }
+.outras-ofertas .oferta-cabecalho .oferta-info { flex: 1 1 0; min-width: 0; }
+.outras-ofertas .oferta-cabecalho .oferta-preco { flex: 0 0 auto; align-items: flex-end; }
+.outras-ofertas .oferta-seta {
+    flex: 0 0 auto;
+    font-size: 1.5rem;
+    color: var(--verde-700);
+    line-height: 1;
+    transition: transform .2s ease;
+}
+.outras-ofertas .oferta-expansivel[open] .oferta-seta { transform: rotate(180deg); }
+.outras-ofertas .oferta-detalhes {
+    padding: 20px;
+    margin: 0 0 14px;
+    border: 1px solid var(--cinza-100);
+    border-radius: 14px;
+    background: var(--cinza-50);
+}
+.outras-ofertas .oferta-detalhes .melhor-oferta-grid { width: 100%; }
+.outras-ofertas .oferta-detalhes .oferta-conteudo { min-width: 0; }
+@media (max-width: 640px) {
+    .outras-ofertas .oferta-cabecalho { flex-direction: row; align-items: center; gap: 10px; }
+    .outras-ofertas .oferta-cabecalho .oferta-info { flex: 1 1 0; width: auto; }
+    .outras-ofertas .oferta-cabecalho .oferta-preco { flex: 0 0 auto; align-items: flex-end; }
+    .outras-ofertas .oferta-detalhes { padding: 14px; }
+}
