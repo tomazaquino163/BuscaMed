@@ -2016,3 +2016,115 @@ a {
     .outras-ofertas .oferta-cabecalho .oferta-preco { flex: 0 0 auto; align-items: flex-end; }
     .outras-ofertas .oferta-detalhes { padding: 14px; }
 }
+
+/* BuscaMed: evita endereço espremido nas ofertas expandidas no desktop.
+   Escopo limitado aos cards secundários; o layout mobile permanece intacto. */
+@media (min-width: 601px) {
+    .outras-ofertas .oferta-detalhes .melhor-oferta-grid {
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .outras-ofertas .oferta-detalhes .medicamento-imagem-box {
+        width: 110px;
+        min-height: 170px;
+    }
+
+    .outras-ofertas .oferta-detalhes .medicamento-imagem {
+        height: 170px;
+    }
+
+    .outras-ofertas .oferta-detalhes .oferta-topo {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .outras-ofertas .oferta-detalhes .farmacia-resumo {
+        width: 100%;
+        min-width: 0;
+        align-items: flex-start;
+    }
+
+    .outras-ofertas .oferta-detalhes .farmacia-logo {
+        width: 56px;
+        height: 56px;
+        flex-basis: 56px;
+    }
+
+    .outras-ofertas .oferta-detalhes .farmacia-resumo > div {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .outras-ofertas .oferta-detalhes .localizacao {
+        text-align: left;
+        white-space: normal;
+        word-break: normal;
+        overflow-wrap: break-word;
+        hyphens: none;
+    }
+
+    .outras-ofertas .oferta-detalhes .preco-bloco {
+        min-width: 0;
+        width: 100%;
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+/* BuscaMed: evita comprimir o endereço da PRIMEIRA oferta no desktop.
+   A regra usa a largura real do card, não a largura da janela. */
+.melhor-oferta {
+    container-type: inline-size;
+}
+
+@media (min-width: 601px) {
+    @container (max-width: 720px) {
+        .melhor-oferta-grid {
+            grid-template-columns: 110px minmax(0, 1fr);
+            gap: 16px;
+        }
+
+        .medicamento-imagem-box {
+            width: 110px;
+        }
+
+        .oferta-topo {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 14px;
+        }
+
+        .farmacia-resumo {
+            width: 100%;
+            align-items: flex-start;
+        }
+
+        .farmacia-resumo > div {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .farmacia-logo {
+            width: 60px;
+            height: 60px;
+            flex-basis: 60px;
+        }
+
+        .localizacao {
+            text-align: left;
+            white-space: normal;
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
+        }
+
+        .preco-bloco {
+            width: 100%;
+            min-width: 0;
+            align-items: flex-start;
+            text-align: left;
+        }
+    }
+}
